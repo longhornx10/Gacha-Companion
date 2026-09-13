@@ -1,0 +1,5 @@
+[game]
+game_id = "example"
+display_name = "Aether Tactics (Example)"
+version = "1.0.0"
+summary = "Fake second game used to prove the core is game-agnostic: 4-member teams, 2 gear slots, different stats/skills/resources."

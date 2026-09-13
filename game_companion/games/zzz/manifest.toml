@@ -1,0 +1,13 @@
+# ZZZ adapter manifest. Game-specific metadata only — core never reads this.
+[game]
+game_id = "zzz"
+display_name = "Zenless Zone Zero"
+version = "1.0.0"
+summary = "First reference implementation: Agents, W-Engines, Drive Discs, Mindscape, Core Skill, 3-agent teams."
+
+[terminology]
+character = "Agent"
+equipment = "W-Engine"
+gear = "Drive Disc"
+duplication = "Mindscape"
+special_progression = "Core Skill"
