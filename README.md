@@ -35,6 +35,7 @@ Other CLI commands: `list-games`, `create-player`, `init-db`, `check-sources`.
 
 | Doc | Contents |
 | --- | --- |
+| [docs/getting-started.md](docs/getting-started.md) | **start here** — install → Open WebUI → daily use |
 | [docs/SPEC.md](docs/SPEC.md) | full product specification |
 | [docs/architecture.md](docs/architecture.md) | design, layering rules, decision log |
 | [docs/data-model.md](docs/data-model.md) | every table, integrity rules |
@@ -50,7 +51,8 @@ uv run pytest tests                      # 89 tests; fully offline (no API calls
 uv run ruff check game_companion tests   # lint
 ```
 
-See `docs/architecture.md` for the design, `docs/openwebui.md` to connect Open WebUI,
+See `docs/architecture.md` for the design, [docs/getting-started.md](docs/getting-started.md)
+for the full 0→100 walkthrough (clone → configure → Open WebUI → daily use),
 and `docs/game-adapter.md` to add a new game.
 
 ## Status
