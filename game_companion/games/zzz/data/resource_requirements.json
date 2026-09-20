@@ -1,0 +1,13 @@
+{
+  "_note": "Per-resource requirement data (X = amount one character needs to reach max). All null by default: unknown values make threshold statuses return 'unknown' instead of guessing. Fill in verified values here or via data_dir/overrides/zzz/resource_requirements.json.",
+  "requirements": {
+    "dennies": null,
+    "agent_exp": null,
+    "wengine_exp": null,
+    "drive_exp": null,
+    "skill_material": null,
+    "core_skill_material": null,
+    "boss_material": null,
+    "weekly_material": null
+  }
+}

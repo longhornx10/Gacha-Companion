@@ -1,0 +1,31 @@
+{
+  "_note": "STARTER roster metadata, curated by hand. It powers scoring heuristics and name resolution. It may be incomplete or outdated - the research layer and user overrides (data_dir/overrides/zzz/agents.json) are the intended correction path. Do not treat as authoritative game data.",
+  "agents": {
+    "anby": {"name": "Anby Demara", "rarity": "A", "attribute": "electric", "specialty": "stun", "faction": "Cunning Hares"},
+    "nicole": {"name": "Nicole Demara", "rarity": "A", "attribute": "ether", "specialty": "support", "faction": "Cunning Hares"},
+    "billy": {"name": "Billy Kid", "rarity": "A", "attribute": "physical", "specialty": "attack", "faction": "Cunning Hares"},
+    "corin": {"name": "Corin Wickes", "rarity": "A", "attribute": "physical", "specialty": "attack", "faction": "Victoria Housekeeping"},
+    "lycaon": {"name": "Von Lycaon", "rarity": "S", "attribute": "ice", "specialty": "stun", "faction": "Victoria Housekeeping"},
+    "rina": {"name": "Alexandrina Sebastiane", "rarity": "S", "attribute": "electric", "specialty": "support", "faction": "Victoria Housekeeping"},
+    "koleda": {"name": "Koleda Belobog", "rarity": "S", "attribute": "fire", "specialty": "stun", "faction": "Belobog Heavy Industries"},
+    "anton": {"name": "Anton Ivanov", "rarity": "A", "attribute": "electric", "specialty": "attack", "faction": "Belobog Heavy Industries"},
+    "ben": {"name": "Ben Bigger", "rarity": "A", "attribute": "fire", "specialty": "defense", "faction": "Belobog Heavy Industries"},
+    "grace": {"name": "Grace Howard", "rarity": "S", "attribute": "electric", "specialty": "anomaly", "faction": "Belobog Heavy Industries"},
+    "soldier11": {"name": "Soldier 11", "rarity": "S", "attribute": "fire", "specialty": "attack", "faction": "Obol Squad"},
+    "zhu_yuan": {"name": "Zhu Yuan", "rarity": "S", "attribute": "ether", "specialty": "attack", "faction": "Criminal Investigation Special Response Team"},
+    "qingyi": {"name": "Qingyi", "rarity": "S", "attribute": "electric", "specialty": "stun", "faction": "Criminal Investigation Special Response Team"},
+    "seth": {"name": "Seth Lowell", "rarity": "A", "attribute": "physical", "specialty": "defense", "faction": "Criminal Investigation Special Response Team"},
+    "ellen": {"name": "Ellen Joe", "rarity": "S", "attribute": "ice", "specialty": "attack", "faction": "Victoria Housekeeping"},
+    "soukaku": {"name": "Soukaku", "rarity": "A", "attribute": "ice", "specialty": "support", "faction": "Section 6"},
+    "miyabi": {"name": "Hoshimi Miyabi", "rarity": "S", "attribute": "ice", "specialty": "anomaly", "faction": "Section 6"},
+    "harumasa": {"name": "Asaba Harumasa", "rarity": "S", "attribute": "electric", "specialty": "attack", "faction": "Section 6"},
+    "caesar": {"name": "Caesar", "rarity": "S", "attribute": "physical", "specialty": "defense", "faction": "Sons of Calydon"},
+    "burnice": {"name": "Burnice White", "rarity": "S", "attribute": "fire", "specialty": "anomaly", "faction": "Sons of Calydon"},
+    "lighter": {"name": "Lighter", "rarity": "S", "attribute": "fire", "specialty": "stun", "faction": "Sons of Calydon"},
+    "lucy": {"name": "Lucy", "rarity": "A", "attribute": "physical", "specialty": "support", "faction": "Sons of Calydon"},
+    "piper": {"name": "Piper Wheel", "rarity": "A", "attribute": "physical", "specialty": "anomaly", "faction": "Sons of Calydon"},
+    "astra_yao": {"name": "Astra Yao", "rarity": "S", "attribute": "ether", "specialty": "support", "faction": "Stars of Lyra"},
+    "evelyn": {"name": "Evelyn", "rarity": "S", "attribute": "fire", "specialty": "attack", "faction": "Stars of Lyra"},
+    "jane_doe": {"name": "Jane Doe", "rarity": "S", "attribute": "physical", "specialty": "anomaly", "faction": null}
+  }
+}

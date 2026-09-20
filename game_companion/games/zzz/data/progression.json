@@ -1,0 +1,15 @@
+{
+  "_note": "STARTER progression data with honesty markers. Values power the planner/audit heuristics; they are NOT verified game data. Override via data_dir/overrides/zzz/progression.json.",
+  "level_cap": {"value": 60, "verified": false},
+  "ascension_stages": {"value": 6, "verified": false},
+  "skill_targets": {
+    "basic_attack": {"target": 12, "verified": false},
+    "dodge": {"target": 12, "verified": false},
+    "assist": {"target": 12, "verified": false},
+    "special_attack": {"target": 12, "verified": false},
+    "chain_attack": {"target": 12, "verified": false},
+    "core_skill": {"target": 7, "verified": false}
+  },
+  "_wengine_level_cap": {"value": 60, "verified": false},
+  "_drive_disc_level_cap": {"value": 15, "verified": false}
+}

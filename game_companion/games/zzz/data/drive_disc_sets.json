@@ -1,0 +1,20 @@
+{
+  "_note": "STARTER list of Drive Disc set names (keys are slugs). 2pc/4pc effects are deliberately NOT encoded yet - encoding them without verified data would fabricate game facts. Override via data_dir/overrides/zzz/drive_disc_sets.json.",
+  "sets": [
+    {"key": "woodpecker_electro", "name": "Woodpecker Electro"},
+    {"key": "shockstar_disco", "name": "Shockstar Disco"},
+    {"key": "freedom_blues", "name": "Freedom Blues"},
+    {"key": "hormone_punk", "name": "Hormone Punk"},
+    {"key": "fanged_metal", "name": "Fanged Metal"},
+    {"key": "chaos_jazz", "name": "Chaos Jazz"},
+    {"key": "chaotic_metal", "name": "Chaotic Metal"},
+    {"key": "inferno_metal", "name": "Inferno Metal"},
+    {"key": "thunder_metal", "name": "Thunder Metal"},
+    {"key": "polar_metal", "name": "Polar Metal"},
+    {"key": "astral_voice", "name": "Astral Voice"},
+    {"key": "soul_rock", "name": "Soul Rock"},
+    {"key": "proto_punk", "name": "Proto Punk"},
+    {"key": "puffer_electro", "name": "Puffer Electro"},
+    {"key": "branch_and_blade_song", "name": "Branch & Blade Song"}
+  ]
+}

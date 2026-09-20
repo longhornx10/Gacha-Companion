@@ -12,8 +12,10 @@ dist/
 .env.*
 !.env.example
 
-# Local data (SQLite DB, exports, personas overrides)
-data/
+# Local data (SQLite DB, exports, personas overrides) — repo-root runtime dir
+# ONLY. The leading / matters: an unanchored "data/" would also ignore packaged
+# game-adapter data like game_companion/games/zzz/data/.
+/data/
 *.db
 *.sqlite3
 
