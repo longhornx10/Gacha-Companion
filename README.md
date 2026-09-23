@@ -15,6 +15,20 @@ companions — a companion that knows *your* account, not just facts about the g
 ## Quick start (Linux)
 
 ```bash
+git clone https://github.com/longhornx10/Gacha-Companion.git
+bash ~/Gacha-Companion/setup.sh
+```
+
+That's it — `setup.sh` opens a **setup wizard in your browser** (one big
+button, plain language, checks everything as it goes). If no browser is
+available it falls back to a terminal guide (`bash setup.sh --cli` forces it).
+The wizard can also add a desktop icon so future runs need no terminal at all.
+It's safe to re-run any time; `bash stop-service.sh` / `bash start-service.sh`
+manage the background service.
+
+Prefer doing it by hand?
+
+```bash
 # 1. Create the environment and install
 uv venv --python 3.12
 uv pip install -e ".[dev]"

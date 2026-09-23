@@ -28,3 +28,7 @@ htmlcov/
 # OS / editor
 .DS_Store
 *.swp
+
+# Local service runtime artifacts (start-service.sh)
+serve.log
+serve.pid

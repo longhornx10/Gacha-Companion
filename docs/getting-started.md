@@ -4,6 +4,30 @@ From a bare Linux machine to daily use with Open WebUI Desktop. Everything here
 matches the code on `main`. See [architecture.md](architecture.md) for design
 details and [openwebui.md](openwebui.md) for integration specifics.
 
+## 0. The easy way: setup wizard
+
+```bash
+git clone https://github.com/longhornx10/Gacha-Companion.git
+bash ~/Gacha-Companion/setup.sh
+```
+
+On a desktop, this opens a **wizard in your browser**: two boxes (secret key +
+your name), one big "Start setup" button, and an animated checklist that
+installs everything, saves settings, creates your profile, and starts the
+service. It auto-detects what's already done (existing settings, profiles, a
+running service, even a local Open WebUI — and the model list straight from
+the LLM endpoint), skips itself straight to the done screen when everything is
+ready, and ends with four copy-paste cards for the Open WebUI hookup plus an
+optional desktop icon so you never need the terminal again. Manual,
+step-by-step controls live under "Manual controls" at the bottom of the page.
+
+No desktop/browser (`--cli`) or over SSH? `setup.sh` falls back to the same
+flow in the terminal, and `bash stop-service.sh` / `bash start-service.sh`
+manage the background service afterwards.
+
+The rest of this document explains each step manually — useful when something
+needs fixing or you want to understand the moving parts.
+
 ## 1. Prerequisites (one-time)
 
 ```bash
@@ -72,6 +96,8 @@ This creates and migrates the SQLite DB automatically, then serves at
 
 ```bash
 curl -s http://127.0.0.1:8765/health
+# {"status":"ok","service":"gacha-companion"}
+curl -s http://127.0.0.1:8765/api/health
 # {"status":"ok","service":"gacha-companion","games":["example","zzz"]}
 ```
 
