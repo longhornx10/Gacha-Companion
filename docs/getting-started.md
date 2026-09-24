@@ -232,7 +232,17 @@ files). **Reset** = delete that folder.
 
 ## 9. Updates and maintenance
 
+**Automatic (recommended):** the setup wizard's done screen has a
+**"Turn on automatic updates"** button — one click installs a daily systemd
+user timer that runs `auto-update.sh`: it pulls the latest code, reinstalls,
+restarts the service when anything changed, rolls back automatically if an
+update refuses to start, and relaunches the service if it ever stopped. All
+activity lands in `update.log` in the repo folder. Turn it off the same way.
+
+**Manual:**
+
 ```bash
+bash auto-update.sh        # same logic, on demand — or simply:
 git pull
 uv pip install -e ".[dev]"
 # restart serve; the DB migrates automatically if the schema changed
@@ -252,6 +262,8 @@ timer).
 | 503 "LLM endpoint is not configured" on tutor/research/screenshots | `.env` not set or you launched `serve` from a different directory; keys weren't loaded |
 | Tools don't fire in chat | Tool not toggled on for that chat, or the chat model doesn't support function calling — switch models |
 | Screenshot import status `"failed"` | Extraction couldn't produce valid JSON; the record keeps the error — retry with a cleaner crop, or pass a manual `candidate` instead of an image |
+| Auto-update says "local changes — skipping" | You edited tracked files in the repo — `git stash` (or commit) them, then re-run `bash auto-update.sh` |
+| An update was rolled back automatically | The new version wouldn't start; you're running the previous commit (see `update.log`) — check in with whoever publishes updates |
 | "cannot activate team …" | A character is on another active team — deactivate that one first, that's by design |
 | Everything else | `GET /health`, then check the terminal running `serve` (logs are human-readable; keys are redacted) |
 

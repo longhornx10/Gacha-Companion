@@ -179,10 +179,61 @@ def detect_state() -> dict:
         "players": players,
         "service": {"port": port, "running": svc_code == 200, "health": svc_body},
         "openwebui_port": owui,
+        "autoupdate": autoupdate_status(),
         "toolfile": str(TOOLFILE),
         "toolfile_exists": TOOLFILE.exists(),
         "default_name": default_name,
     }
+
+
+def autoupdate_status() -> str:
+    """'on' when the daily auto-update timer is enabled, else 'off'."""
+    ok, out = run(["systemctl", "--user", "is-enabled",
+                   "gacha-companion-update.timer"], timeout=10)
+    return "on" if ok and out.strip() == "enabled" else "off"
+
+
+def autoupdate_toggle() -> dict:
+    """Enable/disable the daily auto-update systemd user timer."""
+    if autoupdate_status() == "on":
+        ok, out = run(["systemctl", "--user", "disable", "--now",
+                       "gacha-companion-update.timer"], timeout=30)
+        return {"ok": ok, "on": False,
+                "log": out.strip() or "automatic updates turned off"}
+
+    units = Path.home() / ".config" / "systemd" / "user"
+    units.mkdir(parents=True, exist_ok=True)
+    bash = shutil.which("bash") or "/bin/bash"
+    (units / "gacha-companion-update.service").write_text(
+        "[Unit]\n"
+        "Description=Gacha Companion auto-update\n"
+        "\n"
+        "[Service]\n"
+        "Type=oneshot\n"
+        f"ExecStart={bash} {REPO / 'auto-update.sh'}\n")
+    (units / "gacha-companion-update.timer").write_text(
+        "[Unit]\n"
+        "Description=Run Gacha Companion auto-update daily\n"
+        "\n"
+        "[Timer]\n"
+        "OnCalendar=*-*-* 03:00\n"
+        "Persistent=true\n"
+        "\n"
+        "[Install]\n"
+        "WantedBy=timers.target\n")
+    ok1, out1 = run(["systemctl", "--user", "daemon-reload"], timeout=30)
+    ok2, out2 = run(["systemctl", "--user", "enable", "--now",
+                     "gacha-companion-update.timer"], timeout=30)
+    _, nxt = run(["systemctl", "--user", "show", "-p", "NextElapseUSecRealtime",
+                  "--value", "gacha-companion-update.timer"], timeout=15)
+    on = autoupdate_status() == "on"
+    log = (out1 + " " + out2).strip()
+    if on:
+        log = "automatic updates turned on (daily)"
+    elif not log:
+        log = ("could not reach systemctl — is this a normal desktop session? "
+               "you can still update with: bash auto-update.sh")
+    return {"ok": ok1 and ok2 and on, "on": on, "log": log, "next": nxt.strip()}
 
 
 def redact(text: str) -> str:
@@ -258,6 +309,11 @@ def build_report(client: dict) -> str:
         with logf.open(errors="replace") as f:
             tail = redact("\n".join(deque(f, maxlen=40)))
         L += ["serve.log (last 40 lines):", tail]
+    upd = REPO / "update.log"
+    if upd.exists():
+        with upd.open(errors="replace") as f:
+            utail = redact("\n".join(deque(f, maxlen=20)))
+        L += ["update.log (last 20 lines):", utail]
     L.append("")
 
     players = ""
@@ -340,6 +396,8 @@ class Wizard:
                 return 200, "application/json", json.dumps({"ok": ok, "log": out.strip()})
             if method == "POST" and route == "/api/desktop-shortcut":
                 return 200, "application/json", json.dumps(desktop_shortcut())
+            if method == "POST" and route == "/api/autoupdate/toggle":
+                return 200, "application/json", json.dumps(autoupdate_toggle())
             if method == "POST" and route == "/api/report":
                 return 200, "application/json", json.dumps(
                     {"report": build_report(data if isinstance(data, dict) else {})})
@@ -662,10 +720,11 @@ PAGE = """<!doctype html>
   <h3>Make it easy on yourself</h3>
   <div class="btns">
     <button id="btn-shortcut">Add a desktop icon &#128187;</button>
-    <button id="btn-again" class="sec">Run setup again</button>
+    <button id="btn-autoupd" class="sec">Turn on automatic updates</button>
+    <button id="btn-again" class="sec">Check for updates now</button>
   </div>
   <div class="hint" id="shortcut-msg">The icon opens this helper by double-click &mdash; no terminal needed, ever again.</div>
-  <div class="msg" id="again-msg"></div>
+  <div class="hint" id="autoupd-msg"></div>
 </div>
 
 <!-- ============================ advanced =============================== -->
@@ -936,6 +995,15 @@ async function runGuidedInner(){
   showDone(playerId, playerName);
 }
 
+function renderAutoUpd(){
+  const on = STATE.autoupdate === "on";
+  $("btn-autoupd").textContent = on ? "Automatic updates: ON — click to turn off"
+                                    : "Turn on automatic updates";
+  $("autoupd-msg").textContent = on
+    ? "on — checks once a day, installs updates, restarts itself, and rolls back a bad update automatically"
+    : "one click: checks once a day, keeps everything fresh, and relaunches the companion if it ever stops";
+}
+
 function showDone(playerId, playerName){
   $("start-card").hidden = true;
   $("progress-card").hidden = true;
@@ -956,10 +1024,24 @@ function showDone(playerId, playerName){
   $("owui-link-2").innerHTML = links ? ` &middot; <a href="${links}/workspace/tools" target="_blank">open Tools</a>` : "";
   $("owui-link-4").innerHTML = links ? ` &middot; <a href="${links}/" target="_blank">open a chat</a>` : "";
   renderOwuiProgress();
+  renderAutoUpd();
 }
 
 $("btn-go").onclick = runGuided;
 $("btn-retry").onclick = runGuided;
+$("btn-again").onclick = runGuided;   // re-running the guided flow = check for updates
+$("btn-autoupd").onclick = async () => {
+  $("autoupd-msg").textContent = "working…";
+  const r = await post("/api/autoupdate/toggle");
+  if (r.ok){
+    await refresh();
+    renderAutoUpd();
+    if (r.next) $("autoupd-msg").textContent += " · next check: " + r.next;
+  } else {
+    $("autoupd-msg").textContent = "couldn't change it — " + (r.log || "copy a problem report");
+    log(r.log || "");
+  }
+};
 $("btn-report").onclick = copyReport;
 $("btn-report2").onclick = copyReport;
 $("btn-fix-copy").onclick = async () => {
@@ -1066,7 +1148,9 @@ function renderAdvanced(){
        <span class="badge b-ok">port ${s.openwebui_port}</span></div>`
     : `<div class="row"><span>Open WebUI</span>
        <span class="badge b-dim">not detected (start the Desktop app)</span></div>`;
-  $("sysrows").innerHTML = rows + svc + owui;
+  const au = `<div class="row"><span>automatic updates</span>
+     <span class="badge ${s.autoupdate === "on" ? "b-ok" : "b-dim"}">${s.autoupdate === "on" ? "daily" : "off"}</span></div>`;
+  $("sysrows").innerHTML = rows + svc + owui + au;
   badge($("sysbadge"), s.git && s.curl && s.uv.ok && s.venv, "ready", "see below");
   $("btn-uv").style.display = s.uv.ok ? "none" : "";
 

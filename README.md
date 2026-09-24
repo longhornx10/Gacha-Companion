@@ -22,7 +22,9 @@ bash ~/Gacha-Companion/setup.sh
 That's it — `setup.sh` opens a **setup wizard in your browser** (one big
 button, plain language, checks everything as it goes). If no browser is
 available it falls back to a terminal guide (`bash setup.sh --cli` forces it).
-The wizard can also add a desktop icon so future runs need no terminal at all.
+The wizard can also add a desktop icon and turn on **daily automatic updates**
+(pull → reinstall → restart, with automatic rollback on a bad update) so
+future runs need no terminal at all.
 It's safe to re-run any time; `bash stop-service.sh` / `bash start-service.sh`
 manage the background service.
 

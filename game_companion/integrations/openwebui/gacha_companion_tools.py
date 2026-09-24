@@ -55,6 +55,8 @@ class Tools:
                     detail = response.json().get("detail", response.text)
                 except ValueError:
                     detail = response.text
+                if response.status_code == 404 and "no unique player profile" in str(detail):
+                    return self._profile_hint()
                 return f"Error {response.status_code}: {detail}"
             try:
                 return json.dumps(response.json(), ensure_ascii=False)
@@ -62,6 +64,35 @@ class Tools:
                 return response.text  # markdown endpoints
         except requests.RequestException as exc:
             return f"Gacha Companion service unreachable at {self.valves.base_url}: {exc}"
+
+    def _profile_hint(self) -> str:
+        """Translate the 'no unique player profile' error into a fix the model
+        can relay: list the existing profiles and name the valve to set."""
+        base = self.valves.base_url.rstrip("/")
+        players = []
+        try:
+            r = requests.get(f"{base}/api/players", timeout=10)
+            if r.status_code == 200:
+                players = r.json().get("players", [])
+        except requests.RequestException:
+            pass
+        if not players:
+            return (
+                "Error 404: no player profile exists yet. Create one with the setup "
+                f"wizard (bash setup.sh), or: curl -X POST {base}/api/players "
+                '-H \'Content-Type: application/json\' -d \'{"display_name":"YourName"}\''
+            )
+        lines = [
+            "Error 404: more than one player profile exists, so the tool's "
+            "player_id valve must say which one to use. Existing profiles:"
+        ]
+        lines += [f"- {p['display_name']}: {p['id']}" for p in players]
+        lines.append(
+            "Ask the user which profile is theirs, then have them open the Gacha "
+            "Companion tool in Workspace -> Tools, open Valves (gear icon), and "
+            "paste that id into player_id."
+        )
+        return "\n".join(lines)
 
     def _game(self) -> str:
         return self.valves.game_id
