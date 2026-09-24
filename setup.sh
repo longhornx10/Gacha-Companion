@@ -22,6 +22,11 @@ fi
 REPO_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 cd "$REPO_DIR"
 
+# Diagnostic report: works everywhere, no browser needed, prints clean text.
+if [[ ${1:-} == "--report" ]]; then
+    exec python3 setup-gui.py --report
+fi
+
 step_n=0
 step()  { step_n=$((step_n + 1)); printf '\n%s── [%s] %s ──%s\n' "$CYAN$BOLD" "$step_n" "$*" "$RESET"; }
 hr()    { printf '%s%s%s\n' "$DIM" "$(printf '%.0s─' $(seq 1 64))" "$RESET"; }

@@ -131,6 +131,11 @@ def uv_path() -> str:
     return shutil.which("uv") or str(Path.home() / ".local/bin/uv")
 
 
+def data_dir() -> Path:
+    d = os.environ.get("GAME_COMPANION_DATA_DIR") or env_key("GAME_COMPANION_DATA_DIR")
+    return Path(d).expanduser() if d else Path.home() / ".local" / "share" / "gacha-companion"
+
+
 def detect_state() -> dict:
     base = env_key("GAME_COMPANION_LLM_BASE_URL")
     model = env_key("GAME_COMPANION_LLM_MODEL")
@@ -167,6 +172,9 @@ def detect_state() -> dict:
     except Exception:
         default_name = "Player"
 
+    _, commit = run(["git", "rev-parse", "--short", "HEAD"], timeout=10)
+    _, behind = run(["git", "rev-list", "--count", "HEAD..@{u}"], timeout=10)
+
     return {
         "repo_root": str(REPO),
         "is_repo": (REPO / ".git").exists(),
@@ -180,6 +188,9 @@ def detect_state() -> dict:
         "service": {"port": port, "running": svc_code == 200, "health": svc_body},
         "openwebui_port": owui,
         "autoupdate": autoupdate_status(),
+        "commit": commit.strip() if commit else "",
+        "behind": behind.strip() if behind.strip().isdigit() else None,
+        "data_dir": str(data_dir()),
         "toolfile": str(TOOLFILE),
         "toolfile_exists": TOOLFILE.exists(),
         "default_name": default_name,
@@ -307,13 +318,17 @@ def build_report(client: dict) -> str:
     logf = REPO / "serve.log"
     if logf.exists():
         with logf.open(errors="replace") as f:
-            tail = redact("\n".join(deque(f, maxlen=40)))
-        L += ["serve.log (last 40 lines):", tail]
+            tail = redact("\n".join(deque(f, maxlen=80)))
+        L += ["serve.log (last 80 lines):", tail]
     upd = REPO / "update.log"
     if upd.exists():
         with upd.open(errors="replace") as f:
             utail = redact("\n".join(deque(f, maxlen=20)))
         L += ["update.log (last 20 lines):", utail]
+    ok, j = run(["journalctl", "--user", "-u", "gacha-companion-update.service",
+                 "-n", "20", "--no-pager"], timeout=15)
+    if ok and j.strip() and "No journal files" not in j:
+        L += ["auto-update timer journal (last 20 lines):", redact(j.strip())[:2000]]
     L.append("")
 
     players = ""
@@ -331,24 +346,34 @@ def build_report(client: dict) -> str:
 
 
 def desktop_shortcut() -> dict:
-    """Write a double-clickable launcher for this wizard into the app menu."""
+    """Write double-clickable launchers into the app menu: the setup wizard
+    and the day-to-day control panel."""
     apps = Path.home() / ".local" / "share" / "applications"
     apps.mkdir(parents=True, exist_ok=True)
-    path = apps / "gacha-companion-setup.desktop"
-    path.write_text(
-        "[Desktop Entry]\n"
-        "Type=Application\n"
-        "Name=Gacha Companion Setup\n"
-        "Comment=Open the Gacha Companion setup wizard\n"
-        f"Exec=python3 {REPO / 'setup-gui.py'}\n"
-        "Icon=applications-games\n"
-        "Terminal=false\n"
-        "Categories=Utility;Game;\n"
-    )
-    # Best-effort trust flag; on some desktops the user confirms once instead.
-    if shutil.which("gio"):
-        run(["gio", "set", str(path), "metadata::trusted", "true"], timeout=10)
-    return {"ok": True, "path": str(path)}
+    entries = [
+        ("gacha-companion.desktop", "Gacha Companion",
+         "Open the Gacha Companion control panel", "--panel"),
+        ("gacha-companion-setup.desktop", "Gacha Companion Setup",
+         "Run the Gacha Companion setup wizard", ""),
+    ]
+    written = []
+    for filename, name, comment, flag in entries:
+        path = apps / filename
+        path.write_text(
+            "[Desktop Entry]\n"
+            "Type=Application\n"
+            f"Name={name}\n"
+            f"Comment={comment}\n"
+            f"Exec=python3 {REPO / 'setup-gui.py'} {flag}\n"
+            "Icon=applications-games\n"
+            "Terminal=false\n"
+            "Categories=Utility;Game;\n"
+        )
+        # Best-effort trust flag; on some desktops the user confirms once instead.
+        if shutil.which("gio"):
+            run(["gio", "set", str(path), "metadata::trusted", "true"], timeout=10)
+        written.append(str(path))
+    return {"ok": True, "paths": written}
 
 
 # --------------------------------------------------------------- handler
@@ -366,6 +391,8 @@ class Wizard:
         try:
             if method == "GET" and route == "/":
                 return 200, "text/html; charset=utf-8", PAGE
+            if method == "GET" and route == "/panel":
+                return 200, "text/html; charset=utf-8", PANEL_PAGE
             if method == "GET" and route == "/api/state":
                 return 200, "application/json", json.dumps(detect_state())
             if method == "GET" and route == "/api/toolfile":
@@ -398,6 +425,35 @@ class Wizard:
                 return 200, "application/json", json.dumps(desktop_shortcut())
             if method == "POST" and route == "/api/autoupdate/toggle":
                 return 200, "application/json", json.dumps(autoupdate_toggle())
+            if method == "POST" and route == "/api/update-check":
+                ok, out = run(["bash", str(REPO / "auto-update.sh")], timeout=600)
+                updf = REPO / "update.log"
+                if updf.exists():
+                    tail = "\n".join(updf.read_text(errors="replace").splitlines()[-15:])
+                    out = (out.strip() + "\n" if out.strip() else "") + tail
+                return 200, "application/json", json.dumps({"ok": ok, "log": redact(out.strip())})
+            if method == "GET" and route.split("?")[0] == "/api/logs":
+                import urllib.parse as _up
+                qs = _up.parse_qs(_up.urlparse("http://x" + path).query)
+                which = (qs.get("which") or ["serve"])[0]
+                name = {"serve": "serve.log", "update": "update.log"}.get(which)
+                if not name:
+                    return 404, "application/json", json.dumps({"error": "unknown log"})
+                f = REPO / name
+                text = f.read_text(errors="replace")[-8000:] if f.exists() else "(no log yet)"
+                return 200, "application/json", json.dumps({"log": redact(text)})
+            if method == "POST" and route == "/api/open-folder":
+                targets = {"data": data_dir(), "repo": REPO,
+                           "exports": data_dir() / "exports"}
+                target = targets.get(str(data.get("which", "data")))
+                if target is None:
+                    return 404, "application/json", json.dumps({"error": "unknown folder"})
+                opener = shutil.which("xdg-open")
+                if not opener:
+                    return 200, "application/json", json.dumps(
+                        {"ok": False, "error": f"no file browser found — the folder is: {target}"})
+                run([opener, str(target)], timeout=15)
+                return 200, "application/json", json.dumps({"ok": True, "path": str(target)})
             if method == "POST" and route == "/api/report":
                 return 200, "application/json", json.dumps(
                     {"report": build_report(data if isinstance(data, dict) else {})})
@@ -493,6 +549,279 @@ def make_handler(wizard: Wizard):
 
 
 # --------------------------------------------------------------- the page
+
+PANEL_PAGE = """<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gacha Companion</title>
+<style>
+  :root{
+    --bg:#0b0f14; --card:#121822; --card2:#0e141d; --line:#1f2b3a;
+    --text:#dbe4ee; --dim:#7b8ba0; --acc:#22d3ee; --acc2:#e879f9;
+    --ok:#34d399; --warn:#fbbf24; --err:#f87171;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);
+       font:16px/1.55 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif}
+  .wrap{max-width:880px;margin:0 auto;padding:28px 18px 80px}
+  header{margin-bottom:24px;text-align:center}
+  h1{font-size:26px;margin:0;letter-spacing:.5px}
+  h1 .spark{color:var(--acc)}
+  .sub{color:var(--dim);margin-top:8px;font-size:15px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;
+        padding:22px 24px;margin-bottom:18px}
+  h2{font-size:17px;margin:0 0 14px;font-weight:700}
+  .badge{font-size:12px;padding:3px 9px;border-radius:999px;font-weight:600}
+  .b-ok{background:rgba(52,211,153,.15);color:var(--ok)}
+  .b-err{background:rgba(248,113,113,.15);color:var(--err)}
+  .b-warn{background:rgba(251,191,36,.15);color:var(--warn)}
+  .b-dim{background:rgba(123,139,160,.15);color:var(--dim)}
+  button{background:var(--acc);border:0;border-radius:10px;color:#06222b;
+         font-weight:800;padding:12px 18px;cursor:pointer;font-size:15.5px}
+  button:hover{filter:brightness(1.12)}
+  button.sec{background:transparent;border:1px solid var(--line);color:var(--text)}
+  button.mini{padding:6px 12px;font-size:13px;font-weight:600}
+  button.big{width:100%;padding:18px;font-size:19px;margin-top:22px;border-radius:12px}
+  .btns{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;align-items:center}
+  .hint{color:var(--dim);font-size:13.5px;margin-top:6px}
+  .mono{font-family:ui-monospace,Menlo,monospace;font-size:13px}
+  .kv{display:flex;gap:8px;align-items:center;margin:8px 0;flex-wrap:wrap}
+  .kv code{background:var(--card2);border:1px solid var(--line);border-radius:6px;
+           padding:4px 10px;font-size:13.5px;word-break:break-all}
+  .row{display:flex;justify-content:space-between;align-items:center;gap:10px;
+       padding:7px 0;border-bottom:1px dashed var(--line);font-size:14px}
+  .row:last-child{border-bottom:0}
+  .msg{font-size:14px;margin-top:10px;min-height:18px}
+  .m-ok{color:var(--ok)} .m-err{color:var(--err)} .m-warn{color:var(--warn)}
+  pre{background:#070a0f;border:1px solid var(--line);border-radius:10px;
+      padding:12px 14px;font:12px/1.55 ui-monospace,Menlo,monospace;
+      color:#9fb3c8;white-space:pre-wrap;word-break:break-word;
+      max-height:280px;overflow-y:auto;margin-top:8px;text-align:left}
+  select{background:var(--card2);border:1px solid var(--line);border-radius:8px;
+         color:var(--text);padding:8px 10px;font:14px ui-monospace,Menlo,monospace}
+  input[type=password]{background:var(--card2);border:1px solid var(--line);
+        border-radius:8px;color:var(--text);padding:10px 12px;font-size:15px}
+  a{color:var(--acc)}
+</style></head><body><div class="wrap">
+
+<header>
+  <h1><span class="spark">&#10022;</span> GACHA COMPANION <span class="spark">&#10022;</span></h1>
+  <div class="sub" id="statusline">checking&hellip;</div>
+</header>
+
+<div class="card">
+  <h2>Keep it fresh <span id="upd-badge" class="badge b-dim"></span></h2>
+  <div class="btns">
+    <button id="btn-update">Check for updates now</button>
+  </div>
+  <div class="hint" id="upd-hint"></div>
+  <div class="msg" id="upd-msg"></div>
+  <pre id="upd-log" style="display:none"></pre>
+</div>
+
+<div class="card">
+  <h2>The service <span id="svc-badge" class="badge b-dim">checking&hellip;</span></h2>
+  <div class="btns">
+    <button id="btn-start">Start</button>
+    <button id="btn-stop" class="sec">Stop</button>
+  </div>
+  <div class="msg" id="svc-msg"></div>
+</div>
+
+<div class="card">
+  <h2>Something wrong?</h2>
+  <div class="btns">
+    <button id="btn-report">Copy problem report</button>
+    <button id="btn-open-repo" class="sec">Open the program folder</button>
+    <button id="btn-open-data" class="sec">Open the data folder</button>
+  </div>
+  <div class="hint">The report contains no secrets — it is safe to send to whoever helps you.</div>
+  <details id="report-box" hidden style="margin-top:12px">
+    <summary>report text (if copying is blocked, select it here)</summary>
+    <pre id="report-text"></pre>
+  </details>
+</div>
+
+<div class="card">
+  <h2>Peek at the logs</h2>
+  <div class="btns" style="margin-top:0">
+    <select id="log-select">
+      <option value="serve">service log (serve.log)</option>
+      <option value="update">update log (update.log)</option>
+    </select>
+    <button id="btn-log" class="sec mini">Refresh</button>
+  </div>
+  <pre id="log-view">press Refresh</pre>
+</div>
+
+<div class="card">
+  <h2>Open WebUI quick reference</h2>
+  <div class="kv">base_url <code id="c-url"></code>
+    <button class="mini sec" data-copy="c-url">copy</button></div>
+  <div class="kv">game_id <code id="c-game">zzz</code>
+    <button class="mini sec" data-copy="c-game">copy</button></div>
+  <div class="kv">player_id <code id="c-player"></code>
+    <button class="mini sec" data-copy="c-player">copy</button></div>
+  <div class="btns">
+    <button id="btn-copy-tool" class="sec mini">copy the tool code</button>
+    <a id="owui-link" href="#" target="_blank" style="display:none">open Open WebUI</a>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Automatic updates <span id="au-badge" class="badge b-dim"></span></h2>
+  <div class="btns">
+    <button id="btn-au" class="sec">Turn on</button>
+  </div>
+  <div class="hint" id="au-hint"></div>
+</div>
+
+<div class="center" style="margin-top:10px">
+  <a href="./">Run the full setup wizard again</a>
+</div>
+
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const TOKEN = location.pathname.split("/")[1];
+const api = (p) => "/" + TOKEN + p;
+let STATE = null;
+const clientErrors = [];
+window.addEventListener("error", e => clientErrors.push(e.message || "error"));
+
+async function post(path, body){
+  let r;
+  try {
+    r = await fetch(api(path), {method:"POST",
+      headers:{"Content-Type":"application/json"}, body:JSON.stringify(body||{})});
+  } catch (e) { throw new Error("HELPER_STOPPED"); }
+  return r.json();
+}
+async function refresh(){
+  STATE = await (await fetch(api("/api/state"))).json();
+  render();
+}
+async function copyText(text){
+  try { await navigator.clipboard.writeText(text); return true; }
+  catch (e) {}
+  try {
+    const ta = document.createElement("textarea");
+    ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    const ok = document.execCommand("copy"); ta.remove(); return ok;
+  } catch (e) { return false; }
+}
+document.querySelectorAll("[data-copy]").forEach(b => b.addEventListener("click", async () => {
+  const ok = await copyText($(b.dataset.copy).textContent);
+  b.textContent = ok ? "copied!" : "copy failed";
+  setTimeout(()=> b.textContent="copy", 1200);
+}));
+
+function render(){
+  const s = STATE;
+  const bits = [];
+  bits.push("version " + (s.commit || "?"));
+  bits.push(s.service.running ? "service running" : "service stopped");
+  if (s.behind !== null && s.behind !== undefined) {
+    if (Number(s.behind) > 0) bits.push(s.behind + " update(s) waiting");
+  }
+  $("statusline").textContent = bits.join("  ·  ");
+  $("svc-badge").className = "badge " + (s.service.running ? "b-ok" : "b-warn");
+  $("svc-badge").textContent = s.service.running ? "running" : "stopped";
+  const upd = Number(s.behind);
+  const ub = $("upd-badge");
+  if (s.behind !== null && s.behind !== undefined && upd > 0){
+    ub.className = "badge b-warn"; ub.textContent = s.behind + " waiting";
+  } else { ub.className = "badge b-ok"; ub.textContent = "current"; }
+  $("upd-hint").textContent = "checks, installs and restarts by itself — safe to press any time";
+  $("au-badge").className = "badge " + (s.autoupdate === "on" ? "b-ok" : "b-dim");
+  $("au-badge").textContent = s.autoupdate === "on" ? "daily" : "off";
+  $("btn-au").textContent = s.autoupdate === "on" ? "Turn off" : "Turn on";
+  $("au-hint").textContent = s.autoupdate === "on"
+    ? "updates every night by itself, rolls back a bad update automatically"
+    : "off — updates only happen when you press the button above";
+  $("c-url").textContent = "http://127.0.0.1:" + s.service.port;
+  $("c-player").textContent = (s.players[0] && s.players[0].id) || "(create a profile in setup)";
+  if (s.openwebui_port){
+    $("owui-link").href = "http://127.0.0.1:" + s.openwebui_port + "/";
+    $("owui-link").style.display = "";
+  }
+}
+function log(text, el){ const e = $(el||"upd-log"); e.style.display = "";
+  e.textContent += text + "\\n"; e.scrollTop = e.scrollHeight; }
+function msg(id, text, cls){ const el=$(id); el.textContent=text||""; el.className="msg "+(cls||""); }
+
+$("btn-update").onclick = async () => {
+  msg("upd-msg", "checking + updating… this can take a minute");
+  $("btn-update").disabled = true;
+  let r;
+  try { r = await post("/api/update-check"); }
+  catch (e) {
+    $("btn-update").disabled = false;
+    return msg("upd-msg", "the helper stopped — reopen Gacha Companion from the menu", "m-err");
+  }
+  $("btn-update").disabled = false;
+  log(r.log);
+  msg("upd-msg", r.ok ? "done ✓ (details below)" : "finished with problems — see below",
+      r.ok ? "m-ok" : "m-warn");
+  refresh();
+};
+$("btn-start").onclick = async () => {
+  msg("svc-msg", "starting…");
+  const r = await post("/api/service/start");
+  msg("svc-msg", r.ok ? "running ✓" : (r.log || "failed"), r.ok ? "m-ok" : "m-err");
+  refresh();
+};
+$("btn-stop").onclick = async () => {
+  const r = await post("/api/service/stop");
+  msg("svc-msg", r.ok ? "stopped" : (r.log || "failed"), r.ok ? "" : "m-err");
+  refresh();
+};
+async function copyReport(){
+  const client = {step: "(panel — report requested)", message: "", raw: "",
+                  errors: clientErrors.slice(-10), ua: navigator.userAgent};
+  let text;
+  try { text = (await post("/api/report", client)).report; }
+  catch (e) {
+    text = "GACHA COMPANION — PROBLEM REPORT (partial: helper not answering)\\n"
+      + "errors: " + (client.errors.join(" | ") || "none") + "\\nUA: " + client.ua;
+  }
+  $("report-box").hidden = false;
+  $("report-text").textContent = text;
+  $("report-box").open = true;
+  const ok = await copyText(text);
+  $("btn-report").textContent = ok ? "Report copied ✓ — send it to whoever helps you"
+                                   : "copy blocked — select the text below instead";
+  setTimeout(() => $("btn-report").textContent = "Copy problem report", 4000);
+}
+$("btn-report").onclick = copyReport;
+$("btn-open-repo").onclick = () => post("/api/open-folder", {which:"repo"});
+$("btn-open-data").onclick = () => post("/api/open-folder", {which:"data"});
+$("btn-log").onclick = async () => {
+  $("log-view").textContent = "loading…";
+  const r = await fetch(api("/api/logs?which=" + $("log-select").value));
+  const d = await r.json();
+  $("log-view").textContent = d.log || "(empty)";
+  $("log-view").scrollTop = $("log-view").scrollHeight;
+};
+$("btn-au").onclick = async () => {
+  msg("au-hint", "working…");
+  const r = await post("/api/autoupdate/toggle");
+  if (r.ok){ await refresh(); }
+  else $("au-hint").textContent = "couldn't change it — " + (r.log || "copy a problem report");
+};
+$("btn-copy-tool").onclick = async () => {
+  const t = await (await fetch(api("/api/toolfile"))).text();
+  const ok = await copyText(t);
+  $("btn-copy-tool").textContent = ok ? "copied — paste into Workspace → Tools"
+                                      : "copy blocked";
+  setTimeout(()=> $("btn-copy-tool").textContent = "copy the tool code", 2500);
+};
+refresh();
+</script></body></html>
+"""
 
 PAGE = """<!doctype html>
 <html lang="en"><head>
@@ -719,11 +1048,12 @@ PAGE = """<!doctype html>
 
   <h3>Make it easy on yourself</h3>
   <div class="btns">
-    <button id="btn-shortcut">Add a desktop icon &#128187;</button>
+    <button id="btn-shortcut">Add desktop icons &#128187;</button>
     <button id="btn-autoupd" class="sec">Turn on automatic updates</button>
     <button id="btn-again" class="sec">Check for updates now</button>
   </div>
-  <div class="hint" id="shortcut-msg">The icon opens this helper by double-click &mdash; no terminal needed, ever again.</div>
+  <div class="hint" id="shortcut-msg">Two icons: <b>Gacha Companion</b> (opens a control panel &mdash;
+  updates, logs, reports &mdash; anytime) and <b>Gacha Companion Setup</b> (this wizard). No terminal needed, ever again.</div>
   <div class="hint" id="autoupd-msg"></div>
 </div>
 
@@ -1242,21 +1572,68 @@ $("btn-svc-stop").onclick = async () => {
 
 # --------------------------------------------------------------- main
 
+PANEL_LOCK = REPO / ".panel.json"
+
+
+def running_panel_url() -> str | None:
+    """URL of an already-running panel, or None."""
+    try:
+        info = json.loads(PANEL_LOCK.read_text())
+        if Path(f"/proc/{info['pid']}").exists():
+            return info["url"]
+    except Exception:
+        pass
+    return None
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="Gacha Companion setup wizard")
     ap.add_argument("--no-browser", action="store_true")
     ap.add_argument("--port", type=int, default=0)
+    ap.add_argument("--panel", action="store_true",
+                    help="open the day-to-day control panel")
+    ap.add_argument("--report", action="store_true",
+                    help="print a redacted diagnostic report and exit")
     args = ap.parse_args()
 
     if not (REPO / "pyproject.toml").exists():
         print("run me from inside the Gacha-Companion folder: cd Gacha-Companion && python3 setup-gui.py")
         return 1
 
+    if args.report:
+        print("copy everything below and send it back:", file=sys.stderr)
+        print(build_report({"step": "(terminal report — run by hand)",
+                            "message": "", "ua": "terminal"}))
+        return 0
+
+    if args.panel:
+        if url := running_panel_url():
+            print(f"Gacha Companion panel already open: {url}", flush=True)
+            if not args.no_browser:
+                threading_timer_launch(url + "panel/")
+            return 0
+
     token = secrets.token_urlsafe(10)
     wiz = Wizard(token)
     httpd = ThreadingHTTPServer(("127.0.0.1", args.port), make_handler(wiz))
     port = httpd.server_address[1]
     url = f"http://127.0.0.1:{port}/{token}/"
+    if args.panel:
+        PANEL_LOCK.write_text(json.dumps({"pid": os.getpid(), "port": port,
+                                          "token": token, "url": url}))
+        print("Gacha Companion control panel", flush=True)
+        print(f"  open:  {url}panel/", flush=True)
+        print("  exit:  Ctrl+C here when you are done", flush=True)
+        if not args.no_browser:
+            threading_timer_launch(url + "panel/")
+        try:
+            httpd.serve_forever()
+        except KeyboardInterrupt:
+            pass
+        finally:
+            PANEL_LOCK.unlink(missing_ok=True)
+            print("\nbye — reopen with “Gacha Companion” from your menu any time.")
+        return 0
     print("Gacha Companion setup wizard", flush=True)
     print(f"  open:  {url}", flush=True)
     print("  exit:  Ctrl+C here when you are done", flush=True)

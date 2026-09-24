@@ -25,6 +25,12 @@ No desktop/browser (`--cli`) or over SSH? `setup.sh` falls back to the same
 flow in the terminal, and `bash stop-service.sh` / `bash start-service.sh`
 manage the background service afterwards.
 
+After setup, the **"Gacha Companion" desktop app** (added by the wizard's
+"Add desktop icons" button) opens a small control panel: check/apply updates,
+start/stop the service, peek at logs, open the data folder, and copy a
+secrets-redacted problem report — the same report as `bash setup.sh --report`
+in a terminal.
+
 The rest of this document explains each step manually — useful when something
 needs fixing or you want to understand the moving parts.
 
@@ -265,6 +271,7 @@ timer).
 | Auto-update says "local changes — skipping" | You edited tracked files in the repo — `git stash` (or commit) them, then re-run `bash auto-update.sh` |
 | An update was rolled back automatically | The new version wouldn't start; you're running the previous commit (see `update.log`) — check in with whoever publishes updates |
 | "cannot activate team …" | A character is on another active team — deactivate that one first, that's by design |
+| **Hand a full diagnostic back for help** | `bash setup.sh --report` — prints a complete, secrets-redacted report (logs, versions, settings, disk) to copy-paste. The "Gacha Companion" desktop app has the same button plus a live log viewer. |
 | Everything else | `GET /health`, then check the terminal running `serve` (logs are human-readable; keys are redacted) |
 
 **Data-honesty caveat:** ZZZ static data in the adapter (agent

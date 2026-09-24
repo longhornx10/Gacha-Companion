@@ -29,7 +29,8 @@ htmlcov/
 .DS_Store
 *.swp
 
-# Local service runtime artifacts (start-service.sh, auto-update.sh)
+# Local service runtime artifacts (start-service.sh, auto-update.sh, panel)
 serve.log
 serve.pid
 update.log
+.panel.json
