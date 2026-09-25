@@ -7,6 +7,7 @@ from datetime import datetime
 from sqlalchemy.orm import Session
 
 from game_companion.core.games.base import GameAdapter
+from game_companion.db.models import RedeemCode
 from game_companion.db.repositories import CodeRepository
 from game_companion.errors import ValidationError
 
@@ -25,8 +26,6 @@ class CodeService:
         expires_at: str | None = None,
         notes: str | None = None,
     ):
-        from game_companion.db.models import RedeemCode
-
         if self.codes.find_by_code(self.adapter.game_id, code):
             raise ValidationError(f"code '{code}' already tracked")
         parsed_expiry = None
@@ -57,6 +56,67 @@ class CodeService:
 
     def mark_used(self, code_id: str, player_id: str, used: bool):
         return self.codes.set_player_state(code_id, player_id, used)
+
+
+    def refresh_from_source(
+        self, *, transport=None
+    ) -> dict:
+        """Pull codes from the adapter's auto source (M25).
+
+        Source is authoritative for status; player "used" state is never
+        touched. Every outcome (including "no source declared" and fetch
+        failures) lands in ``source_runs`` so the UI can show it honestly.
+        """
+        from game_companion.core.catalog.service import fetch_payload, record_run
+        from game_companion.utils import utcnow
+
+        spec = self.adapter.codes_source()
+        if not spec:
+            record_run(
+                self.session, self.adapter.game_id, "codes", "codes", "error",
+                detail="game declares no auto codes source",
+            )
+            return {"status": "error", "detail": "no auto codes source for this game"}
+
+        source_key = spec.get("key", "codes")
+        try:
+            payload = fetch_payload(spec, transport)
+            rows = self.adapter.codes_transform(payload)
+            if not rows:
+                raise ValueError("source returned no parseable codes")
+        except Exception as exc:  # noqa: BLE001 — recorded honestly, never fatal
+            record_run(
+                self.session, self.adapter.game_id, source_key, "codes",
+                "error", detail=f"{type(exc).__name__}: {exc}",
+            )
+            return {"status": "error", "detail": str(exc)}
+
+        added = updated = 0
+        for row in rows:
+            existing = self.codes.find_by_code(self.adapter.game_id, row["code"])
+            if existing is None:
+                existing = RedeemCode(
+                    game_id=self.adapter.game_id,
+                    code=row["code"],
+                    discovered_at=row.get("discovered_at") or utcnow(),
+                )
+                self.session.add(existing)
+                added += 1
+            else:
+                updated += 1
+            if row.get("status") in ("active", "expired", "unknown"):
+                existing.status = row["status"]
+            if row.get("rewards"):
+                existing.notes = row["rewards"]
+            if row.get("discovered_at"):
+                existing.discovered_at = row["discovered_at"]
+        self.session.flush()
+        record_run(
+            self.session, self.adapter.game_id, source_key, "codes",
+            "ok", items=len(rows),
+        )
+        return {"status": "ok", "source": spec.get("name", source_key),
+                "items": len(rows), "added": added, "updated": updated}
 
     def render_codes_markdown(self, player_id: str) -> str:
         """#CODES output. Used codes are struck through but NOT hidden forever:

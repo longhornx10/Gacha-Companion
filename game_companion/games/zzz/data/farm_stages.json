@@ -1,0 +1,164 @@
+{
+  "_meta": {
+    "label": "CURRENT BUILD DATA",
+    "sources": [
+      {
+        "name": "ZZZ Wiki (Fandom) — Area Patrol stage list",
+        "url": "https://zenless-zone-zero.fandom.com/wiki/Area_Patrol",
+        "retrieved": "2026-09-25"
+      },
+      {
+        "name": "u7buy — ZZZ Area Patrol guide (stage-to-set list)",
+        "url": "https://www.u7buy.com/blog/zenless-zone-zero-area-patrol",
+        "retrieved": "2026-09-25"
+      },
+      {
+        "name": "kayco.app set pages (stage 12 corroboration)",
+        "url": "https://kayco.app",
+        "retrieved": "2026-09-25"
+      }
+    ],
+    "patch": "3.2",
+    "retrieved": "2026-09-25",
+    "notes": [
+      "battery_cost 60 is a VERIFIED MECHANIC (user-provided in-game spec).",
+      "Each run can drop either of the stage's two sets; the split between them is not officially published — treating it as equal (50/50) is an ASSUMPTION.",
+      "Stage names and adding versions from the Fandom change history; stage 12 (Deceits and Bulwarks, 2.5) corroborated by two further sources."
+    ]
+  },
+  "mode": "area_patrol",
+  "stages": [
+    {
+      "key": "ap_01",
+      "name": "Monster and Weirdo",
+      "order": 1,
+      "sets": [
+        "swing_jazz",
+        "chaotic_metal"
+      ],
+      "battery_cost": 60,
+      "since_version": "1.0"
+    },
+    {
+      "key": "ap_02",
+      "name": "Fist and Gun",
+      "order": 2,
+      "sets": [
+        "hormone_punk",
+        "fanged_metal"
+      ],
+      "battery_cost": 60,
+      "since_version": "1.0"
+    },
+    {
+      "key": "ap_03",
+      "name": "Hunter and Hound",
+      "order": 3,
+      "sets": [
+        "shockstar_disco",
+        "thunder_metal"
+      ],
+      "battery_cost": 60,
+      "since_version": "1.0"
+    },
+    {
+      "key": "ap_04",
+      "name": "Tower and Cannon",
+      "order": 4,
+      "sets": [
+        "woodpecker_electro",
+        "soul_rock"
+      ],
+      "battery_cost": 60,
+      "since_version": "1.0"
+    },
+    {
+      "key": "ap_05",
+      "name": "Madman and Follower",
+      "order": 5,
+      "sets": [
+        "puffer_electro",
+        "inferno_metal"
+      ],
+      "battery_cost": 60,
+      "since_version": "1.0"
+    },
+    {
+      "key": "ap_06",
+      "name": "Sharp Fang and Blunt Axe",
+      "order": 6,
+      "sets": [
+        "freedom_blues",
+        "polar_metal"
+      ],
+      "battery_cost": 60,
+      "since_version": "1.0"
+    },
+    {
+      "key": "ap_07",
+      "name": "Hunter and Beast",
+      "order": 7,
+      "sets": [
+        "chaos_jazz",
+        "proto_punk"
+      ],
+      "battery_cost": 60,
+      "since_version": "1.2"
+    },
+    {
+      "key": "ap_08",
+      "name": "Monster Duet",
+      "order": 8,
+      "sets": [
+        "branch_and_blade_song",
+        "astral_voice"
+      ],
+      "battery_cost": 60,
+      "since_version": "1.4"
+    },
+    {
+      "key": "ap_09",
+      "name": "Gunslinger vs Guardian",
+      "order": 9,
+      "sets": [
+        "shadow_harmony",
+        "phaethons_melody"
+      ],
+      "battery_cost": 60,
+      "since_version": "1.6"
+    },
+    {
+      "key": "ap_10",
+      "name": "Words and Weapons",
+      "order": 10,
+      "sets": [
+        "yunkui_tales",
+        "king_of_the_summit"
+      ],
+      "battery_cost": 60,
+      "since_version": "2.0"
+    },
+    {
+      "key": "ap_11",
+      "name": "Iron Law and Outlaws",
+      "order": 11,
+      "sets": [
+        "dawns_bloom",
+        "moonlight_lullaby"
+      ],
+      "battery_cost": 60,
+      "since_version": "2.2"
+    },
+    {
+      "key": "ap_12",
+      "name": "Deceits and Bulwarks",
+      "order": 12,
+      "sets": [
+        "white_water_ballad",
+        "shining_aria"
+      ],
+      "battery_cost": 60,
+      "since_version": "2.5"
+    }
+  ]
+}

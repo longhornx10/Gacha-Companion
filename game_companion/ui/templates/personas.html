@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-head">
+  {% if theme.logo %}<img class="page-logo" src="{{ theme.logo }}" alt="" {% if theme.logo_filter %}style="filter:{{ theme.logo_filter }}"{% endif %}>{% endif %}
+  <h1>Personas</h1>
+</div>
+<p class="muted">A persona shapes tone only — never facts, numbers or recommendations.
+Personas bound to a game are used automatically when that game is active.</p>
+
+<section class="card">
+  <h2>Speak as {{ char_term }}</h2>
+  <p class="muted">Pick any {{ char_term|lower }} from the catalog and the assistant will
+  role-play as them — while still only stating facts it can verify.</p>
+  <form method="post" action="/ui/personas/quick-character" class="inline-row" style="margin:0">
+    <select name="character_key" required>
+      <option value="">— choose {{ char_term }} —</option>
+      {% for c in catalog_chars %}
+      <option value="{{ c.key }}">{{ c.display_name }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit">Create “as {{ char_term }}” persona</button>
+  </form>
+  {% if not catalog_chars %}
+  <p class="muted">The catalog is empty — import it on the <a href="/ui/database">Database</a> page first.</p>
+  {% endif %}
+</section>
+
+<div class="grid2">
+  {% for p in personas %}
+  <section class="card">
+    <h2>{{ p.name }} <span class="muted">{{ p.id }}</span>
+      {% if p.bound_game %}<span class="chip chip-cyan">{{ p.bound_game }}</span>{% endif %}
+      {% if p.role_as_character %}<span class="chip chip-orange">as {{ p.role_as_name or p.role_as_character }}</span>{% endif %}</h2>
+    <p>{{ p.description }}</p>
+    <p class="muted">tone: {{ p.tone }} · verbosity: {{ p.verbosity }}</p>
+    {% if p.style_traits %}<p class="muted">{{ p.style_traits|join(' · ') }}</p>{% endif %}
+    <form method="post" action="/ui/personas/{{ p.id }}/delete" class="inline"
+          onsubmit="return confirm('Delete persona {{ p.name }}?')">
+      <button type="submit" class="danger">Delete</button>
+    </form>
+  </section>
+  {% endfor %}
+</div>
+
+<section class="card">
+  <h2>Create or update a persona</h2>
+  <p class="muted">Saving an id that already exists updates it (including built-ins).</p>
+  <form method="post" action="/ui/personas/save">
+    <div class="grid2">
+      <p><label>Id (stable slug)<br><input type="text" name="persona_id" placeholder="calm_mentor" required></label></p>
+      <p><label>Name<br><input type="text" name="name" placeholder="Calm Mentor" required></label></p>
+      <p><label>Tone<br>
+        <select name="tone">
+          {% for t in ['friendly', 'energetic', 'calm', 'playful', 'formal'] %}
+          <option value="{{ t }}">{{ t }}</option>
+          {% endfor %}
+        </select></label></p>
+      <p><label>Verbosity<br>
+        <select name="verbosity">
+          <option value="low">low</option>
+          <option value="medium" selected>medium</option>
+          <option value="high">high</option>
+        </select></label></p>
+      <p><label>Bound to game<br>
+        <select name="bound_game">
+          <option value="">Any game</option>
+          {% for g in games %}<option value="{{ g.game_id }}">{{ g.display_name }}</option>{% endfor %}
+        </select></label></p>
+      <p><label>Role-play as {{ char_term|lower }}<br>
+        <select name="role_as_character">
+          <option value="">No role-play</option>
+          {% for c in catalog_chars %}<option value="{{ c.key }}">{{ c.display_name }}</option>{% endfor %}
+        </select></label></p>
+    </div>
+    <p><label>Description<br><input type="text" name="description" style="width:100%"></label></p>
+    <p><label>Style traits (comma-separated)<br><input type="text" name="style_traits" style="width:100%" placeholder="patient, uses short sentences"></label></p>
+    <p><label>Example phrases (one per line)<br><textarea name="example_phrases" rows="3" style="width:100%"></textarea></label></p>
+    <p><label>Extra system preamble<br><textarea name="system_preamble" rows="2" style="width:100%"></textarea></label></p>
+    <p><button type="submit">Save persona</button></p>
+  </form>
+</section>
+{% endblock %}

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en" data-game="{{ game_id }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ title }} · Gacha Companion</title>
+<link rel="stylesheet" href="/ui/static/style.css?v=14">
+<style>:root{--accent:{{ theme.accent }};--accent2:{{ theme.accent2 }};{% if theme.bg %}--bg:{{ theme.bg }};--bg2:{{ theme.bg2 }};--card:{{ theme.card }};--radius:{{ theme.radius }};{% endif %}{% if theme.font %}--font-display:'{{ theme.font }}',system-ui,sans-serif;{% endif %}}</style>
+<script src="/ui/static/htmx.min.js" defer></script>
+<script src="/ui/static/delight.js?v=4" defer></script>
+</head>
+<body data-currency="{{ theme.currency or '' }}" data-currency-colors="{{ theme.currency_colors or '' }}" data-currency-shape="{{ theme.currency_shape or 'pieces' }}" data-currency-icon="{{ theme.currency_icon or '' }}">
+<header>
+  <div class="topbar">
+    <a class="brand" href="/ui"><span class="brand-dot"></span>Gacha Companion</a>
+    {% if not ctx.needs_setup %}
+    <form method="post" action="/ui/select-game" class="switcher">
+      <input type="hidden" name="next" value="{{ request.url.path }}">
+      <label class="switcher-label" for="game-select">Game</label>
+      <select id="game-select" name="game_id" onchange="this.form.submit()">
+        {% for g in games %}
+        <option value="{{ g.game_id }}" {% if g.game_id == game_id %}selected{% endif %}>{{ g.display_name }}</option>
+        {% endfor %}
+      </select>
+      <noscript><button type="submit">Switch</button></noscript>
+    </form>
+    <a class="player-link" href="/ui/settings">{{ ctx.player.display_name }}</a>
+    {% endif %}
+  </div>
+  {% if not ctx.needs_setup %}
+  <nav>
+    <a href="/ui" class="{{ 'active' if active == 'dashboard' }}">Home</a>
+    <a href="/ui/roster" class="{{ 'active' if active == 'roster' }}">{{ term.character_plural }}</a>
+    <a href="/ui/hall" class="{{ 'active' if active == 'hall' }}">The Hall</a>
+    <a href="/ui/teams" class="{{ 'active' if active == 'teams' }}">{{ term.team }}s</a>
+    <a href="/ui/gear" class="{{ 'active' if active == 'gear' }}">Inventory</a>
+    <a href="/ui/farm" class="{{ 'active' if active == 'farm' }}">Farm Plan</a>
+    <a href="/ui/trackers" class="{{ 'active' if active == 'trackers' }}">Trackers</a>
+    <a href="/ui/imports" class="{{ 'active' if active == 'imports' }}">Import</a>
+    <a href="/ui/games" class="{{ 'active' if active == 'games' }}">Games</a>
+    <a href="/ui/settings" class="{{ 'active' if active == 'settings' }}">Settings</a>
+  </nav>
+  {% endif %}
+</header>
+{% if notice %}<div class="notice" role="status">{{ notice }}</div>{% endif %}
+<main>
+{% block content %}{% endblock %}
+</main>
+<footer>
+  <p>Your data lives in SQLite on this machine. The assistant reads it through tools — it never owns your data.</p>
+</footer>
+</body>
+</html>

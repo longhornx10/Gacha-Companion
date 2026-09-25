@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-head">
+  {% if theme.logo %}<img class="page-logo" src="{{ theme.logo }}" alt="" {% if theme.logo_filter %}style="filter:{{ theme.logo_filter }}"{% endif %}>{% endif %}
+  <h1>Roster audit</h1>
+  <a class="button" href="/ui/roster">Back to {{ term.character_plural|lower }}</a>
+</div>
+<p class="muted">Deterministic checks against starter data — missing levels, unfilled
+gear slots, never-verified entries. {{ audit.audited }} {{ term.character_plural|lower }} checked.</p>
+
+{% if audit.results %}
+<table>
+  <thead><tr><th>{{ term.character }}</th><th>Status</th><th>Findings</th></tr></thead>
+  <tbody>
+    {% for r in audit.results %}
+    <tr>
+      <td><strong>{{ r.display_name }}</strong></td>
+      <td><span class="chip {{ 'chip-red' if r.status == 'critical' else ('chip-orange' if r.status == 'attention' else 'chip-white') }}">{{ r.status }}</span></td>
+      <td>
+        {% if r.issues %}
+          <ul class="issues">{% for i in r.issues %}<li>{{ i.detail }}</li>{% endfor %}</ul>
+        {% else %}<span class="muted">nothing found</span>{% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="card"><p class="muted">No owned {{ term.character_plural|lower }} to audit yet.</p></div>
+{% endif %}
+{% endblock %}

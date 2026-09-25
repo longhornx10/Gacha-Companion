@@ -1,0 +1,1 @@
+"""HSR game adapter package."""

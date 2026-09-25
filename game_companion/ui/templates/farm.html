@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-head">
+  {% if theme.logo %}<img class="page-logo" src="{{ theme.logo }}" alt="" {% if theme.logo_filter %}style="filter:{{ theme.logo_filter }}"{% endif %}>{% endif %}
+  <h1>Farm Plan</h1>
+</div>
+<p class="muted">What to farm next, based on the current meta, your agents, and the
+{{ gear_plural|lower }} you own. Everything technical is behind the scenes.</p>
+
+{% if not plan %}
+<div class="card">
+  <h2>Not available for this game yet</h2>
+  <p class="muted">The farm planner needs a meta dataset (builds per character,
+  farmable stages) that this game's adapter doesn't ship. Packaged data stays
+  empty rather than guessing.</p>
+</div>
+{% else %}
+
+<form method="get" action="/ui/farm" class="card inline-row">
+  <label>Plan for
+    <select name="scope">
+      <option value="mine" {{ 'selected' if scope == 'mine' }}>My agents</option>
+      <option value="meta" {{ 'selected' if scope == 'meta' }}>Everyone in the meta</option>
+    </select>
+  </label>
+  <label>Spare {{ gear_plural|lower }} to keep
+    <select name="spare">
+      {% for value, label in spare_labels.items() %}
+      <option value="{{ value }}" {{ 'selected' if spare == value }}>{{ label }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <button type="submit">Update plan</button>
+</form>
+
+{% if plan.scope.fallback %}
+<p class="muted">None of your saved agents are in the current meta dataset yet, so this
+plan covers everyone — add your agents on the Agents page to personalize it.</p>
+{% endif %}
+{% if plan.inventory_summary.discs == 0 %}
+<p class="muted">You haven't logged any {{ gear_plural|lower }} yet — add them on the
+Inventory page and this plan gets personal. For now it shows what the meta needs most.</p>
+{% endif %}
+
+{% if simple.top_stage %}
+<div class="card">
+  <h2>Farm this next: {{ simple.top_stage.stage_name }}</h2>
+  <p><strong>{{ simple.top_stage.set_names | join(' + ') }}</strong>
+  — Area Patrol, {{ simple.top_stage.battery_cost or '?' }} battery per run.</p>
+  {% if simple.why %}<p class="muted">{{ simple.why }}</p>{% endif %}
+  {% if simple.gap_elsewhere %}<p class="muted">{{ simple.gap_elsewhere }}</p>{% endif %}
+</div>
+{% endif %}
+
+<h2>Sets you need most, in order</h2>
+{% if simple.sets %}
+<table>
+  <thead><tr><th>Set</th><th>How you're doing</th><th>Where to get it</th></tr></thead>
+  <tbody>
+    {% for s in simple.sets %}
+    <tr>
+      <td><strong>{{ s.name }}</strong></td>
+      <td>{{ s.word }}{% if s.pct %} ({{ s.pct }}%){% endif %}</td>
+      <td>
+        {% if s.stage_name %}
+          <span class="chip chip-cyan">{{ s.stage_name }}</span>
+        {% else %}
+          <span class="chip chip-gray" title="This set isn't dropped by any farming stage">event / shop only</span>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="muted">Nothing needs farming right now — every set your agents use is covered.</p>
+{% endif %}
+
+{% if simple.other_stages %}
+<h2>Other stages worth running</h2>
+<table>
+  <thead><tr><th>Stage</th><th>Drops</th><th>Battery</th></tr></thead>
+  <tbody>
+    {% for s in simple.other_stages %}
+    <tr>
+      <td><strong>{{ s.stage_name }}</strong></td>
+      <td>{{ s.set_names | join(' + ') }}</td>
+      <td class="num-cell">{{ s.battery_cost or '?' }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+<details>
+  <summary class="muted">Show the details (numbers, labels, provenance)</summary>
+  <p class="muted">Scope: {{ plan.scope.agents }} agent(s), spare-target β = {{ plan.config.beta }}
+  ({{ spare_labels[spare] }}). Demand and need come from
+  <strong>{{ meta_source or 'the packaged meta dataset' }}</strong>
+  (patch {{ meta_patch or '?' }}, retrieved {{ meta_retrieved or '?' }});
+  targets and grading are heuristics; the stage split is an assumption — nothing here is a
+  drop-rate claim.</p>
+
+  <h2>Sets by farm pressure</h2>
+  <table>
+    <thead><tr>
+      <th>Set</th>
+      <th title="Demand-weighted pieces the current meta wants">Demand</th>
+      <th title="Characters whose primary build uses the set">Need</th>
+      <th title="⌈β × need⌉ spare-set target">Target</th>
+      <th title="Quality-credited count of owned pieces">Effective</th>
+      <th title="Effective / target">Coverage</th>
+      <th title="Slot with the fewest usable pieces vs an even share">Bottleneck</th>
+      <th title="Where to farm — or why not to">Farm</th>
+    </tr></thead>
+    <tbody>
+      {% for r in plan.set_rows %}
+      <tr>
+        <td><strong>{{ r.set_name }}</strong></td>
+        <td class="num-cell">{{ r.demand }}</td>
+        <td class="num-cell">{{ r.need }}</td>
+        <td class="num-cell">{{ r.target }}</td>
+        <td class="num-cell">{{ r.effective }}</td>
+        <td class="num-cell">
+          {% if r.coverage is none %}—
+          {% else %}{{ (r.coverage * 100) | round(0) | int }}%{% endif %}
+        </td>
+        <td class="muted">{{ (plan.bottlenecks.get(r.set_key) or {}).detail or '—' }}</td>
+        <td>
+          {% if r.farmable and r.farm_stage %}
+            {% set stage = plan.stage_index | selectattr('key', 'equalto', r.farm_stage) | list %}
+            <span class="chip chip-cyan">{{ stage[0].name if stage else r.farm_stage }}</span>
+          {% elif not r.farmable %}
+            <span class="chip chip-gray" title="Not dropped by any farming stage (event/shop set)">event/shop</span>
+          {% else %}
+            <span class="chip chip-gray">no stage data</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>Stages by combined pressure</h2>
+  <p class="muted">Stage pressure = Σ (set pressure × share). The share between a
+  stage's two sets is an <strong>ASSUMPTION</strong> (even split) — treat rankings,
+  not absolute numbers, as the signal.</p>
+  {% if plan.stage_rows %}
+  <table>
+    <thead><tr><th>Stage</th><th>Drops</th><th>Battery</th><th>Pressure</th><th></th></tr></thead>
+    <tbody>
+      {% for s in plan.stage_rows %}
+      <tr>
+        <td><strong>{{ s.stage_name }}</strong></td>
+        <td>{{ s.set_names | join(' + ') }}</td>
+        <td class="num-cell">{{ s.battery_cost or '?' }}</td>
+        <td class="num-cell">{{ '%.3f' | format(s.pressure) }}</td>
+        <td>
+          {% if loop.first %}<span class="chip chip-orange">farm next</span>{% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="muted">No stage carries pressure right now (every demanded set is covered).</p>
+  {% endif %}
+
+  <ul class="muted">
+    <li><strong>DEMAND / NEED</strong> — {{ plan.labels.demand }}: Prydwen tier list +
+      per-agent build pages (q-weights normalized per character; 2pc rank decay is a
+      HEURISTIC).</li>
+    <li><strong>TARGET</strong> — {{ plan.labels.target }}: T = ⌈β × need⌉, β is your choice.</li>
+    <li><strong>EFFECTIVE</strong> — {{ plan.labels.effective }}: owned pieces credited
+      {{ plan.provenance.grading.scale.keys() | join('/') }} by level/rarity/main-stat fit.</li>
+    <li><strong>COVERAGE / PRESSURE</strong> — {{ plan.labels.coverage }} (derived from the above).</li>
+    <li><strong>STAGE SPLIT</strong> — {{ plan.labels.stage_split }}: even split between a
+      stage's two sets; no official drop rates are published.</li>
+    <li>Scarcity boosts ({{ plan.provenance.scarcity.table.keys() | join(', ') }}):
+      {{ plan.provenance.scarcity.label }} — sets whose users need elemental slot-V mains
+      are hardest to farm well.</li>
+  </ul>
+</details>
+
+{% endif %}
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card setup">
+  <h1>Welcome!</h1>
+  <p>This is your gacha companion: it keeps track of your characters, gear,
+     resources and codes locally on this computer, and talks with you about them.</p>
+  <p>Pick a name for your profile to get started:</p>
+  <form method="post" action="/ui/players/create" class="inline-row big">
+    <input type="text" name="display_name" placeholder="Your name" required autofocus>
+    <button type="submit">Let's go</button>
+  </form>
+</div>
+{% endblock %}

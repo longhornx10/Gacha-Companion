@@ -168,3 +168,42 @@ def evaluate_gear(
     if payload.character:
         character = CharacterRepository(session).get_by_key_or_raise(game_id, player.id, payload.character)
     return evaluate_gear_item(session, adapter, game_id, player.id, gear_row, character)
+
+
+@router.get("/farm-plan")
+def farm_plan(
+    game_id: str,
+    beta: float = Query(default=1.2),
+    scope: str = Query(default="meta"),
+    session: Session = Depends(get_db),
+    player=Depends(resolve_player),
+):
+    """Set-farming pressure plan (M26). 409 when the game has no meta data.
+
+    ``scope=mine`` restricts demand to the player's own roster; the default
+    ``meta`` covers every meta agent.
+    """
+    adapter = adapter_for(game_id)
+    rows = [
+        {
+            "gear_type": g.gear_type,
+            "set_key": g.set_key,
+            "slot": g.slot,
+            "rarity": g.rarity,
+            "level": g.level,
+            "main_stat_key": g.main_stat_key,
+            "equipped_character_id": g.equipped_character_id,
+        }
+        for g in GearRepository(session).search(game_id, player.id)
+    ]
+    unit_keys = None
+    if scope == "mine":
+        unit_keys = [c.key for c in CharacterRepository(session).search(game_id, player.id)]
+    plan = adapter.build_farm_plan(rows, beta=beta, unit_keys=unit_keys)
+    if plan is None:
+        return {
+            "available": False,
+            "detail": f"{adapter.display_name} has no meta dataset for the farm planner yet",
+        }
+    plan["available"] = True
+    return plan

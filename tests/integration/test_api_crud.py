@@ -197,5 +197,5 @@ def test_player_and_game_isolation(client, player, second_player):
     # cross-player reads of a specific character are a 404, not a leak
     assert client.get(f"/api/games/zzz/characters/burnice?player_id={second_player}").status_code == 404
 
-    # unknown game rejected
-    assert client.get(f"/api/games/hsr/characters?player_id={player}").status_code == 404
+    # unknown game rejected (hsr/nte are real adapters now)
+    assert client.get(f"/api/games/nope/characters?player_id={player}").status_code == 404

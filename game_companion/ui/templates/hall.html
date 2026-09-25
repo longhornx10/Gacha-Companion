@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-head">
+  {% if theme.logo %}<img class="page-logo" src="{{ theme.logo }}" alt="" {% if theme.logo_filter %}style="filter:{{ theme.logo_filter }}"{% endif %}>{% endif %}
+  <h1>The Hall</h1>
+  {% if mood %}<span class="muted">{{ mood }}</span>{% endif %}
+</div>
+<p class="muted">Your collection at a glance — portraits, levels, and every build in
+progress. Click anyone to open their record.</p>
+
+{% if newly_unlocked %}
+<div class="toast" data-sound="sparkle">
+  <span style="font-size:1.5rem">{{ newly_unlocked[0].icon }}</span>
+  <span><strong>Achievement unlocked:</strong> {{ newly_unlocked[0].name }}
+  {% if newly_unlocked|length > 1 %}<span class="muted">(+{{ newly_unlocked|length - 1 }} more)</span>{% endif %}</span>
+</div>
+{% endif %}
+
+{% if team_cards %}
+<h2>Active {{ term.team|lower }}</h2>
+<div class="hall-team">
+  {% for c in team_cards %}
+  <a class="hall-card hall-rarity-{{ c.rarity }}" href="{{ c.edit }}">
+    <div class="hall-portrait">
+      {% if c.portrait %}<img src="{{ c.portrait }}" alt="{{ c.name }}" loading="lazy">{% else %}<div class="hall-monogram">{{ c.name[:1] }}</div>{% endif %}
+      <span class="hall-level">{{ c.level if c.level is not none else '—' }}</span>
+    </div>
+    <div class="hall-name">{{ c.name }}</div>
+    <div class="hall-sub">★ team slot {{ loop.index }}</div>
+  </a>
+  {% endfor %}
+</div>
+{% endif %}
+
+<h2>{{ term.character_plural }} <span class="muted">({{ cards|length }})</span></h2>
+{% if cards %}
+<div class="hall-grid">
+  {% for c in cards %}
+  <a class="hall-card hall-rarity-{{ c.rarity }}" href="{{ c.edit }}" title="{{ c.name }}">
+    <div class="hall-portrait">
+      <div class="hall-monogram">{{ c.name[:1] }}</div>
+      {% if c.portrait %}<img src="{{ c.portrait }}" alt="{{ c.name }}" loading="lazy" onerror="this.remove()">{% endif %}
+      <span class="hall-badges">
+        {% if c.element_icon %}<img src="{{ c.element_icon }}" alt="{{ c.element }}" title="{{ c.element }}">{% elif c.element %}<span class="hall-icon-fallback" title="{{ c.element }}">{{ c.element[:2]|capitalize }}</span>{% endif %}
+        {% if c.specialty %}<span class="hall-icon-fallback" title="{{ c.specialty }}">{{ c.specialty[:2]|capitalize }}</span>{% endif %}
+      </span>
+      <span class="hall-level">{{ c.level if c.level is not none else '—' }}{% if c.dupe %} · {{ c.dupe }}{% endif %}</span>
+      {% if c.favorite %}<span class="hall-new">★</span>{% endif %}
+    </div>
+    <div class="hall-name">{{ c.name }}</div>
+    <div class="hall-build">
+      {% if c.engine_icon %}<img src="{{ c.engine_icon }}" alt="{{ c.engine_name or 'item' }}" title="{{ c.engine_name or 'Equipped item' }}">{% else %}<span class="empty-dot" title="No item equipped"></span>{% endif %}
+      {% for icon in c.disc_icons[:4] %}
+        {% if icon %}<img src="{{ icon }}" alt="set" title="Set piece">{% else %}<span class="empty-dot"></span>{% endif %}
+      {% endfor %}
+      {% if c.disc_slots > 4 %}<span class="more">+{{ c.disc_slots - 4 }}</span>
+      {% elif c.disc_slots < 6 %}<span class="more">{{ 6 - c.disc_slots }} empty</span>{% endif %}
+    </div>
+  </a>
+  {% endfor %}
+</div>
+{% else %}
+<div class="card">
+  <h2>Nothing on display yet</h2>
+  <p class="muted">Add your first {{ char_term|lower }} on the <a href="/ui/roster">Agents</a>
+  page — the catalog has everyone, so it's one click each.</p>
+</div>
+{% endif %}
+
+{% if latest_cards %}
+<h2>Fresh faces in the catalog</h2>
+<p class="muted">The newest {{ char_term_plural|lower if char_term_plural else char_term|lower }} to hit
+the game, straight from the auto-updating catalog.</p>
+<div class="hall-strip">
+  {% for c in latest_cards %}
+  <div class="hall-card">
+    <div class="hall-portrait">
+      {% if c.portrait %}<img src="{{ c.portrait }}" alt="{{ c.name }}" loading="lazy">{% else %}<div class="hall-monogram">{{ c.name[:1] }}</div>{% endif %}
+      <span class="hall-new">NEW</span>
+    </div>
+    <div class="hall-name">{{ c.name }}</div>
+    <div class="hall-sub">{% if c.rarity %}{{ c.rarity }}★{% endif %}</div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<h2>Achievements <span class="muted">({{ achievements | selectattr('unlocked') | list | length }}/{{ achievements|length }})</span></h2>
+<div class="ach-shelf">
+  {% for a in achievements %}
+  <div class="ach {{ 'locked' if not a.unlocked }}" title="{{ a.description }}">
+    <span class="ach-medal">{{ a.icon }}</span>
+    <span><span class="ach-name">{{ a.name }}</span><br><span class="ach-desc">{{ a.description }}</span></span>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -45,4 +45,4 @@ class LLMError(DomainError):
 
 class SearchNotConfiguredError(DomainError):
     status_code = 503
-    detail = "no search provider configured (set GAME_COMPANION_SEARXNG_BASE_URL)"
+    detail = "no search provider answered (built-in DuckDuckGo + optional SearXNG)"

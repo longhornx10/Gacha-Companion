@@ -10,11 +10,24 @@ from fastapi.testclient import TestClient
 
 @pytest.fixture()
 def settings(tmp_path: Path, monkeypatch):
+    # hot-applied settings write os.environ (pydantic precedence) — clear any
+    # leaked GAME_COMPANION_* vars so every test starts from a clean slate
+    # (monkeypatch restores whatever was there after the test).
+    import os
+
+    for var in [k for k in os.environ if k.startswith("GAME_COMPANION_")]:
+        monkeypatch.delenv(var, raising=False)
+    # ISOLATE THE CWD: .env is resolved relative to the process CWD (pydantic
+    # env_file + core/appsettings writes) — tests must never touch the real
+    # repo .env. chdir into the per-test tmp dir; monkeypatch restores it.
+    monkeypatch.chdir(tmp_path)
     data_dir = tmp_path / "data"
     monkeypatch.setenv("GAME_COMPANION_DATA_DIR", str(data_dir))
     monkeypatch.setenv("ALEMBIC_DATABASE_URL", f"sqlite:///{data_dir / 'test.db'}")
-    # keep the suite fully offline: no LLM endpoint, no search provider
+    # keep the suite fully offline: no LLM endpoint, no search provider,
+    # no background auto-refresh network fetches
     monkeypatch.setenv("GAME_COMPANION_LLM_BASE_URL", "")
+    monkeypatch.setenv("GAME_COMPANION_AUTO_REFRESH", "0")
     monkeypatch.delenv("GAME_COMPANION_LLM_API_KEY", raising=False)
     monkeypatch.delenv("GAME_COMPANION_SEARXNG_BASE_URL", raising=False)
     from game_companion.config import get_settings
@@ -39,6 +52,17 @@ def player(client) -> str:
     response = client.post("/api/players", json={"display_name": "Test Player"})
     assert response.status_code == 201, response.text
     return response.json()["id"]
+
+
+@pytest.fixture()
+def ui_player(client) -> str:
+    """A player created through the /ui first-run form; returns the player id."""
+    response = client.post(
+        "/ui/players/create", data={"display_name": "Phoenix"}, follow_redirects=False
+    )
+    assert response.status_code == 303, response.text
+    players = client.get("/api/players").json()["players"]
+    return players[-1]["id"]
 
 
 @pytest.fixture()

@@ -65,7 +65,7 @@ class RosterService:
     def update_character(self, char: Character, payload: Mapping[str, Any]) -> Character:
         updatable = (
             "display_name", "rarity", "owned", "level",
-            "duplication_level", "favorite", "notes",
+            "duplication_level", "favorite", "notes", "source",
         )
         for attr in updatable:
             if attr in payload:

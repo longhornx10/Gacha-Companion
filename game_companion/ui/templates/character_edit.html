@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-head">
+  {% if theme.logo %}<img class="page-logo" src="{{ theme.logo }}" alt="" {% if theme.logo_filter %}style="filter:{{ theme.logo_filter }}"{% endif %}>{% endif %}
+  <h1>Edit {{ selected.display_name }}</h1>
+</div>
+<p class="muted">Everything stored about this {{ char_term|lower }} — review it for accuracy,
+fix anything, and save. Saving marks the data as verified by you.</p>
+
+<form method="post" action="/ui/roster/{{ selected.key }}/edit">
+  <section class="card">
+    <h2>{{ selected.display_name }} <span class="muted">{{ selected.key }}</span></h2>
+    <p class="muted">
+      source: {{ selected.source }} ·
+      {% if selected.last_verified_at %}last verified {{ selected.last_verified_at[:10] }}{% else %}never verified — review recommended{% endif %}
+    </p>
+    <div class="grid2">
+      <p><label>{{ char_term }} name<br><input type="text" name="display_name" value="{{ selected.display_name }}"></label></p>
+      <p><label>Rarity<br><input type="text" name="rarity" value="{{ selected.rarity if selected.rarity is not none else '' }}" style="max-width:6rem"></label></p>
+      <p><label>Level<br><input type="text" name="level" value="{{ selected.level if selected.level is not none else '' }}" style="max-width:6rem"></label></p>
+      <p><label>{{ dupe_term }}<br><input type="text" name="duplication_level" value="{{ selected.duplication_level if selected.duplication_level is not none else '' }}" style="max-width:6rem"></label></p>
+    </div>
+    <p>
+      <label><input type="checkbox" name="owned" {% if selected.owned %}checked{% endif %}> Owned</label>
+      &nbsp;&nbsp;
+      <label><input type="checkbox" name="favorite" {% if selected.favorite %}checked{% endif %}> Favorite ★</label>
+    </p>
+    <p><label>Notes<br><textarea name="notes" rows="2" style="width:100%">{{ selected.notes or '' }}</textarea></label></p>
+  </section>
+
+  <section class="card">
+    <h2>Game details</h2>
+    <div class="grid2">
+      {% if 'attribute' in choices %}
+      <p><label>Attribute<br>
+        <select name="attribute">
+          <option value="">—</option>
+          {% for v in choices['attribute'] %}<option value="{{ v }}" {% if selected.data.get('attribute') == v %}selected{% endif %}>{{ v|capitalize }}</option>{% endfor %}
+        </select></label></p>
+      {% endif %}
+      {% if 'specialty' in choices %}
+      <p><label>Specialty<br>
+        <select name="specialty">
+          <option value="">—</option>
+          {% for v in choices['specialty'] %}<option value="{{ v }}" {% if selected.data.get('specialty') == v %}selected{% endif %}>{{ v|capitalize }}</option>{% endfor %}
+        </select></label></p>
+      {% endif %}
+      <p><label>Faction<br><input type="text" name="faction" value="{{ selected.data.get('faction', '') }}"></label></p>
+    </div>
+    {% if selected.data %}<p class="muted">Other stored details: {{ selected.data|tojson }}</p>{% endif %}
+  </section>
+
+  <section class="card">
+    <h2>Skill levels</h2>
+    <div class="grid2">
+      {% for key, name in skill_defs.items() %}
+      <p><label>{{ name }}<br>
+        <input type="text" name="skill_{{ key }}" value="{{ selected.skills.get(key, '') if key in selected.skills else '' }}" style="max-width:6rem">
+      </label></p>
+      {% endfor %}
+    </div>
+  </section>
+
+  <p>
+    <button type="submit">Save changes</button>
+    <a class="button" href="/ui/roster">Back to the list</a>
+  </p>
+</form>
+{% endblock %}

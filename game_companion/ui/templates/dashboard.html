@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="home-layout">
+
+  {% if banners.hero %}
+  <section class="home-hero">
+    <div class="hero-body">
+      <span class="hero-label">Now on banner</span>
+      <strong class="hero-name">{{ banners.hero.name }}</strong>
+      <span class="hero-meta">
+        {% if banners.hero.banner_type %}<span class="chip chip-accent">{{ banners.hero.banner_type }}</span>{% endif %}
+        <span>{{ banners.hero.ends_label or banners.hero.starts_label or 'date TBA' }}</span>
+        {% if banners.hero.phase %}<span class="muted">· {{ banners.hero.phase }}</span>{% endif %}
+      </span>
+      {% if banners.hero.featured %}<span class="hero-sub">Featuring {{ banners.hero.featured|join(' · ') }}</span>{% endif %}
+      {% if banners.also %}<span class="hero-sub">Also live: {% for a in banners.also %}{{ a.name }}{% if a.banner_type %} ({{ a.banner_type }}){% endif %}{{ ' · ' if not loop.last }}{% endfor %}</span>{% endif %}
+      {% if banners.next %}<span class="hero-sub">Next: {{ banners.next.name }} {{ banners.next.starts_label or '' }}</span>{% endif %}
+      <span class="hero-caption">Banner windows from Prydwen · community data · NA server dates</span>
+    </div>
+    <div class="hero-art">
+      {% if banners.hero.art %}<img src="{{ banners.hero.art }}" alt="{{ banners.hero.name }} banner art" loading="lazy"
+        data-lightbox="{{ banners.hero.art }}" title="Click to view full size">{% endif %}
+    </div>
+  </section>
+  {% endif %}
+
+  <div class="chat-side home-chats">
+    <form method="post" action="/ui/chat/new">
+      <button type="submit" style="width:100%">+ New chat</button>
+    </form>
+    <ul class="chat-list">
+      {% for conv in conversations %}
+      <li>
+        <a href="/ui?c={{ conv.id }}" class="{{ 'current' if current and conv.id == current.id }}">
+          {{ conv.title|truncate(28) }}
+        </a>
+        <form method="post" action="/ui/chat/{{ conv.id }}/delete" class="inline"
+              onsubmit="return confirm('Delete this chat?')">
+          <button type="submit" class="link-danger" title="Delete chat">✕</button>
+        </form>
+      </li>
+      {% else %}
+      <li class="muted">No chats yet</li>
+      {% endfor %}
+    </ul>
+    <p><a href="/ui/personas" class="muted">Edit personas →</a></p>
+    <div class="chat-side-shortcuts">
+      <h3>Shortcuts</h3>
+      <p><a class="button" href="/ui/farm">What should I farm?</a></p>
+      <p><a class="button" href="/ui/imports">Import data</a>
+         <a class="button" href="/ui/audit">Run audit</a></p>
+      <p class="muted small">
+        {% if dashboard.last_import %}Last import: {{ dashboard.last_import.screen_type }}
+        <span class="chip chip-gray">{{ dashboard.last_import.status }}</span>
+        {% else %}Nothing imported yet.{% endif %}
+      </p>
+    </div>
+  </div>
+
+  <section class="chat-main">
+    {% if current %}
+    <div class="chat-head">
+      <strong>{{ current.title }}</strong>
+      <form method="post" action="/ui/chat/{{ current.id }}/persona" class="inline-row" style="margin:0">
+        <select name="persona_id">
+          <option value="">Default tone</option>
+          {% for p in personas %}
+          <option value="{{ p.id }}" {% if current.persona_id == p.id %}selected{% endif %}>{{ p.name }}</option>
+          {% endfor %}
+        </select>
+        <button type="submit">Speak as</button>
+      </form>
+    </div>
+
+    <div class="chat-log">
+      {% for m in chat_messages %}
+        {% if m.role == 'user' %}
+          <div class="msg user"><span>{{ m.content }}</span></div>
+        {% elif m.role == 'assistant' %}
+          <div class="msg assistant">
+            {% if m.tools %}<div class="tool-chips">{% for t in m.tools %}<span class="chip chip-gray">{{ t }}</span>{% endfor %}</div>{% endif %}
+            {% if m.content %}<span>{{ m.content }}</span>{% endif %}
+          </div>
+        {% elif m.role == 'tool' %}
+          <div class="msg tool"><span class="chip chip-gray">{{ m.tool_name or 'tool' }}</span></div>
+        {% endif %}
+      {% else %}
+      <p class="muted">Say hello — ask about your {{ term.character_plural|lower }}, what to farm, teams, resources or codes.</p>
+      {% endfor %}
+    </div>
+
+    <form method="post" action="/ui/chat/{{ current.id }}/send" class="chat-composer">
+      <input type="text" name="text" placeholder="Ask anything about your account…" required autocomplete="off" autofocus>
+      <button type="submit">Send</button>
+    </form>
+    {% else %}
+    <div class="card">
+      <h2>Chat with your companion</h2>
+      <p class="muted">This is the fastest way to use the app: it reads your real roster,
+      resources and codes from this machine and answers in plain language.
+      Try “what should I farm next?” or “how many {{ term.character_plural|lower }} are level 60?”</p>
+      <form method="post" action="/ui/chat/new">
+        <button type="submit">Start chatting</button>
+      </form>
+      <p class="muted" style="margin-top:.7rem"><a href="/ui/personas">Personas</a> — make the companion speak as a {{ term.character|lower }}.</p>
+    </div>
+    {% endif %}
+  </section>
+
+  <aside class="rail home-side">
+    <div class="rail-brand">
+      {% if theme.logo %}<img class="rail-logo" src="{{ theme.logo }}" alt="{{ dashboard.game_name }} logo"
+        {% if theme.logo_filter %}style="filter:{{ theme.logo_filter }}"{% endif %}>{% endif %}
+      <span>{{ dashboard.game_name }}</span>
+    </div>
+
+    <div class="rail-grid">
+      <a class="rail-stat" href="/ui/roster">
+        <span class="num">{{ dashboard.roster_count }}</span><span class="lbl">{{ term.character_plural }}</span>
+      </a>
+      <a class="rail-stat" href="/ui/gear">
+        <span class="num">{{ dashboard.gear_count }}</span><span class="lbl">{{ term_plural.gear }}</span>
+      </a>
+      <a class="rail-stat" href="/ui/gear">
+        <span class="num">{{ dashboard.equipment_count }}</span><span class="lbl">{{ term_plural.equipment }}</span>
+      </a>
+      <a class="rail-stat" href="/ui/trackers#codes">
+        <span class="num">{{ dashboard.codes_active }}</span><span class="lbl">codes ready</span>
+      </a>
+    </div>
+
+    <a class="rail-sec" href="/ui/hall">
+      <h3>Achievements</h3>
+      {% set unlocked = achievements | selectattr('unlocked') | list | length %}
+      <p class="rail-count">{{ unlocked }} of {{ achievements|length }} earned</p>
+      <div class="medal-row">
+        {% for a in achievements %}
+        <span class="medal {{ 'on' if a.unlocked }}" title="{{ a.name }} — {{ a.description }}">{{ a.icon }}</span>
+        {% endfor %}
+      </div>
+      <p class="rail-more">See them all in The Hall →</p>
+    </a>
+
+    <a class="rail-sec" href="/ui/teams">
+      <h3>Active {{ term.team|lower }}</h3>
+      {% if dashboard.active_team %}
+      <p class="rail-strong">{{ dashboard.active_team.name }}</p>
+      <p class="rail-sub">{{ dashboard.active_team.members | map(attribute='display_name') | join(' · ') }}</p>
+      {% else %}
+      <p class="rail-sub">No active {{ term.team|lower }} — pick one →</p>
+      {% endif %}
+    </a>
+
+    <a class="rail-sec" href="/ui/trackers#resources">
+      <h3>Resources</h3>
+      {% if dashboard.resources %}
+      <table class="mini">
+        <tbody>
+          {% for r in dashboard.resources %}
+          <tr>
+            <td>{{ r.name }}</td>
+            <td class="num-cell">{{ r.quantity }}</td>
+            <td><span class="chip {{ r.chip }}">{{ r.status.replace('_', ' ') }}</span></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p class="rail-sub">Nothing tracked yet — add resources →</p>
+      {% endif %}
+    </a>
+
+    <a class="rail-sec" href="/ui/trackers#history">
+      <h3>Recent results</h3>
+      {% if dashboard.recent_results %}
+      <table class="mini">
+        <tbody>
+          {% for r in dashboard.recent_results[:4] %}
+          <tr>
+            <td>{{ r.encounter_key.replace('_', ' ') }}</td>
+            <td class="muted">
+              {% if r.cleared %}cleared{% if r.stars %} · {{ r.stars }}★{% endif %}{% else %}{{ r.score if r.score is not none else '—' }}{% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p class="rail-sub">No combat results yet.</p>
+      {% endif %}
+    </a>
+  </aside>
+
+</div>
+{% endblock %}

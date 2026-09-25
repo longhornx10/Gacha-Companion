@@ -19,6 +19,14 @@ STAT_DEFINITIONS = [
     StatDefinition(key="anomaly_mastery", name="Anomaly Mastery", kind="percent"),
     StatDefinition(key="pen_ratio", name="Pen Ratio", kind="percent"),
     StatDefinition(key="energy_regen", name="Energy Regen", kind="percent"),
+    # Elemental damage mains (slot V only). wind_dmg seen in Prydwen build
+    # data (3.2) — UNKNOWN-NEEDS DATA until corroborated in-game.
+    StatDefinition(key="physical_dmg", name="Physical DMG", kind="percent"),
+    StatDefinition(key="fire_dmg", name="Fire DMG", kind="percent"),
+    StatDefinition(key="ice_dmg", name="Ice DMG", kind="percent"),
+    StatDefinition(key="electric_dmg", name="Electric DMG", kind="percent"),
+    StatDefinition(key="ether_dmg", name="Ether DMG", kind="percent"),
+    StatDefinition(key="wind_dmg", name="Wind DMG", kind="percent"),
 ]
 
 # Starter max levels: combat skills cap at 12 in-game; Core Skill is capped

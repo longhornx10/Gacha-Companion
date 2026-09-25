@@ -1,0 +1,25 @@
+{
+  "_meta": {
+    "review": "hand_curated",
+    "notes": "Starter data from launch-window guides. NTE inverts the usual set model: each Cartridge's 4-Module combo forms its set bonus (set_rule module_combo) — see docs/game-adapters-research.md. Slot count and pools: verify in-game."
+  },
+  "families": [
+    {
+      "key": "cartridge",
+      "display": "Cartridge",
+      "slot_count": 4,
+      "set_rule": "module_combo",
+      "set_sizes": [4],
+      "rarity_scale": "SAB",
+      "max_level": null,
+      "max_substats": 4,
+      "starter_data": true,
+      "slots": [
+        {"key": "piece_1", "display": "Piece 1"},
+        {"key": "piece_2", "display": "Piece 2"},
+        {"key": "piece_3", "display": "Piece 3"},
+        {"key": "piece_4", "display": "Piece 4"}
+      ]
+    }
+  ]
+}

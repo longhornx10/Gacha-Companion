@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-head">
+  {% if theme.logo %}<img class="page-logo" src="{{ theme.logo }}" alt="" {% if theme.logo_filter %}style="filter:{{ theme.logo_filter }}"{% endif %}>{% endif %}
+  <h1>Inventory</h1>
+</div>
+
+<section class="card">
+  <h2>{{ equipment_noun }}</h2>
+  {% if equipment %}
+  <table>
+    <thead><tr><th>Name</th><th>Rarity</th><th>Level</th><th>Stars</th><th>Equipped by</th><th>Locked</th></tr></thead>
+    <tbody>
+      {% for e in equipment %}
+      <tr>
+        <td><strong>{{ e.display_name }}</strong></td>
+        <td>{{ e.rarity or '—' }}</td>
+        <td class="num-cell">{{ e.level if e.level is not none else '—' }}</td>
+        <td class="num-cell">{{ e.refinement if e.refinement is not none else '—' }}</td>
+        <td>{{ e.equipped or '—' }}</td>
+        <td>{% if e.locked %}🔒{% else %}·{% endif %}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}<p class="muted">No {{ equipment_noun|lower }} recorded yet — add your first one below.</p>{% endif %}
+
+  <h3>Add a {{ equipment_noun|lower }}</h3>
+  {% if catalog_equipment %}
+  <p class="muted">Pick the item from the catalog, then fill in what you own: its level,
+  refinement, and who has it equipped.</p>
+  <form method="post" action="/ui/gear/equipment/add" class="inline-row">
+    <select name="catalog_key" required>
+      <option value="">— choose from the catalog —</option>
+      {% for e in catalog_equipment %}
+      <option value="{{ e.key }}">{{ e.display_name }}{% if e.rarity %} ({{ e.rarity }}★){% endif %}</option>
+      {% endfor %}
+    </select>
+    <input type="text" name="level" placeholder="Level" style="max-width:6rem">
+    <input type="text" name="refinement" placeholder="Refinement" style="max-width:7rem">
+    <select name="equipped_character_id">
+      <option value="">— not equipped —</option>
+      {% for cid, cname in character_options %}
+      <option value="{{ cid }}">{{ cname }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit">Add</button>
+  </form>
+  {% else %}
+  <p class="muted">The equipment catalog hasn't been imported yet —
+  open the <a href="/ui/games#data">Games</a> page and click “Check online sources now”.</p>
+  {% endif %}
+</section>
+
+<section class="card">
+  <h2>{{ gear_noun }}</h2>
+  {% if gear %}
+  <table>
+    <thead><tr><th>Set</th><th>Slot</th><th>Rarity</th><th>Level</th><th>Main stat</th><th>Subs</th><th>Equipped by</th><th>Flags</th></tr></thead>
+    <tbody>
+      {% for g in gear %}
+      <tr>
+        <td>{{ g.set_key or '—' }}</td>
+        <td>{{ g.slot or '—' }}</td>
+        <td>{{ g.rarity or '—' }}</td>
+        <td class="num-cell">{{ g.level if g.level is not none else '—' }}</td>
+        <td>{{ g.main or '—' }}</td>
+        <td class="num-cell">{{ g.substats }}</td>
+        <td>{{ g.equipped or '—' }}</td>
+        <td>{% if g.locked %}🔒{% endif %} {% if g.favorite %}★{% endif %}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}<p class="muted">No {{ gear_noun|lower }} recorded yet — add your first piece below.</p>{% endif %}
+
+  <h3>Add a {{ gear_noun|lower }}</h3>
+  <p class="muted">Record one piece: pick its set and slot, then the stats it rolled.</p>
+  <form method="post" action="/ui/gear/gear/add" class="inline-row">
+    <select name="set_key" required>
+      <option value="">— set —</option>
+      {% for key, name in set_choices %}
+      <option value="{{ key }}">{{ name }}</option>
+      {% endfor %}
+    </select>
+    <select name="slot" required>
+      <option value="">— slot —</option>
+      {% for s in gear_slots %}
+      <option value="{{ s.key }}">{{ s.name }}</option>
+      {% endfor %}
+    </select>
+    <input type="text" name="rarity" placeholder="Rarity" style="max-width:5.5rem">
+    <input type="text" name="level" placeholder="Level" style="max-width:5.5rem">
+    <select name="main_stat_key">
+      <option value="">— main stat —</option>
+      {% for s in stat_options %}
+      <option value="{{ s.key }}">{{ s.name }}</option>
+      {% endfor %}
+    </select>
+    <input type="text" name="main_stat_value" placeholder="Value" style="max-width:6rem">
+    <select name="equipped_character_id">
+      <option value="">— not equipped —</option>
+      {% for cid, cname in character_options %}
+      <option value="{{ cid }}">{{ cname }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit">Add</button>
+  </form>
+</section>
+{% endblock %}

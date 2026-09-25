@@ -19,6 +19,7 @@ from game_companion.utils import utcnow
 
 _EQUIP_FIELDS = ("rarity", "level", "refinement", "locked", "notes", "data")
 _GEAR_FIELDS = (
+    "gear_type",
     "set_key",
     "slot",
     "rarity",
@@ -108,9 +109,20 @@ class GearService:
             valid = {s.key for s in self.adapter.gear_slots()}
             if slot not in valid:
                 raise ValidationError(f"unknown gear slot '{slot}' (valid: {sorted(valid)})")
+        families = self.adapter.gear_families()
+        gear_type = payload.get("gear_type")
+        if families:
+            family_keys = {f.key for f in families}
+            if gear_type is None:
+                gear_type = families[0].key
+            elif gear_type not in family_keys:
+                raise ValidationError(
+                    f"unknown gear family '{gear_type}' (valid: {sorted(family_keys)})"
+                )
         item = GearItem(
             game_id=game_id,
             player_profile_id=player_id,
+            gear_type=gear_type or "disc",
             equipped_character_id=char.id if char else None,
             last_verified_at=utcnow() if payload.get("verified") else None,
             source=str(payload.get("source") or "manual"),

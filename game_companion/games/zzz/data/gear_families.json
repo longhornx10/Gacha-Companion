@@ -1,0 +1,85 @@
+{
+  "_meta": {
+    "review": "hand_curated",
+    "notes": "Family/slot structure is starter data. Main-stat pools are a VERIFIED MECHANIC (user-provided in-game spec, v3.2): slots I-III fixed flat HP/ATK/DEF; IV can roll CRIT stats; V carries elemental damage bonuses; VI carries utility mains. wind_dmg is flagged UNKNOWN-NEEDS DATA (seen in Prydwen build data 3.2, not yet corroborated in-game). Pool keys match the adapter's stat vocabulary."
+  },
+  "families": [
+    {
+      "key": "disc",
+      "display": "Drive Disc",
+      "slot_count": 6,
+      "set_rule": "fixed_pieces",
+      "set_sizes": [
+        2,
+        4
+      ],
+      "rarity_scale": "SAB",
+      "max_level": 15,
+      "max_substats": 4,
+      "starter_data": true,
+      "slots": [
+        {
+          "key": "1",
+          "display": "I",
+          "main_stat_pool": [
+            "hp"
+          ]
+        },
+        {
+          "key": "2",
+          "display": "II",
+          "main_stat_pool": [
+            "atk"
+          ]
+        },
+        {
+          "key": "3",
+          "display": "III",
+          "main_stat_pool": [
+            "def"
+          ]
+        },
+        {
+          "key": "4",
+          "display": "IV",
+          "main_stat_pool": [
+            "hp_pct",
+            "atk_pct",
+            "def_pct",
+            "crit_rate",
+            "crit_dmg",
+            "anomaly_proficiency"
+          ]
+        },
+        {
+          "key": "5",
+          "display": "V",
+          "main_stat_pool": [
+            "hp_pct",
+            "atk_pct",
+            "def_pct",
+            "pen_ratio",
+            "physical_dmg",
+            "fire_dmg",
+            "ice_dmg",
+            "electric_dmg",
+            "ether_dmg",
+            "wind_dmg"
+          ]
+        },
+        {
+          "key": "6",
+          "display": "VI",
+          "main_stat_pool": [
+            "hp_pct",
+            "atk_pct",
+            "def_pct",
+            "anomaly_mastery",
+            "energy_regen",
+            "impact"
+          ]
+        }
+      ]
+    }
+  ]
+}

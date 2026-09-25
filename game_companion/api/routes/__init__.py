@@ -3,9 +3,11 @@
 from fastapi import APIRouter
 
 from game_companion.api.routes import (
+    chat,
     codes_history,
     exports,
     items,
+    llm,
     recommendations,
     research_vision,
     roster,
@@ -19,6 +21,8 @@ api_router.include_router(roster.router)
 api_router.include_router(items.router)
 api_router.include_router(teams_resources.router)
 api_router.include_router(codes_history.router)
+api_router.include_router(chat.router)
+api_router.include_router(llm.router)
 api_router.include_router(research_vision.router)
 api_router.include_router(recommendations.router)
 api_router.include_router(exports.router)

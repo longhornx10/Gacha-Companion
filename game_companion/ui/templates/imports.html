@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-head">
+  {% if theme.logo %}<img class="page-logo" src="{{ theme.logo }}" alt="" {% if theme.logo_filter %}style="filter:{{ theme.logo_filter }}"{% endif %}>{% endif %}
+  <h1>Imports</h1>
+</div>
+
+<section class="card">
+  <h2>Paste a roster</h2>
+  <p class="muted">Copy your roster text (one {{ term.character|lower }} per line —
+  name, level, {{ term.duplication|lower }}, {{ term.equipment|lower }} all optional).
+  Nothing is saved until you review and confirm it below.</p>
+  <form method="post" action="/ui/imports/roster-txt">
+    <textarea name="text" rows="7" style="width:100%" required
+      placeholder="Burnice lv60 M1&#10;Ellen lv60&#10;Lycaon M0"></textarea>
+    <p><button type="submit">Stage roster</button></p>
+  </form>
+</section>
+
+<section class="card">
+  <h2>Upload a screenshot</h2>
+  {% if vision_warning %}<p class="vision-warning">⚠ {{ vision_warning }}</p>{% endif %}
+  <p class="muted">Screenshots are read by your configured vision model{{ (' — ' ~ model_name) if model_name }}, then shown below
+  for review — raw output never touches your data directly.</p>
+  <form method="post" action="/ui/imports/upload" enctype="multipart/form-data" class="inline-row">
+    <input type="file" name="upload" accept="image/*" required>
+    <select name="screen_type">
+      {% for st in screen_types %}<option value="{{ st }}">{{ st.replace('_', ' ') }}</option>{% endfor %}
+    </select>
+    <input type="text" name="character_hint" placeholder="{{ term.character }} name (optional)">
+    <button type="submit">Upload</button>
+  </form>
+</section>
+
+<section class="card">
+  <h2>Pending &amp; past imports</h2>
+  {% if imports %}
+  <table>
+    <thead><tr><th>When</th><th>Kind</th><th>Proposed changes</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+      {% for imp in imports %}
+      <tr>
+        <td class="muted">{{ imp.created_at[:16].replace('T', ' ') if imp.created_at else '—' }}</td>
+        <td>{{ imp.screen_type.replace('_', ' ') }}<br><span class="muted">{{ imp.name }}</span></td>
+        <td>
+          {% if imp.error %}<span class="chip chip-red">failed</span> <span class="muted">{{ imp.error }}</span>
+          {% elif imp.status == 'pending' %}
+            <ul class="issues">
+              {% for c in imp.changes %}
+                <li>{{ c.action }} {{ c.entity }} {{ c.key }}{% if c.field %}: {{ c.field }} {{ c.current if c.current is not none else '—' }} → {{ c.proposed }}{% endif %}</li>
+              {% endfor %}
+            </ul>
+            {% if imp.unresolved %}
+              <details><summary class="muted">{{ imp.unresolved|length }} line(s) need attention</summary>
+                <ul class="issues">{% for u in imp.unresolved %}<li>{{ u.line }} — {{ u.reason }}</li>{% endfor %}</ul>
+              </details>
+            {% endif %}
+          {% elif imp.changes %}
+            {{ imp.changes|length }} change(s)
+          {% else %}—{% endif %}
+        </td>
+        <td><span class="chip {{ 'chip-orange' if imp.status == 'pending' else 'chip-gray' }}">{{ imp.status }}</span></td>
+        <td>
+          {% if imp.status == 'pending' %}
+          <form method="post" action="/ui/imports/{{ imp.id }}/confirm" class="inline">
+            <button type="submit">Apply</button>
+          </form>
+          <form method="post" action="/ui/imports/{{ imp.id }}/reject" class="inline">
+            <button type="submit" class="danger">Discard</button>
+          </form>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="muted">No imports yet.</p>
+  {% endif %}
+</section>
+{% endblock %}

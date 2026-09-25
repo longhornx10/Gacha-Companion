@@ -22,12 +22,25 @@ class PersonaConfig(BaseModel):
     system_preamble: str = ""
     # Optional game binding ("zzz"); None = usable for any game.
     bound_game: str | None = None
+    # Role-play mode: speak AS this character (catalog key + display name).
+    # Tone rules still apply to facts — the character never invents data.
+    role_as_character: str | None = None
+    role_as_name: str | None = None
 
     def system_prompt_fragment(self, terminology_line: str = "") -> str:
-        parts = [
-            f"You are the user's gacha companion, speaking with a '{self.name}' persona "
-            f"(tone: {self.tone}, verbosity: {self.verbosity}).",
-        ]
+        if self.role_as_character:
+            who = self.role_as_name or self.role_as_character
+            parts = [
+                f"You are role-playing as {who} while helping the user with their "
+                f"gacha game. Stay in character: speak the way {who} would, with "
+                f"that personality and those mannerisms.",
+                f"Persona framing: '{self.name}' (tone: {self.tone}, verbosity: {self.verbosity}).",
+            ]
+        else:
+            parts = [
+                f"You are the user's gacha companion, speaking with a '{self.name}' persona "
+                f"(tone: {self.tone}, verbosity: {self.verbosity}).",
+            ]
         if self.description:
             parts.append(self.description)
         if self.style_traits:
@@ -40,6 +53,12 @@ class PersonaConfig(BaseModel):
         parts.append(
             "The persona influences TONE ONLY. Never alter facts, numbers, citations, "
             "or recommendations to fit the persona."
+            + (
+                " Even in character, only state game facts backed by tool results — "
+                "the character never invents data about the user's account."
+                if self.role_as_character
+                else ""
+            )
         )
         if self.system_preamble:
             parts.append(self.system_preamble)

@@ -13,6 +13,7 @@ from game_companion.core.games.base import (
     EncounterModeDefinition,
     GameAdapter,
     GearEvaluation,
+    GearFamily,
     GearSlotDefinition,
     ScoreComponent,
     ScreenshotSpec,
@@ -55,6 +56,9 @@ class ZZZAdapter(GameAdapter):
         self._sets = resource_rules.load_data_json("drive_disc_sets", self._overrides_dir).get(
             "sets", []
         )
+        self._gear_families = resource_rules.load_data_json("gear_families", self._overrides_dir).get(
+            "families", []
+        )
         self._name_index: dict[str, str] = {}
         for key, meta in self._agents.items():
             self._name_index[key] = key
@@ -83,6 +87,32 @@ class ZZZAdapter(GameAdapter):
     def gear_slots(self) -> list[GearSlotDefinition]:
         return gear_rules.GEAR_SLOTS
 
+    def gear_families(self) -> list[GearFamily]:
+        families = []
+        for family in self._gear_families:
+            families.append(
+                GearFamily(
+                    key=family["key"],
+                    display=family.get("display", family["key"]),
+                    slot_count=family.get("slot_count", 0),
+                    set_rule=family.get("set_rule", "fixed_pieces"),
+                    set_sizes=tuple(family.get("set_sizes", ())),
+                    rarity_scale=family.get("rarity_scale", "SAB"),
+                    max_level=family.get("max_level"),
+                    max_substats=family.get("max_substats"),
+                    starter_data=family.get("starter_data", False),
+                    slots=tuple(
+                        GearSlotDefinition(
+                            key=slot["key"],
+                            name=slot.get("display", slot["key"]),
+                            main_stat_pool=tuple(slot.get("main_stat_pool", ())),
+                        )
+                        for slot in family.get("slots", ())
+                    ),
+                )
+            )
+        return families
+
     def stat_definitions(self) -> list[StatDefinition]:
         return list(STAT_DEFINITIONS)
 
@@ -97,6 +127,31 @@ class ZZZAdapter(GameAdapter):
 
     def gear_sets(self) -> list[dict[str, Any]]:
         return [dict(s) for s in self._sets]
+
+    def farm_stages(self) -> list[dict[str, Any]]:
+        from game_companion.games.zzz import farm as zzz_farm
+
+        return zzz_farm.load_farm_stages(self._overrides_dir).get("stages", [])
+
+    def gear_meta(self) -> dict[str, Any]:
+        from game_companion.games.zzz import farm as zzz_farm
+
+        return zzz_farm.load_drive_meta(self._overrides_dir)
+
+    def grade_gear(self, gear: Mapping[str, Any]) -> dict[str, Any]:
+        from game_companion.games.zzz import farm as zzz_farm
+
+        return zzz_farm.grade_disc(gear)
+
+    def build_farm_plan(
+        self,
+        gear_rows: Sequence[Mapping],
+        beta: float = 1.2,
+        unit_keys: Sequence[str] | None = None,
+    ) -> dict[str, Any] | None:
+        from game_companion.games.zzz import farm as zzz_farm
+
+        return zzz_farm.build_farm_plan(self, gear_rows, beta=beta, unit_keys=unit_keys)
 
     def equipment_rules(self) -> dict[str, Any]:
         return {
@@ -140,6 +195,40 @@ class ZZZAdapter(GameAdapter):
             "discovery_source_keys": zzz_sources.CODE_DISCOVERY_SOURCE_KEYS,
             "notes": zzz_sources.CODE_CONFIG_NOTES,
         }
+
+    def theme(self) -> dict[str, str]:
+        # palette mirrors the game's menus: near-black neutral + signature red
+        # (#ed343e) and stun yellow (#ffc000) as seen in ZZZ's own UI accents
+        return {
+            "accent": "#ed343e",
+            "accent2": "#ffc000",
+            "bg": "#0f0f13",
+            "bg2": "#1a1a21",
+            "card": "#1e1e24",
+            "line": "#2d2d35",
+            "radius": "10px",
+            "mood": "New Eridu after dark",
+            "font": "Saira Condensed",
+            "logo": "/ui/static/images/logos/zzz.webp",
+            "bg_image": "https://cdn.prydwen.gg/images/zenless-zone-zero/website_bg.webp",
+            "currency": "Polychrome",
+            "currency_colors": "#b16cff,#41d1ff,#e0c8ff,#7a5cff",
+            "currency_shape": "image",
+            "currency_icon": "/ui/static/images/currency/polychrome.webp",
+        }
+
+    def media_url(self, kind: str, key: str, meta: Any = None) -> str | None:
+        base = "https://cdn.prydwen.gg/images/zenless-zone-zero"
+        slug = key.strip().lower().replace("_", "-")
+        if kind == "character":
+            return f"{base}/characters/{slug}.webp"
+        if kind == "equipment":
+            return f"{base}/w-engines/{slug}_image.webp"
+        if kind == "gear_set":
+            return f"{base}/drives/set_{slug}.webp"
+        if kind == "element" and slug in ("physical", "fire", "ice", "electric", "ether"):
+            return f"{base}/icons/ele_{slug}.webp"
+        return None
 
     def persona_flavors(self) -> list[dict[str, Any]]:
         return [
@@ -225,6 +314,14 @@ class ZZZAdapter(GameAdapter):
             cleaned[key] = value
         return cleaned
 
+    def character_field_choices(self) -> dict[str, list[str]]:
+        from game_companion.games.zzz.terminology import ATTRIBUTE_NAMES, SPECIALTY_NAMES
+
+        return {
+            "attribute": sorted(ATTRIBUTE_NAMES),
+            "specialty": sorted(SPECIALTY_NAMES),
+        }
+
     def character_meta(self, key: str) -> dict[str, Any] | None:
         resolved = self._name_index.get(key.lower()) or self._name_index.get(key)
         if resolved is None:
@@ -244,6 +341,36 @@ class ZZZAdapter(GameAdapter):
         return self._name_index.get(name.strip().lower())
 
     # -- scoring hooks (heuristic, explainable) -------------------------------------
+
+    def bootstrap_sources(self) -> dict[str, Any]:
+        from game_companion.games.zzz import bootstrap as zzz_bootstrap
+
+        return zzz_bootstrap.BOOTSTRAP_SOURCES
+
+    def bootstrap_transform(self, source_key: str, payload: Any) -> list[dict[str, Any]]:
+        from game_companion.games.zzz import bootstrap as zzz_bootstrap
+
+        return zzz_bootstrap.transform(source_key, payload)
+
+    def catalog_sources(self) -> dict[str, Any]:
+        from game_companion.games.zzz import catalog as zzz_catalog
+
+        return zzz_catalog.CATALOG_SOURCES
+
+    def catalog_transform(self, source_key: str, payload: Any) -> list[dict[str, Any]]:
+        from game_companion.games.zzz import catalog as zzz_catalog
+
+        return zzz_catalog.catalog_transform(source_key, payload)
+
+    def codes_source(self) -> dict[str, Any] | None:
+        from game_companion.games.zzz import catalog as zzz_catalog
+
+        return dict(zzz_catalog.CODES_SOURCE)
+
+    def codes_transform(self, payload: Any) -> list[dict[str, Any]]:
+        from game_companion.games.zzz import catalog as zzz_catalog
+
+        return zzz_catalog.codes_transform(payload)
 
     def score_gear(self, gear: Mapping[str, Any], context: Mapping[str, Any]) -> GearEvaluation:
         return gear_rules.score_gear(gear, context, self.character_meta)

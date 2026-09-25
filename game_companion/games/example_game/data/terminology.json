@@ -1,0 +1,24 @@
+{
+  "_meta": {
+    "review": "hand_curated",
+    "notes": "Reference adapter vocabulary (Aether Tactics, fictional). Shows the expected shape for new adapters."
+  },
+  "terms": {
+    "character": {"display": "Vanguard", "gloss": "Playable unit you own and level"},
+    "character_plural": {"display": "Vanguards", "gloss": ""},
+    "equipment": {"display": "Sigil", "gloss": "Signature weapon; one per character"},
+    "equipment_plural": {"display": "Sigils", "gloss": ""},
+    "gear": {"display": "Charm", "gloss": "Set-based gear piece with substats"},
+    "gear_plural": {"display": "Charms", "gloss": ""},
+    "duplication": {"display": "Echo", "gloss": "Dupe system, 0-6"},
+    "special_progression": {"display": "Rite", "gloss": "Per-character progression track"},
+    "team": {"display": "Squad", "gloss": "Up to 4 characters"},
+    "build": {"display": "Loadout", "gloss": "Sigil + charm loadout"},
+    "role": {"display": "Discipline", "gloss": "Combat role"},
+    "attribute": {"display": "Aspect", "gloss": "Element"},
+    "pull_currency": {"display": "Prism", "gloss": "Premium pull currency"},
+    "pull_ticket_limited": {"display": "Wish Sigil", "gloss": "Limited banner ticket"},
+    "money": {"display": "Shards", "gloss": "Everyday currency"},
+    "stamina": {"display": "Vigor", "gloss": "Farming energy"}
+  }
+}

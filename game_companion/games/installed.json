@@ -1,0 +1,6 @@
+{
+  "adapters": {
+    "hsr": "game_companion.games.hsr.adapter:HSRAdapter",
+    "nte": "game_companion.games.nte.adapter:NTEAdapter"
+  }
+}

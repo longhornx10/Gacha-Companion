@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-head">
+  {% if theme.logo %}<img class="page-logo" src="{{ theme.logo }}" alt="" {% if theme.logo_filter %}style="filter:{{ theme.logo_filter }}"{% endif %}>{% endif %}
+  <h1>Trackers</h1>
+</div>
+<p class="muted">The stuff you check day to day: resources, redeem codes, and combat
+results — all on one page.</p>
+
+<section id="resources" class="card">
+  <h2>Resources</h2>
+  {% if resources %}
+  <table>
+    <thead><tr><th>Resource</th><th>Amount</th><th>Status</th><th>Planned for</th><th>Update</th></tr></thead>
+    <tbody>
+      {% for r in resources %}
+      <tr>
+        <td><strong>{{ r.name }}</strong></td>
+        <td class="num-cell">{{ r.quantity }}</td>
+        <td><span class="chip {{ r.chip }}">{{ r.status.replace('_', ' ') }}</span></td>
+        <td class="muted">{{ r.planned_characters|length if r.planned_characters else '—' }}</td>
+        <td>
+          <form method="post" action="/ui/resources/update" class="inline-row" style="margin:0">
+            <input type="hidden" name="resource_key" value="{{ r.resource_key }}">
+            <input type="text" name="quantity" value="{{ r.quantity }}" style="max-width:7rem">
+            <button type="submit">Set</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <p class="muted">Statuses are computed from your saved plan — never guessed by the assistant.</p>
+  {% else %}
+  <p class="muted">No resources tracked yet. Tell the assistant what you're planning —
+  for example “I'm building Burnice” — and the resources you need appear here with live
+  status. You can also ask it to “track 12,400 Polychrome”.</p>
+  {% endif %}
+</section>
+
+<section id="codes" class="card">
+  <h2>Codes</h2>
+  {% if codes_source %}
+  <p>
+    Codes refresh automatically every day from <strong>{{ codes_source.name }}</strong>.
+    {% if codes_run and codes_run.fetched_at %}
+      Last checked {{ codes_run.fetched_at }}.
+    {% elif codes_run %}
+      Not fetched yet.
+    {% else %}
+      First fetch will happen shortly after the app starts.
+    {% endif %}
+  </p>
+  {% if codes_run and codes_run.status != 'ok' %}
+  <p class="muted">Last attempt failed: {{ codes_run.detail or 'unknown reason' }} —
+  the app keeps retrying daily.</p>
+  {% endif %}
+  <form method="post" action="/ui/codes/refresh" class="inline">
+    <button type="submit">Refresh now</button>
+  </form>
+  {% else %}
+  <p class="muted">This game has no dependable auto codes source yet —
+  when one is available it will be fetched automatically, daily.</p>
+  {% endif %}
+
+  {% set active_codes = codes | rejectattr('used') | selectattr('status', 'equalto', 'active') | list %}
+  {% set used_codes = codes | selectattr('used') | list %}
+  {% set expired_codes = codes | rejectattr('used') | rejectattr('status', 'equalto', 'active') | list %}
+
+  {% if active_codes %}
+  <div class="code-grid">
+    {% for c in active_codes %}
+    <div class="code-card">
+      <div class="code-row">
+        <code>{{ c.code }}</code>
+        <button type="button" class="code-copy" data-copy="{{ c.code }}">Copy</button>
+      </div>
+      <div class="code-row">
+        <span class="chip chip-cyan">{{ c.status }}</span>{% if c.recycled %} <span class="muted">♻ recycled</span>{% endif %}
+        <form method="post" action="/ui/codes/{{ c.id }}/toggle-used" class="inline">
+          <button type="submit">Redeemed ✓</button>
+        </form>
+      </div>
+      <div class="code-meta">
+        {% if c.notes %}{{ c.notes }}{% endif %}
+        {% if c.expires_at %} · expires {{ c.expires_at[:10] }}{% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <p class="muted">Copy a code into the game's redemption page, then hit
+  <strong>Redeemed ✓</strong> to check it off.</p>
+  {% elif codes_source %}
+  <p class="muted">No active codes right now — click “Refresh now” above; new codes land automatically.</p>
+  {% else %}
+  <p class="muted">No codes known for this game yet.</p>
+  {% endif %}
+
+  {% if used_codes %}
+  <details>
+    <summary class="muted">Redeemed ({{ used_codes|length }})</summary>
+    <table>
+      <tbody>
+      {% for c in used_codes %}
+      <tr>
+        <td><span class="used">{{ c.code }}</span></td>
+        <td class="muted">{{ c.notes or '' }}</td>
+        <td><form method="post" action="/ui/codes/{{ c.id }}/toggle-used" class="inline">
+          <button type="submit">Mark unused</button></form></td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </details>
+  {% endif %}
+
+  {% if expired_codes %}
+  <details>
+    <summary class="muted">Expired ({{ expired_codes|length }})</summary>
+    <table>
+      <tbody>
+      {% for c in expired_codes %}
+      <tr><td><span class="muted">{{ c.code }}</span></td>
+          <td class="muted">expired {{ c.expires_at[:10] if c.expires_at else '—' }}</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </details>
+  {% endif %}
+</section>
+
+<section id="history" class="card">
+  <h2>Combat history</h2>
+  {% if results %}
+  <table>
+    <thead><tr><th>Encounter</th><th>Played</th><th>Team</th><th>Result</th></tr></thead>
+    <tbody>
+      {% for r in results %}
+      <tr>
+        <td>{{ r.encounter_key.replace('_', ' ') }}</td>
+        <td class="muted">{{ r.played_at[:10] if r.played_at else '—' }}</td>
+        <td class="muted">{{ r.team or '—' }}</td>
+        <td>
+          {% if r.cleared %}cleared{% if r.stars %} · {{ r.stars }}★{% endif %}
+          {% elif r.cleared == false %}no clear
+          {% else %}{{ r.score if r.score is not none else (r.rank or '—') }}{% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="muted">No combat results recorded yet.</p>
+  {% endif %}
+</section>
+{% endblock %}

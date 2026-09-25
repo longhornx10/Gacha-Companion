@@ -1,0 +1,40 @@
+{
+  "_meta": {
+    "review": "hand_curated",
+    "notes": "Starter data: relic/ornament structure and slot main-stat pools follow the standard community lists. Verify pools against in-game before relying on them for optimization."
+  },
+  "families": [
+    {
+      "key": "relic",
+      "display": "Relic",
+      "slot_count": 4,
+      "set_rule": "fixed_pieces",
+      "set_sizes": [2, 4],
+      "rarity_scale": "stars5",
+      "max_level": 15,
+      "max_substats": 4,
+      "starter_data": true,
+      "slots": [
+        {"key": "head", "display": "Head", "main_stat_pool": ["flat_hp"]},
+        {"key": "hands", "display": "Hands", "main_stat_pool": ["flat_atk"]},
+        {"key": "body", "display": "Body", "main_stat_pool": ["hp_percent", "atk_percent", "def_percent", "crit_rate", "crit_dmg", "outgoing_healing", "effect_hit_rate"]},
+        {"key": "feet", "display": "Feet", "main_stat_pool": ["hp_percent", "atk_percent", "def_percent", "speed_flat", "break_effect"]}
+      ]
+    },
+    {
+      "key": "ornament",
+      "display": "Planar Ornament",
+      "slot_count": 2,
+      "set_rule": "fixed_pieces",
+      "set_sizes": [2],
+      "rarity_scale": "stars5",
+      "max_level": 15,
+      "max_substats": 4,
+      "starter_data": true,
+      "slots": [
+        {"key": "sphere", "display": "Planar Sphere", "main_stat_pool": ["hp_percent", "atk_percent", "def_percent", "attribute_dmg"]},
+        {"key": "rope", "display": "Link Rope", "main_stat_pool": ["hp_percent", "atk_percent", "def_percent", "break_effect", "energy_regen"]}
+      ]
+    }
+  ]
+}

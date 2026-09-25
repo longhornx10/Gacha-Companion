@@ -23,13 +23,37 @@ RESOURCE_KEYS: list[tuple[str, str]] = [
     ("core_skill_material", "Core Skill upgrade materials"),
     ("boss_material", "Boss ascension material"),
     ("weekly_material", "Weekly challenge material"),
+    ("polychrome", "Polychrome"),
+    ("monochrome", "Monochrome"),
+    ("master_tape", "Master Tape"),
+    ("boopon", "Boopon"),
 ]
+
+# Cross-game resource taxonomy (M24): same category, different game names.
+RESOURCE_CATEGORIES: dict[str, str] = {
+    "polychrome": "pull_currency",
+    "monochrome": "pull_currency",
+    "master_tape": "pull_ticket_limited",
+    "boopon": "pull_ticket_limited",
+    "dennies": "money",
+    "agent_exp": "standard_material",
+    "wengine_exp": "standard_material",
+    "drive_exp": "standard_material",
+    "skill_material": "standard_material",
+    "core_skill_material": "standard_material",
+    "boss_material": "standard_material",
+    "weekly_material": "standard_material",
+}
 
 _OVERLOADABLE = {
     "resource_requirements": "resource_requirements.json",
     "agents": "agents.json",
     "progression": "progression.json",
     "drive_disc_sets": "drive_disc_sets.json",
+    "gear_families": "gear_families.json",
+    "terminology": "terminology.json",
+    "drive_meta": "drive_meta.json",
+    "farm_stages": "farm_stages.json",
 }
 
 
@@ -59,7 +83,13 @@ def resource_definitions(requirements: dict) -> list[ResourceDefinition]:
         if single_max is None:
             notes = "single-character max unknown; supply verified data to enable status thresholds"
         definitions.append(
-            ResourceDefinition(key=key, name=name, single_character_max=single_max, notes=notes)
+            ResourceDefinition(
+                key=key,
+                name=name,
+                single_character_max=single_max,
+                category=RESOURCE_CATEGORIES.get(key),
+                notes=notes,
+            )
         )
     return definitions
 

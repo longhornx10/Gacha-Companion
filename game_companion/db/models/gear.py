@@ -17,6 +17,8 @@ class GearItem(PKMixin, TimestampMixin, Base):
     player_profile_id: Mapped[str] = mapped_column(
         ForeignKey("player_profiles.id", ondelete="CASCADE"), index=True
     )
+    # Adapter gear-family key ("disc" for ZZZ; relics/ornaments for HSR; ...).
+    gear_type: Mapped[str] = mapped_column(String(40), default="disc", server_default="disc", index=True)
     set_key: Mapped[str | None] = mapped_column(String(80), default=None)
     slot: Mapped[str | None] = mapped_column(String(20), default=None)
     rarity: Mapped[int | None] = mapped_column(Integer, default=None)

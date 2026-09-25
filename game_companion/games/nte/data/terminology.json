@@ -1,0 +1,26 @@
+{
+  "_meta": {
+    "review": "hand_curated",
+    "notes": "From launch-window wikis (Prydwen, Game8, neverness.gg) via docs/game-adapters-research.md. NTE is young: entries marked [verify] must be confirmed in-game before being relied on."
+  },
+  "terms": {
+    "character": {"display": "Character", "gloss": "Playable unit you own and level"},
+    "character_plural": {"display": "Characters", "gloss": ""},
+    "equipment": {"display": "Arc", "gloss": "Signature weapon; one per character"},
+    "equipment_plural": {"display": "Arcs", "gloss": ""},
+    "gear": {"display": "Cartridge", "gloss": "Gear piece; its 4-Module combo forms the set bonus"},
+    "gear_plural": {"display": "Cartridges", "gloss": ""},
+    "duplication": {"display": "Awakening", "gloss": "Dupe system with freely chosen nodes ('Cosmic Insights') [verify rank naming]"},
+    "special_progression": {"display": "Skill track", "gloss": "Per-character progression [verify official name]"},
+    "team": {"display": "Team", "gloss": "Characters fighting together [verify size]"},
+    "build": {"display": "Build", "gloss": "Arc + Cartridge loadout"},
+    "role": {"display": "Role", "gloss": "Combat role [verify official set]"},
+    "attribute": {"display": "Esper attribute", "gloss": "Element with a cycle/counters system [verify names]"},
+    "banner": {"display": "The Fair", "gloss": "Board-style summoning event using Dice"},
+    "endgame": {"display": "endgame mode", "gloss": "[verify] names and team-slot rules"},
+    "pull_currency": {"display": "Annulith", "gloss": "Premium pull currency; Riftcrystal converts 1:1 into it"},
+    "pull_ticket_limited": {"display": "Tri-Key", "gloss": "Limited/special pull ticket [verify banner mapping]"},
+    "pull_ticket_standard": {"display": "Dice", "gloss": "Solid/Fabricated Dice pull tickets [verify mapping]"},
+    "stamina": {"display": "Stamina", "gloss": "[verify] official name"}
+  }
+}

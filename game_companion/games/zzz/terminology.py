@@ -29,6 +29,9 @@ ATTRIBUTE_NAMES = {
     "ice": "Ice",
     "electric": "Electric",
     "ether": "Ether",
+    # Seen in Prydwen build data (3.2) — UNKNOWN-NEEDS DATA in-game until
+    # corroborated by a second source.
+    "wind": "Wind",
 }
 
 SPECIALTY_NAMES = {
@@ -37,4 +40,8 @@ SPECIALTY_NAMES = {
     "anomaly": "Anomaly",
     "support": "Support",
     "defense": "Defense",
+    # 2.x specialty (Yixuan, Alice, ...); starter roster data predates it
+    "rupture": "Rupture",
+    # 2.x/3.x specialty (Claret, ...); from Prydwen build data (3.2)
+    "armorer": "Armorer",
 }

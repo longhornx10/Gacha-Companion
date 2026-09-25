@@ -6,7 +6,13 @@ from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
 
 from game_companion.api.deps import adapter_for, get_db, resolve_player
-from game_companion.api.schemas.requests import ClaimCreate, ImportCreate, ResearchQuery, SourceSeed
+from game_companion.api.schemas.requests import (
+    ClaimCreate,
+    ImportCreate,
+    ResearchQuery,
+    RosterImportCreate,
+    SourceSeed,
+)
 from game_companion.api.serialize import claim_dict, import_dict, source_dict
 from game_companion.core.research.service import ResearchService, provider_from_settings
 from game_companion.core.vision.service import ImportService
@@ -146,6 +152,23 @@ def list_imports(game_id: str, session: Session = Depends(get_db), player=Depend
     return {"imports": [import_dict(i) for i in rows]}
 
 
+@router.post("/import-roster")
+def import_roster(game_id: str, payload: RosterImportCreate, session: Session = Depends(get_db), player=Depends(resolve_player)):
+    from game_companion.core.roster import importer
+
+    adapter = adapter_for(game_id)
+    if payload.text:
+        parsed = importer.parse_roster_text(payload.text, adapter)
+    elif payload.json_data is not None:
+        parsed = importer.parse_roster_json(payload.json_data, adapter)
+    else:
+        from game_companion.errors import ValidationError
+
+        raise ValidationError("provide 'text' (plain-text roster) or 'json_data'")
+    row = importer.stage_roster_import(session, adapter, game_id, player.id, parsed)
+    return importer.summarize(row)
+
+
 @router.get("/imports/{import_id}")
 def get_import(game_id: str, import_id: str, session: Session = Depends(get_db), player=Depends(resolve_player)):
     return import_dict(ImportRepository(session).get_or_raise(import_id, "import"))
@@ -161,3 +184,56 @@ def confirm_import(game_id: str, import_id: str, session: Session = Depends(get_
 def reject_import(game_id: str, import_id: str, session: Session = Depends(get_db), player=Depends(resolve_player)):
     service = ImportService(session, adapter_for(game_id))
     return service.reject(import_id)
+
+
+# -- reference catalog (M25) ----------------------------------------------------
+
+
+@router.get("/catalog")
+def list_catalog(game_id: str, entity_type: str | None = None, session: Session = Depends(get_db)):
+    from game_companion.core.catalog.service import CatalogService
+
+    service = CatalogService(session, adapter_for(game_id))
+    entries = service.entries(entity_type)
+    return {
+        "entries": [
+            {
+                "entity_type": e.entity_type,
+                "key": e.key,
+                "display_name": e.display_name,
+                "rarity": e.rarity,
+                "meta": e.meta,
+                "source": e.source,
+                "updated_at": e.updated_at.isoformat() if e.updated_at else None,
+            }
+            for e in entries
+        ],
+        "runs": [
+            {
+                "source_key": r.source_key,
+                "kind": r.kind,
+                "status": r.status,
+                "detail": r.detail,
+                "items": r.items,
+                "fetched_at": r.fetched_at.isoformat() if r.fetched_at else None,
+            }
+            for r in service.runs()
+        ],
+    }
+
+
+@router.post("/catalog/refresh")
+def refresh_catalog(
+    game_id: str,
+    request: Request,
+    source_key: str = "auto",
+    session: Session = Depends(get_db),
+):
+    from game_companion.core.catalog.service import CatalogService
+
+    service = CatalogService(session, adapter_for(game_id))
+    summary = service.refresh(
+        source_key, transport=getattr(request.app.state, "llm_transport", None)
+    )
+    session.commit()
+    return {"game_id": game_id, "summary": summary}

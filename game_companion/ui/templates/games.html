@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-head">
+  {% if theme.logo %}<img class="page-logo" src="{{ theme.logo }}" alt="" {% if theme.logo_filter %}style="filter:{{ theme.logo_filter }}"{% endif %}>{% endif %}
+  <h1>Games</h1>
+</div>
+<p class="muted">Everything for every game installed here: switch, refresh the
+reference catalog, pull the latest codes, or add a brand-new game — all without
+leaving the app.</p>
+
+<div class="grid2">
+  {% for g in game_rows %}
+  <section class="card">
+    <h2>{% if g.theme.logo %}<img class="page-logo" src="{{ g.theme.logo }}" alt="" {% if g.theme.logo_filter %}style="filter:{{ g.theme.logo_filter }}"{% endif %}>{% endif %}{{ g.display_name }}
+      <span class="muted">{{ g.game_id }} · v{{ g.version }}</span>
+      {% if g.is_active %}<span class="chip chip-cyan">active</span>{% endif %}
+    </h2>
+    <p>
+      {% for kind, count in g.catalog_counts.items() %}
+      <span class="chip chip-cyan">{{ count }} {{ kind|catplural }}</span>
+      {% else %}
+      <span class="chip chip-gray">catalog empty</span>
+      {% endfor %}
+      {% if g.has_codes %}
+        {% if g.codes_status == 'ok' %}<span class="chip chip-cyan">codes fresh{% if g.codes_at %} · {{ g.codes_at }}{% endif %}</span>
+        {% elif g.codes_status %}<span class="chip chip-orange">codes failing</span>
+        {% else %}<span class="chip chip-gray">codes not fetched yet</span>{% endif %}
+      {% else %}
+        <span class="chip chip-gray">no codes source yet</span>
+      {% endif %}
+    </p>
+    {% if g.sources %}
+    <p class="muted">Catalog sources: {% for s in g.sources %}{{ s.key }} ({{ s.entity }}){% if not loop.last %}, {% endif %}{% endfor %}</p>
+    {% else %}
+    <p class="muted">No catalog sources declared for this game yet.</p>
+    {% endif %}
+    <p>
+      {% if not g.is_active %}
+      <form method="post" action="/ui/select-game" class="inline">
+        <input type="hidden" name="game_id" value="{{ g.game_id }}">
+        <input type="hidden" name="next" value="/ui/games">
+        <button type="submit">Switch to this game</button>
+      </form>
+      {% endif %}
+      <form method="post" action="/ui/games/{{ g.game_id }}/refresh-catalog" class="inline">
+        <button type="submit">Import catalog</button>
+      </form>
+      {% if g.has_codes %}
+      <form method="post" action="/ui/games/{{ g.game_id }}/refresh-codes" class="inline">
+        <button type="submit">Refresh codes</button>
+      </form>
+      {% endif %}
+    </p>
+  </section>
+  {% endfor %}
+</div>
+
+<section id="data" class="card">
+  <h2>Game data for {{ active_display }}</h2>
+  <p class="muted">Every standard {{ char_term|lower }}, equipment and gear set for this
+  game, fetched from online sources. Powers the pick-lists everywhere in the app and
+  refreshes automatically once a week. When online sources report new
+  {{ char_term_plural|lower if char_term_plural else char_term|lower }} or data changes,
+  they are listed here first — nothing is applied without your approval.</p>
+
+  <p>
+    {% if catalog_counts %}
+      {% for kind, count in catalog_counts.items() %}
+      <span class="chip chip-cyan">{{ count }} {{ kind|catplural }}</span>
+      {% endfor %}
+    {% else %}
+      <span class="chip chip-gray">catalog empty</span>
+    {% endif %}
+  </p>
+  <p>
+    <form method="post" action="/ui/games/data/check-updates" class="inline">
+      <button type="submit">Check online sources now</button>
+    </form>
+  </p>
+  {% if catalog_runs %}
+  <table>
+    <thead><tr><th>Source</th><th>Kind</th><th>Last run</th><th>Result</th></tr></thead>
+    <tbody>
+      {% for r in catalog_runs %}
+      <tr>
+        <td><strong>{{ r.key }}</strong></td>
+        <td>{{ r.kind }}</td>
+        <td class="muted">{{ r.fetched_at or 'never' }}</td>
+        <td>
+          {% if r.status == 'ok' %}
+            <span class="chip chip-cyan">ok · {{ r.item_count }} items</span>
+          {% else %}
+            <span class="chip chip-orange">failed</span>
+            <span class="muted">{{ r.detail|truncate(70) }}</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="muted">No catalog runs recorded yet.</p>
+  {% endif %}
+
+  {% if pending_changes %}
+  <h3>Pending updates</h3>
+  <table>
+    <thead><tr><th>Entity</th><th>Change</th><th>Source</th><th></th></tr></thead>
+    <tbody>
+      {% for ch in pending_changes %}
+      <tr>
+        <td><strong>{{ ch.entity_key }}</strong></td>
+        <td>
+          {% if ch.is_new %}<span class="chip chip-cyan">new</span> {{ ch.proposed.get('name', '') }}
+          {{ ch.proposed.get('attribute', '') }} {{ ch.proposed.get('specialty', '') }}
+          {% else %}update: {{ ch.proposed|tojson|truncate(90) }}{% endif %}
+        </td>
+        <td class="muted">{{ ch.evidence.get('source', '') }}</td>
+        <td>
+          <form method="post" action="/ui/games/data/changes/{{ ch.id }}/approve" class="inline"><button type="submit">Approve</button></form>
+          <form method="post" action="/ui/games/data/changes/{{ ch.id }}/reject" class="inline"><button type="submit" class="danger">Reject</button></form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}<p class="muted">No pending updates.</p>{% endif %}
+</section>
+
+<section class="card">
+  <h2>Add a new game</h2>
+  <p class="muted">Creates a fresh game template with its own theme, terminology and
+  gear rules. You can switch to it right away; fill in the specifics as you learn them.</p>
+  <form method="post" action="/ui/games/create" class="inline-row">
+    <input type="text" name="game_id" placeholder="game id, e.g. genshin" required style="max-width:12rem">
+    <input type="text" name="display_name" placeholder="Display name, e.g. Genshin Impact" required>
+    <button type="submit">Create game</button>
+  </form>
+</section>
+{% endblock %}

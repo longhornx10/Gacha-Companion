@@ -6,6 +6,7 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI, Request
+from fastapi.staticfiles import StaticFiles
 
 from game_companion.api.deps import domain_error_handler
 from game_companion.api.routes import api_router
@@ -15,6 +16,8 @@ from game_companion.db.models import *  # noqa: F401,F403 - registers all tables
 from game_companion.db.session import create_db_engine, create_session_factory
 from game_companion.errors import DomainError
 from game_companion.logging import setup_logging
+from game_companion.ui.routes import _STATIC_DIR as UI_STATIC_DIR
+from game_companion.ui.routes import router as ui_router
 
 
 @asynccontextmanager
@@ -22,7 +25,13 @@ async def lifespan(app: FastAPI):
     settings: Settings = app.state.settings
     Path(settings.resolved_data_dir).mkdir(parents=True, exist_ok=True)
     Path(settings.exports_dir).mkdir(parents=True, exist_ok=True)
+    from game_companion.core.catalog.scheduler import start_refresh_loop
+
+    app.state.refresh_task = start_refresh_loop(app)
     yield
+    from game_companion.core.catalog.scheduler import stop_refresh_loop
+
+    stop_refresh_loop(app.state.refresh_task)
     app.state.llm.close()
 
 
@@ -45,8 +54,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.state.engine = engine
     app.state.session_factory = create_session_factory(engine)
     app.state.llm = LLMClient(settings)
+    app.state.llm_transport = None  # test seam: inject a mock transport
 
     app.include_router(api_router)
+    app.include_router(ui_router)
+    app.mount("/ui/static", StaticFiles(directory=str(UI_STATIC_DIR)), name="ui-static")
     app.add_exception_handler(DomainError, domain_error_handler)
 
     @app.get("/health")

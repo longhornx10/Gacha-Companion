@@ -176,6 +176,21 @@ class ImportService:
         elif image_base64:
             if llm is None or not getattr(llm, "configured", False):
                 raise NotFoundError("no LLM configured for vision extraction; pass a manual candidate instead")
+            if not getattr(llm, "vision_capable", True):
+                # heuristic said no: broker "auto" routing may still accept
+                # images, so ask the endpoint directly. A clear image refusal
+                # stops here; probe errors (network, 5xx) fall through so the
+                # real extraction attempt surfaces the honest error instead.
+                try:
+                    refused = not llm.probe_vision()
+                except LLMError:
+                    refused = False
+                if refused:
+                    raise ValidationError(
+                        f"the current model '{getattr(llm, 'model', '')}' refused a test image, "
+                        "so it cannot read screenshots. Pick a vision model in Settings → "
+                        "Assistant model (or set the vision override there) and retry."
+                    )
             try:
                 raw = base64.b64decode(image_base64)
                 image_hash = hashlib.sha256(raw).hexdigest()
@@ -236,10 +251,18 @@ class ImportService:
         if not row.candidate:
             raise ValidationError("import has no candidate to apply")
         hint = (row.diff or {}).get("character_key") if row.diff else None
-        applied = _apply_candidate(
-            self.session, self.adapter, row.game_id, row.player_profile_id,
-            row.screen_type, row.candidate, character_hint=hint,
-        )
+        if row.screen_type == "roster_txt":
+            from game_companion.core.roster.importer import apply_roster_entries
+
+            applied = apply_roster_entries(
+                self.session, self.adapter, row.game_id, row.player_profile_id,
+                row.candidate.get("entries", []),
+            )
+        else:
+            applied = _apply_candidate(
+                self.session, self.adapter, row.game_id, row.player_profile_id,
+                row.screen_type, row.candidate, character_hint=hint,
+            )
         row.status = "applied"
         row.applied_at = utcnow()
         self.session.flush()

@@ -1,0 +1,4852 @@
+{
+  "_meta": {
+    "label": "CURRENT BUILD DATA",
+    "source": "Prydwen GG — ZZZ tier list + per-agent build pages",
+    "source_urls": [
+      "https://www.prydwen.gg/zenless/tier-list",
+      "https://www.prydwen.gg/zenless/characters/<agent-slug> (one per agent below)"
+    ],
+    "patch": "3.2",
+    "retrieved": "2026-09-25",
+    "notes": [
+      "Tier/role from the tier list page; per-agent builds from that agent's build page (diskBuilds/statBuilds/teamCalcs in the page data). Each agent carries its own build_patch stamp from the source.",
+      "q-weights: 4pc families use Prydwen's usage percentages when given (else editorial rank decay 0.7^rank); 2pc options use rank decay 1.0/0.7/0.5/0.35/0.25 — Prydwen ranks 2pc options without percentages, so that decay is a HEURISTIC. Weights are normalized per agent so 4pc demand sums to 4 pieces and 2pc demand to 2 pieces per agent.",
+      "Team-archetype weight w = 1.0 for every archetype in this MVP.",
+      "An agent's demand is counted once even if several archetypes include it.",
+      "Only agents ranked T0–T1 at retrieval are included; unreleased agents are excluded by policy (no unreleased characters as meta evidence)."
+    ]
+  },
+  "archetypes": [
+    {
+      "key": "team_01_alice",
+      "name": "Alice / Vivian / Yuzuha",
+      "members": [
+        "alice",
+        "vivian",
+        "ukinami-yuzuha"
+      ],
+      "w": 1.0,
+      "anchor_agent": "alice",
+      "tier": "T0.5"
+    },
+    {
+      "key": "team_02_aria",
+      "name": "Aria / Sunna / Yuzuha",
+      "members": [
+        "aria",
+        "sunna",
+        "ukinami-yuzuha"
+      ],
+      "w": 1.0,
+      "anchor_agent": "aria",
+      "tier": "T0"
+    },
+    {
+      "key": "team_03_banyue",
+      "name": "Banyue / Dialyn / Lucia",
+      "members": [
+        "banyue",
+        "dialyn",
+        "lucia"
+      ],
+      "w": 1.0,
+      "anchor_agent": "banyue",
+      "tier": "T0.5"
+    },
+    {
+      "key": "team_04_billy-starlight",
+      "name": "Billy - Starlight / Dialyn / Lucia",
+      "members": [
+        "billy-starlight",
+        "dialyn",
+        "lucia"
+      ],
+      "w": 1.0,
+      "anchor_agent": "billy-starlight",
+      "tier": "T0.5"
+    },
+    {
+      "key": "team_05_burnice",
+      "name": "Burnice / Alice / Yuzuha",
+      "members": [
+        "burnice",
+        "alice",
+        "ukinami-yuzuha"
+      ],
+      "w": 1.0,
+      "anchor_agent": "burnice",
+      "tier": "T0.5"
+    },
+    {
+      "key": "team_06_cissia",
+      "name": "Cissia / Seed / Astra Yao",
+      "members": [
+        "cissia",
+        "seed",
+        "astra-yao"
+      ],
+      "w": 1.0,
+      "anchor_agent": "cissia",
+      "tier": "T0.5"
+    },
+    {
+      "key": "team_07_claret",
+      "name": "Claret / Norma / Rina",
+      "members": [
+        "claret",
+        "norma",
+        "rina"
+      ],
+      "w": 1.0,
+      "anchor_agent": "claret",
+      "tier": "T0"
+    },
+    {
+      "key": "team_08_promeia",
+      "name": "Promeia / Nangong Yu / Yuzuha",
+      "members": [
+        "promeia",
+        "nangong-yu",
+        "ukinami-yuzuha"
+      ],
+      "w": 1.0,
+      "anchor_agent": "promeia",
+      "tier": "T0.5"
+    },
+    {
+      "key": "team_09_pyrois",
+      "name": "Pyrois / Dialyn / Sunna",
+      "members": [
+        "pyrois",
+        "dialyn",
+        "sunna"
+      ],
+      "w": 1.0,
+      "anchor_agent": "pyrois",
+      "tier": "T0.5"
+    },
+    {
+      "key": "team_10_remielle",
+      "name": "Remielle / Promeia / Velina",
+      "members": [
+        "remielle",
+        "promeia",
+        "velina"
+      ],
+      "w": 1.0,
+      "anchor_agent": "remielle",
+      "tier": "T0"
+    },
+    {
+      "key": "team_11_seed",
+      "name": "Seed / Anby: Soldier 0 / Astra Yao",
+      "members": [
+        "seed",
+        "anby-demara-soldier-0",
+        "astra-yao"
+      ],
+      "w": 1.0,
+      "anchor_agent": "seed",
+      "tier": "T0.5"
+    },
+    {
+      "key": "team_12_sigrid",
+      "name": "Sigrid / Norma / Sunna",
+      "members": [
+        "sigrid",
+        "norma",
+        "sunna"
+      ],
+      "w": 1.0,
+      "anchor_agent": "sigrid",
+      "tier": "T0"
+    },
+    {
+      "key": "team_13_velina",
+      "name": "Velina / Promeia / Yuzuha",
+      "members": [
+        "velina",
+        "promeia",
+        "ukinami-yuzuha"
+      ],
+      "w": 1.0,
+      "anchor_agent": "velina",
+      "tier": "T0"
+    },
+    {
+      "key": "team_14_ye-shunguang",
+      "name": "Ye Shunguang / Dialyn / Zhao",
+      "members": [
+        "ye-shunguang",
+        "dialyn",
+        "zhao"
+      ],
+      "w": 1.0,
+      "anchor_agent": "ye-shunguang",
+      "tier": "T0"
+    },
+    {
+      "key": "team_15_yidhari",
+      "name": "Yidhari / Ju Fufu / Lucia",
+      "members": [
+        "yidhari",
+        "ju-fufu",
+        "lucia"
+      ],
+      "w": 1.0,
+      "anchor_agent": "yidhari",
+      "tier": "T0.5"
+    }
+  ],
+  "agents": [
+    {
+      "key": "alice",
+      "name": "Alice",
+      "tier": "T0.5",
+      "role": "sec-dps",
+      "category": "AnoDPS",
+      "rating": 10,
+      "rarity": "S",
+      "element": "physical",
+      "specialty": "anomaly",
+      "faction": "Spook Shack",
+      "build_patch": 2.1,
+      "slot_mains": {
+        "4": [
+          [
+            "anomaly_proficiency"
+          ],
+          [
+            "atk_pct"
+          ]
+        ],
+        "5": [
+          [
+            "pen_ratio"
+          ],
+          [
+            "physical_dmg"
+          ],
+          [
+            "atk_pct"
+          ]
+        ],
+        "6": [
+          [
+            "anomaly_mastery"
+          ]
+        ]
+      },
+      "slot_mains_note": null,
+      "substat_priority_raw": "Anomaly Proficiency > ATK% > PEN > ATK",
+      "four_piece_families": [
+        {
+          "set": "fanged_metal",
+          "usage_pct": 100.0
+        },
+        {
+          "set": "hormone_punk",
+          "usage_pct": 88.84
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "phaethons_melody",
+          "puffer_electro",
+          "freedom_blues",
+          "chaos_jazz",
+          "astral_voice"
+        ],
+        [
+          "phaethons_melody",
+          "puffer_electro",
+          "freedom_blues",
+          "chaos_jazz",
+          "fanged_metal",
+          "astral_voice"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "fanged_metal",
+          "two_piece": "phaethons_melody",
+          "q": 0.2077
+        },
+        {
+          "four_piece": "hormone_punk",
+          "two_piece": "phaethons_melody",
+          "q": 0.168
+        },
+        {
+          "four_piece": "fanged_metal",
+          "two_piece": "puffer_electro",
+          "q": 0.1454
+        },
+        {
+          "four_piece": "hormone_punk",
+          "two_piece": "puffer_electro",
+          "q": 0.1176
+        },
+        {
+          "four_piece": "fanged_metal",
+          "two_piece": "astral_voice",
+          "q": 0.0727
+        },
+        {
+          "four_piece": "hormone_punk",
+          "two_piece": "fanged_metal",
+          "q": 0.0588
+        },
+        {
+          "four_piece": "fanged_metal",
+          "two_piece": "freedom_blues",
+          "q": 0.0519
+        },
+        {
+          "four_piece": "fanged_metal",
+          "two_piece": "chaos_jazz",
+          "q": 0.0519
+        },
+        {
+          "four_piece": "hormone_punk",
+          "two_piece": "freedom_blues",
+          "q": 0.042
+        },
+        {
+          "four_piece": "hormone_punk",
+          "two_piece": "chaos_jazz",
+          "q": 0.042
+        },
+        {
+          "four_piece": "hormone_punk",
+          "two_piece": "astral_voice",
+          "q": 0.042
+        }
+      ],
+      "team_primary": [
+        "vivian",
+        "ukinami-yuzuha"
+      ],
+      "synergy_partners": [
+        "vivian, yanagi, burnice, grace-howard",
+        "ukinami-yuzuha",
+        "astra-yao, nicole-demara, lucy"
+      ],
+      "comment": "Best option for direct Anomaly-based Physical damage dealers, granting 10% permanent Physical DMG% from the 2-PC and 35% increased DMG against enemies inflicted by Assault by any party member for 12 seconds. DMG% bonus against enemies will be up the majority of most fights against boss-type enemies thanks to its long duration and ability to trigger from any team member, allowing a Physical-based Bangboo/teammate to assist with uptime via their own Assaults."
+    },
+    {
+      "key": "anby-demara-soldier-0",
+      "name": "Anby: Soldier 0",
+      "tier": "T1",
+      "role": "dps",
+      "category": "CritDPS",
+      "rating": 9,
+      "rarity": "S",
+      "element": "electric",
+      "specialty": "attack",
+      "faction": "Unknown Faction",
+      "build_patch": 2.5,
+      "slot_mains": {
+        "4": [
+          [
+            "crit_rate"
+          ],
+          [
+            "crit_dmg"
+          ]
+        ],
+        "5": [
+          [
+            "electric_dmg"
+          ],
+          [
+            "atk_pct"
+          ]
+        ],
+        "6": [
+          [
+            "atk_pct"
+          ]
+        ]
+      },
+      "slot_mains_note": null,
+      "substat_priority_raw": "CRIT RATE = CRIT DMG > ATK% > PEN = ATK",
+      "four_piece_families": [
+        {
+          "set": "shadow_harmony",
+          "usage_pct": null
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "woodpecker_electro",
+          "hormone_punk",
+          "astral_voice",
+          "thunder_metal",
+          "branch_and_blade_song",
+          "puffer_electro"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "shadow_harmony",
+          "two_piece": "woodpecker_electro",
+          "q": 0.3571
+        },
+        {
+          "four_piece": "shadow_harmony",
+          "two_piece": "thunder_metal",
+          "q": 0.1786
+        },
+        {
+          "four_piece": "shadow_harmony",
+          "two_piece": "hormone_punk",
+          "q": 0.125
+        },
+        {
+          "four_piece": "shadow_harmony",
+          "two_piece": "astral_voice",
+          "q": 0.125
+        },
+        {
+          "four_piece": "shadow_harmony",
+          "two_piece": "branch_and_blade_song",
+          "q": 0.125
+        },
+        {
+          "four_piece": "shadow_harmony",
+          "two_piece": "puffer_electro",
+          "q": 0.0893
+        }
+      ],
+      "team_primary": [
+        "orphie-and-magus",
+        "trigger"
+      ],
+      "synergy_partners": [
+        "trigger, ju-fufu, pulchra",
+        "seed, orphie-and-magus",
+        "astra-yao, nicole-demara, lucy"
+      ],
+      "comment": "Aftershock and Dash Attack focused Disc Drive set that grants 15% DMG to Aftershock/Dash ATKs, 12% CRIT RATE and 12% Combat ATK when fully stacked. S0 Anby can easily fully stack this set and keep it permanantly active with no trouble making it her best Disc Drive set."
+    },
+    {
+      "key": "aria",
+      "name": "Aria",
+      "tier": "T0",
+      "role": "sec-dps",
+      "category": "AnoDPS",
+      "rating": 11,
+      "rarity": "S",
+      "element": "ether",
+      "specialty": "anomaly",
+      "faction": "Angels of Delusion",
+      "build_patch": 2.6,
+      "slot_mains": {
+        "4": [
+          [
+            "anomaly_proficiency"
+          ]
+        ],
+        "5": [
+          [
+            "ether_dmg",
+            "atk_pct"
+          ],
+          [
+            "pen_ratio"
+          ]
+        ],
+        "6": [
+          [
+            "anomaly_mastery"
+          ]
+        ]
+      },
+      "slot_mains_note": null,
+      "substat_priority_raw": "Anomaly Proficiency > ATK% > PEN > ATK",
+      "four_piece_families": [
+        {
+          "set": "phaethons_melody",
+          "usage_pct": 102.17
+        },
+        {
+          "set": "shining_aria",
+          "usage_pct": 100.0
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "freedom_blues",
+          "chaos_jazz",
+          "shining_aria",
+          "chaotic_metal"
+        ],
+        [
+          "phaethons_melody",
+          "freedom_blues",
+          "chaos_jazz"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "shining_aria",
+          "two_piece": "phaethons_melody",
+          "q": 0.291
+        },
+        {
+          "four_piece": "phaethons_melody",
+          "two_piece": "freedom_blues",
+          "q": 0.1486
+        },
+        {
+          "four_piece": "phaethons_melody",
+          "two_piece": "chaos_jazz",
+          "q": 0.1486
+        },
+        {
+          "four_piece": "phaethons_melody",
+          "two_piece": "shining_aria",
+          "q": 0.104
+        },
+        {
+          "four_piece": "phaethons_melody",
+          "two_piece": "chaotic_metal",
+          "q": 0.104
+        },
+        {
+          "four_piece": "shining_aria",
+          "two_piece": "freedom_blues",
+          "q": 0.1018
+        },
+        {
+          "four_piece": "shining_aria",
+          "two_piece": "chaos_jazz",
+          "q": 0.1018
+        }
+      ],
+      "team_primary": [
+        "sunna",
+        "ukinami-yuzuha"
+      ],
+      "synergy_partners": [
+        "ukinami-yuzuha, sunna",
+        "lycaon",
+        "dialyn",
+        "trigger, zhao"
+      ],
+      "comment": "As it turns out, Phaethon's Melody is Aria's best 4-piece option for Drive Discs. Compared to Shining Aria it provides more Anomaly Proficiency and has its DMG % Bonuses be up regardless of an enemy's stun status, however it should be kept in mind that it has strict player demands for it to truly be better. With it needing EX Special uses by other Agents to get full benefit, it needs not only high Energy Regen on the rest of the team to maintain its uptime, but constant juggling between Agents to keep up with its 8 second buff timer. So while it is the better option, that is only true for players that are willing to actively manage it."
+    },
+    {
+      "key": "astra-yao",
+      "name": "Astra Yao",
+      "tier": "T0.5",
+      "role": "support",
+      "category": "Support",
+      "rating": 10,
+      "rarity": "S",
+      "element": "ether",
+      "specialty": "support",
+      "faction": "Stars of Lyra",
+      "build_patch": 2.2,
+      "slot_mains": {
+        "4": [
+          [
+            "atk_pct"
+          ]
+        ],
+        "5": [
+          [
+            "atk_pct"
+          ]
+        ],
+        "6": [
+          [
+            "energy_regen",
+            "atk_pct"
+          ]
+        ]
+      },
+      "slot_mains_note": "CRIT Build",
+      "substat_priority_raw": "ATK% > Flat ATK (Top Priorities Until Ability Cap) > CRIT RATE = CRIT DMG > PEN",
+      "four_piece_families": [
+        {
+          "set": "astral_voice",
+          "usage_pct": null
+        },
+        {
+          "set": "moonlight_lullaby",
+          "usage_pct": null
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "swing_jazz",
+          "moonlight_lullaby",
+          "hormone_punk"
+        ],
+        [
+          "swing_jazz",
+          "hormone_punk",
+          "astral_voice"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "astral_voice",
+          "two_piece": "hormone_punk",
+          "q": 0.2422
+        },
+        {
+          "four_piece": "moonlight_lullaby",
+          "two_piece": "swing_jazz",
+          "q": 0.2422
+        },
+        {
+          "four_piece": "astral_voice",
+          "two_piece": "swing_jazz",
+          "q": 0.173
+        },
+        {
+          "four_piece": "astral_voice",
+          "two_piece": "moonlight_lullaby",
+          "q": 0.173
+        },
+        {
+          "four_piece": "moonlight_lullaby",
+          "two_piece": "hormone_punk",
+          "q": 0.0848
+        },
+        {
+          "four_piece": "moonlight_lullaby",
+          "two_piece": "astral_voice",
+          "q": 0.0848
+        }
+      ],
+      "team_primary": [],
+      "synergy_partners": [
+        "evelyn",
+        "ye-shunguang, anby-demara-soldier-0, seed, soldier-11, zhu-yuan, nekomata",
+        "miyabi, yanagi, jane-doe, burnice",
+        "nicole-demara, trigger"
+      ],
+      "comment": "Astral Voice is Astra Yao's best set - by a long shot - beating out Swing Jazz in both buff potential and uptime. Astra can stack its effect quickly ,thanks to the Quick Assists she continually grants the team and maintain it indefinitely."
+    },
+    {
+      "key": "banyue",
+      "name": "Banyue",
+      "tier": "T0.5",
+      "role": "dps",
+      "category": "CritDPS",
+      "rating": 10,
+      "rarity": "S",
+      "element": "fire",
+      "specialty": "rupture",
+      "faction": "Krampus Compliance Authority",
+      "build_patch": 2.4,
+      "slot_mains": {
+        "4": [
+          [
+            "crit_dmg"
+          ],
+          [
+            "crit_rate"
+          ]
+        ],
+        "5": [
+          [
+            "fire_dmg"
+          ],
+          [
+            "hp_pct"
+          ]
+        ],
+        "6": [
+          [
+            "hp_pct"
+          ]
+        ]
+      },
+      "slot_mains_note": null,
+      "substat_priority_raw": "CRIT Rate = CRIT DMG > HP% > ATK% > Flat HP",
+      "four_piece_families": [
+        {
+          "set": "yunkui_tales",
+          "usage_pct": null
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "woodpecker_electro",
+          "branch_and_blade_song"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "yunkui_tales",
+          "two_piece": "woodpecker_electro",
+          "q": 0.5882
+        },
+        {
+          "four_piece": "yunkui_tales",
+          "two_piece": "branch_and_blade_song",
+          "q": 0.4118
+        }
+      ],
+      "team_primary": [
+        "dialyn",
+        "lucia"
+      ],
+      "synergy_partners": [
+        "dialyn",
+        "ju-fufu, trigger",
+        "lucia, pan-yinhu"
+      ],
+      "comment": "The best (and frankly only) option that should be considered on Banyue. Provides HP% on the 2-piece which is perfect for him, and provides a stackable CRIT Rate up effect for up to 4% 3 times (with a total of 12%) for 15s. At max stacks, it also increases Sheer DMG by 10%. A perfect Disc Drive set for him which boosts all of the stats he desires."
+    },
+    {
+      "key": "billy-starlight",
+      "name": "Billy - Starlight",
+      "tier": "T0.5",
+      "role": "dps",
+      "category": "CritDPS",
+      "rating": 10,
+      "rarity": "S",
+      "element": "physical",
+      "specialty": "rupture",
+      "faction": "Cunning Hares",
+      "build_patch": 2.8,
+      "slot_mains": {
+        "4": [
+          [
+            "crit_rate",
+            "crit_dmg",
+            "hp_pct"
+          ]
+        ],
+        "5": [
+          [
+            "physical_dmg"
+          ],
+          [
+            "hp_pct"
+          ]
+        ],
+        "6": [
+          [
+            "hp_pct"
+          ]
+        ]
+      },
+      "slot_mains_note": null,
+      "substat_priority_raw": "CRIT RATE > CRIT DMG = HP% > Flat HP > Flat ATK",
+      "four_piece_families": [
+        {
+          "set": "yunkui_tales",
+          "usage_pct": 100.0
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "woodpecker_electro",
+          "branch_and_blade_song",
+          "fanged_metal",
+          "white_water_ballad",
+          "astral_voice",
+          "hormone_punk",
+          "bunny_in_wonderland"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "yunkui_tales",
+          "two_piece": "woodpecker_electro",
+          "q": 0.3571
+        },
+        {
+          "four_piece": "yunkui_tales",
+          "two_piece": "branch_and_blade_song",
+          "q": 0.25
+        },
+        {
+          "four_piece": "yunkui_tales",
+          "two_piece": "fanged_metal",
+          "q": 0.0893
+        },
+        {
+          "four_piece": "yunkui_tales",
+          "two_piece": "white_water_ballad",
+          "q": 0.0893
+        },
+        {
+          "four_piece": "yunkui_tales",
+          "two_piece": "bunny_in_wonderland",
+          "q": 0.0893
+        },
+        {
+          "four_piece": "yunkui_tales",
+          "two_piece": "astral_voice",
+          "q": 0.0625
+        },
+        {
+          "four_piece": "yunkui_tales",
+          "two_piece": "hormone_punk",
+          "q": 0.0625
+        }
+      ],
+      "team_primary": [
+        "dialyn",
+        "lucia"
+      ],
+      "synergy_partners": [
+        "dialyn",
+        "lucia",
+        "ju-fufu, trigger, qingyi",
+        "pan-yinhu"
+      ],
+      "comment": "Yunkui Tales is the only real viable 4-piece set for Billy. It should be noted however, that as he's usually run into encounters with long phase transitions, there's a very real risk of this buff falling off, so be sure to use Cool Wheelies every so often to maintain it even during downtimes. The 2-piece is varied however: so long as Billy is capped out on CRIT Rate, the difference between CRIT DMG and DMG % is minimal, with HP % being a little worse but still a serviceable option."
+    },
+    {
+      "key": "burnice",
+      "name": "Burnice",
+      "tier": "T0.5",
+      "role": "sec-dps",
+      "category": "AnoDPS",
+      "rating": 10,
+      "rarity": "S",
+      "element": "fire",
+      "specialty": "anomaly",
+      "faction": "Sons of Calydon",
+      "build_patch": 2.5,
+      "slot_mains": {
+        "4": [
+          [
+            "anomaly_proficiency"
+          ]
+        ],
+        "5": [
+          [
+            "pen_ratio"
+          ],
+          [
+            "fire_dmg"
+          ]
+        ],
+        "6": [
+          [
+            "anomaly_mastery"
+          ]
+        ]
+      },
+      "slot_mains_note": null,
+      "substat_priority_raw": "Anomaly Proficiency > ATK% > PEN > ATK",
+      "four_piece_families": [
+        {
+          "set": "freedom_blues",
+          "usage_pct": null
+        },
+        {
+          "set": "chaos_jazz",
+          "usage_pct": null
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "swing_jazz",
+          "moonlight_lullaby"
+        ],
+        [
+          "swing_jazz",
+          "moonlight_lullaby"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "freedom_blues",
+          "two_piece": "swing_jazz",
+          "q": 0.2941
+        },
+        {
+          "four_piece": "freedom_blues",
+          "two_piece": "moonlight_lullaby",
+          "q": 0.2941
+        },
+        {
+          "four_piece": "chaos_jazz",
+          "two_piece": "swing_jazz",
+          "q": 0.2059
+        },
+        {
+          "four_piece": "chaos_jazz",
+          "two_piece": "moonlight_lullaby",
+          "q": 0.2059
+        }
+      ],
+      "team_primary": [
+        "alice",
+        "ukinami-yuzuha"
+      ],
+      "synergy_partners": [
+        "velina, remielle",
+        "ukinami-yuzuha, nangong-yu"
+      ],
+      "comment": "Freedom Blues is the go-to pick for Wind Anomaly teams (like when run alongside Velina). With Vortexes being as strong as they are, it's better to push for more of them over getting slight damage increases, especially as Burnice's high Energy Regen means that she has little issue with maintaining the 4-piece effect. As her Potential Unlock scales with Energy Regen, it's the ideal 2-piece option."
+    },
+    {
+      "key": "cissia",
+      "name": "Cissia",
+      "tier": "T0.5",
+      "role": "dps",
+      "category": "CritDPS",
+      "rating": 10,
+      "rarity": "S",
+      "element": "electric",
+      "specialty": "attack",
+      "faction": "Metropolitan Order Division",
+      "build_patch": 2.7,
+      "slot_mains": {
+        "4": [
+          [
+            "crit_rate"
+          ],
+          [
+            "crit_dmg"
+          ]
+        ],
+        "5": [
+          [
+            "electric_dmg"
+          ],
+          [
+            "atk_pct"
+          ]
+        ],
+        "6": [
+          [
+            "energy_regen"
+          ]
+        ]
+      },
+      "slot_mains_note": null,
+      "substat_priority_raw": "CRIT RATE = CRIT DMG = ATK% > PEN > ATK",
+      "four_piece_families": [
+        {
+          "set": "astral_voice",
+          "usage_pct": 105.15
+        },
+        {
+          "set": "dawns_bloom",
+          "usage_pct": 100.0
+        },
+        {
+          "set": "thunder_metal",
+          "usage_pct": 99.45
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "swing_jazz",
+          "moonlight_lullaby",
+          "branch_and_blade_song",
+          "thunder_metal",
+          "woodpecker_electro"
+        ],
+        [
+          "swing_jazz",
+          "moonlight_lullaby",
+          "branch_and_blade_song",
+          "astral_voice",
+          "hormone_punk",
+          "thunder_metal",
+          "woodpecker_electro"
+        ],
+        [
+          "swing_jazz",
+          "moonlight_lullaby",
+          "branch_and_blade_song"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "thunder_metal",
+          "two_piece": "branch_and_blade_song",
+          "q": 0.1344
+        },
+        {
+          "four_piece": "thunder_metal",
+          "two_piece": "swing_jazz",
+          "q": 0.096
+        },
+        {
+          "four_piece": "thunder_metal",
+          "two_piece": "moonlight_lullaby",
+          "q": 0.096
+        },
+        {
+          "four_piece": "astral_voice",
+          "two_piece": "branch_and_blade_song",
+          "q": 0.0948
+        },
+        {
+          "four_piece": "dawns_bloom",
+          "two_piece": "branch_and_blade_song",
+          "q": 0.0821
+        },
+        {
+          "four_piece": "astral_voice",
+          "two_piece": "swing_jazz",
+          "q": 0.0677
+        },
+        {
+          "four_piece": "astral_voice",
+          "two_piece": "moonlight_lullaby",
+          "q": 0.0677
+        },
+        {
+          "four_piece": "astral_voice",
+          "two_piece": "thunder_metal",
+          "q": 0.0677
+        },
+        {
+          "four_piece": "dawns_bloom",
+          "two_piece": "swing_jazz",
+          "q": 0.0586
+        },
+        {
+          "four_piece": "dawns_bloom",
+          "two_piece": "moonlight_lullaby",
+          "q": 0.0586
+        },
+        {
+          "four_piece": "astral_voice",
+          "two_piece": "woodpecker_electro",
+          "q": 0.0474
+        },
+        {
+          "four_piece": "dawns_bloom",
+          "two_piece": "thunder_metal",
+          "q": 0.041
+        },
+        {
+          "four_piece": "dawns_bloom",
+          "two_piece": "astral_voice",
+          "q": 0.0293
+        },
+        {
+          "four_piece": "dawns_bloom",
+          "two_piece": "hormone_punk",
+          "q": 0.0293
+        },
+        {
+          "four_piece": "dawns_bloom",
+          "two_piece": "woodpecker_electro",
+          "q": 0.0293
+        }
+      ],
+      "team_primary": [
+        "seed",
+        "astra-yao"
+      ],
+      "synergy_partners": [
+        "sunna, astra-yao",
+        "seed",
+        "dialyn, ju-fufu, qingyi, trigger",
+        "nicole-demara"
+      ],
+      "comment": "Astral Voice has the highest potential in a Seed team with Sunna/Astra. Both Seed and Cissia can make use of Astral Voice, as it doesn't matter who holds the set, so long as Quick Assists are taking place to pass along the buff. It's at least on par with Dawn's Bloom even with lacklustre buff juggling, but becomes significantly better when Quick Assists are sustained across the team so that both Seed and Cissia can have uptime of the buff."
+    },
+    {
+      "key": "claret",
+      "name": "Claret",
+      "tier": "T0",
+      "role": "dps",
+      "category": "CritDPS",
+      "rating": 11,
+      "rarity": "S",
+      "element": "electric",
+      "specialty": "armorer",
+      "faction": "Unknown Faction",
+      "build_patch": 3.2,
+      "slot_mains": {
+        "4": [
+          [
+            "crit_rate"
+          ]
+        ],
+        "5": [
+          [
+            "pen_ratio"
+          ]
+        ],
+        "6": [
+          [
+            "def_pct"
+          ]
+        ]
+      },
+      "slot_mains_note": null,
+      "substat_priority_raw": "CRIT RATE > DEF% > CRIT DMG > PEN > DEF",
+      "four_piece_families": [
+        {
+          "set": "thorned_rose",
+          "usage_pct": 100.0
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "puffer_electro",
+          "woodpecker_electro",
+          "soul_rock",
+          "thunder_metal",
+          "branch_and_blade_song"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "thorned_rose",
+          "two_piece": "puffer_electro",
+          "q": 0.3571
+        },
+        {
+          "four_piece": "thorned_rose",
+          "two_piece": "woodpecker_electro",
+          "q": 0.25
+        },
+        {
+          "four_piece": "thorned_rose",
+          "two_piece": "soul_rock",
+          "q": 0.1786
+        },
+        {
+          "four_piece": "thorned_rose",
+          "two_piece": "thunder_metal",
+          "q": 0.125
+        },
+        {
+          "four_piece": "thorned_rose",
+          "two_piece": "branch_and_blade_song",
+          "q": 0.0893
+        }
+      ],
+      "team_primary": [
+        "norma",
+        "rina"
+      ],
+      "synergy_partners": [
+        "norma",
+        "rina",
+        "lycaon",
+        "trigger, nicole-demara"
+      ],
+      "comment": "Thorned Rose is made for Armorers, so it's the go-to pick for Claret, who more than meets the DEF requirements for the 4-piece effect. The 2-piece sets can vary, with Puffer Electro being best for Rina teams, but worse on those with DEF Shred. The exact performance of which will range on the team and buff saturation, but all can be valid options."
+    },
+    {
+      "key": "dialyn",
+      "name": "Dialyn",
+      "tier": "T0",
+      "role": "support",
+      "category": "Support",
+      "rating": 11,
+      "rarity": "S",
+      "element": "physical",
+      "specialty": "stun",
+      "faction": "Krampus Compliance Authority",
+      "build_patch": 2.4,
+      "slot_mains": {
+        "4": [
+          [
+            "crit_rate"
+          ]
+        ],
+        "5": [
+          [
+            "atk_pct"
+          ],
+          [
+            "physical_dmg",
+            "pen_ratio"
+          ]
+        ],
+        "6": [
+          [
+            "energy_regen"
+          ]
+        ]
+      },
+      "slot_mains_note": null,
+      "substat_priority_raw": "CRIT RATE (until 100%) > CRIT DMG = ATK% > PEN > ATK",
+      "four_piece_families": [
+        {
+          "set": "king_of_the_summit",
+          "usage_pct": null
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "woodpecker_electro",
+          "swing_jazz"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "king_of_the_summit",
+          "two_piece": "woodpecker_electro",
+          "q": 0.5882
+        },
+        {
+          "four_piece": "king_of_the_summit",
+          "two_piece": "swing_jazz",
+          "q": 0.4118
+        }
+      ],
+      "team_primary": [],
+      "synergy_partners": [
+        "ye-shunguang",
+        "yixuan",
+        "yidhari",
+        "manato",
+        "banyue",
+        "hugo",
+        "evelyn",
+        "corin, billy-kid, nekomata",
+        "anton, ellen, harumasa, zhu-yuan"
+      ],
+      "comment": "King of the Summit is the de facto best Stunner set, so it stands that it is used on Dialyn. It is especially easy to use it on her, as she actively builds for CRIT Rate, so meeting the 50% threshold is never an issue, and the low cost EX Specials mean constant uptime.\nIf at below 100% CRIT Rate, Woodpecker is likely the better option, otherwise use Swing Jazz."
+    },
+    {
+      "key": "evelyn",
+      "name": "Evelyn",
+      "tier": "T1",
+      "role": "dps",
+      "category": "CritDPS",
+      "rating": 9,
+      "rarity": "S",
+      "element": "fire",
+      "specialty": "attack",
+      "faction": "Stars of Lyra",
+      "build_patch": 2.4,
+      "slot_mains": {
+        "4": [
+          [
+            "atk_pct"
+          ],
+          [
+            "crit_dmg"
+          ]
+        ],
+        "5": [
+          [
+            "pen_ratio"
+          ],
+          [
+            "fire_dmg"
+          ],
+          [
+            "atk_pct"
+          ]
+        ],
+        "6": [
+          [
+            "atk_pct"
+          ]
+        ]
+      },
+      "slot_mains_note": null,
+      "substat_priority_raw": "CRIT RATE (Until 75% in stat screen) > CRIT DMG = ATK% > PEN > ATK",
+      "four_piece_families": [
+        {
+          "set": "hormone_punk",
+          "usage_pct": null
+        },
+        {
+          "set": "puffer_electro",
+          "usage_pct": null
+        },
+        {
+          "set": "astral_voice",
+          "usage_pct": null
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [],
+        [],
+        []
+      ],
+      "build_variants": [
+        {
+          "four_piece": "hormone_punk",
+          "two_piece": null,
+          "q": 0.4566
+        },
+        {
+          "four_piece": "puffer_electro",
+          "two_piece": null,
+          "q": 0.3196
+        },
+        {
+          "four_piece": "astral_voice",
+          "two_piece": null,
+          "q": 0.2237
+        }
+      ],
+      "team_primary": [
+        "dialyn",
+        "sunna"
+      ],
+      "synergy_partners": [
+        "dialyn",
+        "lighter, trigger, ju-fufu, koleda, norma",
+        "seed",
+        "astra-yao, ukinami-yuzuha, lucy"
+      ],
+      "comment": "Hormone Punk is Evelyn's \"best\" Drive Disc set, giving the highest damage gains provided that one can make effective use of its buff timers. Due to the constant swapping in and out of Evelyn in many of her combos (for the multiple Chain Attack casts), this set doesn't need perfect alignment to have value, but it is conditional on the player having the skill and awareness to be mindful of when it is up and adjust their playstyle accordingly."
+    },
+    {
+      "key": "grace-howard",
+      "name": "Grace",
+      "tier": "T1",
+      "role": "sec-dps",
+      "category": "AnoDPS",
+      "rating": 9,
+      "rarity": "S",
+      "element": "electric",
+      "specialty": "anomaly",
+      "faction": "Belobog Heavy Industries",
+      "build_patch": 2.5,
+      "slot_mains": {
+        "4": [
+          [
+            "anomaly_proficiency"
+          ],
+          [
+            "atk_pct"
+          ]
+        ],
+        "5": [
+          [
+            "pen_ratio"
+          ],
+          [
+            "electric_dmg"
+          ],
+          [
+            "atk_pct"
+          ]
+        ],
+        "6": [
+          [
+            "anomaly_mastery"
+          ]
+        ]
+      },
+      "slot_mains_note": null,
+      "substat_priority_raw": "Anomaly Proficiency > ATK% > PEN > ATK",
+      "four_piece_families": [
+        {
+          "set": "thunder_metal",
+          "usage_pct": 100.0
+        },
+        {
+          "set": "chaos_jazz",
+          "usage_pct": 99.95
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "puffer_electro",
+          "phaethons_melody",
+          "freedom_blues",
+          "astral_voice",
+          "hormone_punk"
+        ],
+        [
+          "puffer_electro",
+          "phaethons_melody",
+          "freedom_blues",
+          "astral_voice",
+          "hormone_punk"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "thunder_metal",
+          "two_piece": "puffer_electro",
+          "q": 0.1961
+        },
+        {
+          "four_piece": "chaos_jazz",
+          "two_piece": "puffer_electro",
+          "q": 0.196
+        },
+        {
+          "four_piece": "thunder_metal",
+          "two_piece": "phaethons_melody",
+          "q": 0.1373
+        },
+        {
+          "four_piece": "chaos_jazz",
+          "two_piece": "phaethons_melody",
+          "q": 0.1372
+        },
+        {
+          "four_piece": "thunder_metal",
+          "two_piece": "freedom_blues",
+          "q": 0.0981
+        },
+        {
+          "four_piece": "chaos_jazz",
+          "two_piece": "freedom_blues",
+          "q": 0.098
+        },
+        {
+          "four_piece": "thunder_metal",
+          "two_piece": "astral_voice",
+          "q": 0.0343
+        },
+        {
+          "four_piece": "thunder_metal",
+          "two_piece": "hormone_punk",
+          "q": 0.0343
+        },
+        {
+          "four_piece": "chaos_jazz",
+          "two_piece": "astral_voice",
+          "q": 0.0343
+        },
+        {
+          "four_piece": "chaos_jazz",
+          "two_piece": "hormone_punk",
+          "q": 0.0343
+        }
+      ],
+      "team_primary": [
+        "burnice",
+        "ukinami-yuzuha"
+      ],
+      "synergy_partners": [
+        "remielle, velina",
+        "nangong-yu, ukinami-yuzuha"
+      ],
+      "comment": "The raw amount of Combat Attack Thunder Metal gives makes it a contender for the strongest set on Grace. It has historically always been one of the best options in mono Shock teams, which are even more viable with Grace's potentials granting her Ablooms. It is technically also the best set to use on her even in standard Anomaly/Disorder teams, but does need effective active management so that most of Grace's Anomaly buildup happens during Shock. "
+    },
+    {
+      "key": "harumasa",
+      "name": "Harumasa",
+      "tier": "T1",
+      "role": "dps",
+      "category": "CritDPS",
+      "rating": 9,
+      "rarity": "S",
+      "element": "electric",
+      "specialty": "attack",
+      "faction": "Section 6",
+      "build_patch": 2.6,
+      "slot_mains": {
+        "4": [
+          [
+            "atk_pct"
+          ],
+          [
+            "crit_dmg",
+            "crit_rate"
+          ]
+        ],
+        "5": [
+          [
+            "atk_pct"
+          ],
+          [
+            "electric_dmg"
+          ]
+        ],
+        "6": [
+          [
+            "atk_pct"
+          ]
+        ]
+      },
+      "slot_mains_note": null,
+      "substat_priority_raw": "Crit Rate (until 75% in stat screen) > ATK% > Crit DMG% > Flat PEN > Flat ATK",
+      "four_piece_families": [
+        {
+          "set": "thunder_metal",
+          "usage_pct": 100.0
+        },
+        {
+          "set": "shadow_harmony",
+          "usage_pct": 93.63
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "hormone_punk",
+          "astral_voice",
+          "branch_and_blade_song",
+          "shadow_harmony",
+          "woodpecker_electro"
+        ],
+        [
+          "branch_and_blade_song",
+          "woodpecker_electro",
+          "astral_voice",
+          "hormone_punk"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "shadow_harmony",
+          "two_piece": "branch_and_blade_song",
+          "q": 0.2198
+        },
+        {
+          "four_piece": "shadow_harmony",
+          "two_piece": "woodpecker_electro",
+          "q": 0.1539
+        },
+        {
+          "four_piece": "thunder_metal",
+          "two_piece": "branch_and_blade_song",
+          "q": 0.1418
+        },
+        {
+          "four_piece": "thunder_metal",
+          "two_piece": "hormone_punk",
+          "q": 0.1013
+        },
+        {
+          "four_piece": "thunder_metal",
+          "two_piece": "astral_voice",
+          "q": 0.1013
+        },
+        {
+          "four_piece": "thunder_metal",
+          "two_piece": "shadow_harmony",
+          "q": 0.1013
+        },
+        {
+          "four_piece": "thunder_metal",
+          "two_piece": "woodpecker_electro",
+          "q": 0.0709
+        },
+        {
+          "four_piece": "shadow_harmony",
+          "two_piece": "astral_voice",
+          "q": 0.0549
+        },
+        {
+          "four_piece": "shadow_harmony",
+          "two_piece": "hormone_punk",
+          "q": 0.0549
+        }
+      ],
+      "team_primary": [
+        "qingyi",
+        "nicole-demara"
+      ],
+      "synergy_partners": [
+        "dialyn",
+        "qingyi, trigger, anby-demara",
+        "ukinami-yuzuha, nicole-demara, astra-yao",
+        "seed",
+        "rina",
+        "sunna"
+      ],
+      "comment": "Thunder Metal is the single highest source of ATK % out of all the Drive Discs, making it Harumasa's best option by far. It requires Shock to be active however, which limits the comps it can be used in to those with another Electric Agent. If well managed, it will outperform other sets, but if not its bonuses would fall behind that of alternatives like Hormone Punk or Shadow Harmony."
+    },
+    {
+      "key": "jane-doe",
+      "name": "Jane Doe",
+      "tier": "T1",
+      "role": "sec-dps",
+      "category": "AnoDPS",
+      "rating": 9,
+      "rarity": "S",
+      "element": "physical",
+      "specialty": "anomaly",
+      "faction": "N.E.P.S.",
+      "build_patch": 3.1,
+      "slot_mains": {
+        "4": [
+          [
+            "anomaly_proficiency"
+          ]
+        ],
+        "5": [
+          [
+            "pen_ratio"
+          ],
+          [
+            "physical_dmg"
+          ],
+          [
+            "atk_pct"
+          ]
+        ],
+        "6": [
+          [
+            "anomaly_mastery"
+          ]
+        ]
+      },
+      "slot_mains_note": null,
+      "substat_priority_raw": "Anomaly Proficiency >= ATK% > PEN > ATK",
+      "four_piece_families": [
+        {
+          "set": "fanged_metal",
+          "usage_pct": 100.0
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "puffer_electro",
+          "phaethons_melody",
+          "freedom_blues",
+          "chaos_jazz",
+          "astral_voice",
+          "hormone_punk",
+          "white_water_ballad"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "fanged_metal",
+          "two_piece": "puffer_electro",
+          "q": 0.3571
+        },
+        {
+          "four_piece": "fanged_metal",
+          "two_piece": "phaethons_melody",
+          "q": 0.25
+        },
+        {
+          "four_piece": "fanged_metal",
+          "two_piece": "freedom_blues",
+          "q": 0.0893
+        },
+        {
+          "four_piece": "fanged_metal",
+          "two_piece": "chaos_jazz",
+          "q": 0.0893
+        },
+        {
+          "four_piece": "fanged_metal",
+          "two_piece": "white_water_ballad",
+          "q": 0.0893
+        },
+        {
+          "four_piece": "fanged_metal",
+          "two_piece": "astral_voice",
+          "q": 0.0625
+        },
+        {
+          "four_piece": "fanged_metal",
+          "two_piece": "hormone_punk",
+          "q": 0.0625
+        }
+      ],
+      "team_primary": [
+        "velina",
+        "ukinami-yuzuha"
+      ],
+      "synergy_partners": [
+        "remielle, velina",
+        "alice",
+        "burnice, vivian",
+        "ukinami-yuzuha, nangong-yu",
+        "astra-yao, trigger, lucy, nicole-demara"
+      ],
+      "comment": "Best option for direct Anomaly-based Physical damage dealers, granting 10% permanent Physical DMG% from the 2-PC and 35% increased DMG against enemies inflicted by Assault by any party member for 12 seconds. DMG% bonus against enemies will be up the majority of most fights against boss-type enemies thanks to its long duration and ability to trigger from any team member, allowing a Physical-based Bangboo/teammate to assist with uptime via their own Assaults."
+    },
+    {
+      "key": "ju-fufu",
+      "name": "Ju Fufu",
+      "tier": "T1",
+      "role": "support",
+      "category": "Support",
+      "rating": 9,
+      "rarity": "S",
+      "element": "fire",
+      "specialty": "stun",
+      "faction": "Yunkui Summit",
+      "build_patch": 2,
+      "slot_mains": {
+        "4": [
+          [
+            "crit_rate",
+            "atk_pct"
+          ]
+        ],
+        "5": [
+          [
+            "atk_pct"
+          ]
+        ],
+        "6": [
+          [
+            "impact",
+            "atk_pct"
+          ]
+        ]
+      },
+      "slot_mains_note": null,
+      "substat_priority_raw": "CRIT Rate (until 50% if using 4P King) > ATK/Flat ATK (until max. 3400) > CRIT DMG > PEN",
+      "four_piece_families": [
+        {
+          "set": "king_of_the_summit",
+          "usage_pct": null
+        },
+        {
+          "set": "swing_jazz",
+          "usage_pct": null
+        },
+        {
+          "set": "proto_punk",
+          "usage_pct": null
+        },
+        {
+          "set": "shockstar_disco",
+          "usage_pct": null
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "shockstar_disco",
+          "woodpecker_electro",
+          "astral_voice",
+          "hormone_punk",
+          "swing_jazz"
+        ],
+        [
+          "king_of_the_summit",
+          "shockstar_disco",
+          "astral_voice",
+          "hormone_punk"
+        ],
+        [
+          "king_of_the_summit",
+          "astral_voice",
+          "hormone_punk",
+          "swing_jazz"
+        ],
+        [
+          "king_of_the_summit",
+          "astral_voice",
+          "hormone_punk",
+          "swing_jazz"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "king_of_the_summit",
+          "two_piece": "shockstar_disco",
+          "q": 0.1548
+        },
+        {
+          "four_piece": "swing_jazz",
+          "two_piece": "king_of_the_summit",
+          "q": 0.1256
+        },
+        {
+          "four_piece": "king_of_the_summit",
+          "two_piece": "woodpecker_electro",
+          "q": 0.1084
+        },
+        {
+          "four_piece": "swing_jazz",
+          "two_piece": "shockstar_disco",
+          "q": 0.0879
+        },
+        {
+          "four_piece": "proto_punk",
+          "two_piece": "king_of_the_summit",
+          "q": 0.0879
+        },
+        {
+          "four_piece": "shockstar_disco",
+          "two_piece": "king_of_the_summit",
+          "q": 0.0616
+        },
+        {
+          "four_piece": "king_of_the_summit",
+          "two_piece": "swing_jazz",
+          "q": 0.0542
+        },
+        {
+          "four_piece": "proto_punk",
+          "two_piece": "swing_jazz",
+          "q": 0.044
+        },
+        {
+          "four_piece": "king_of_the_summit",
+          "two_piece": "astral_voice",
+          "q": 0.0387
+        },
+        {
+          "four_piece": "king_of_the_summit",
+          "two_piece": "hormone_punk",
+          "q": 0.0387
+        },
+        {
+          "four_piece": "swing_jazz",
+          "two_piece": "astral_voice",
+          "q": 0.0314
+        },
+        {
+          "four_piece": "swing_jazz",
+          "two_piece": "hormone_punk",
+          "q": 0.0314
+        },
+        {
+          "four_piece": "proto_punk",
+          "two_piece": "astral_voice",
+          "q": 0.0308
+        },
+        {
+          "four_piece": "proto_punk",
+          "two_piece": "hormone_punk",
+          "q": 0.0308
+        },
+        {
+          "four_piece": "shockstar_disco",
+          "two_piece": "swing_jazz",
+          "q": 0.0308
+        },
+        {
+          "four_piece": "shockstar_disco",
+          "two_piece": "astral_voice",
+          "q": 0.0215
+        },
+        {
+          "four_piece": "shockstar_disco",
+          "two_piece": "hormone_punk",
+          "q": 0.0215
+        }
+      ],
+      "team_primary": [],
+      "synergy_partners": [
+        "yixuan",
+        "evelyn, hugo, soldier-11, anby-demara-soldier-0",
+        "trigger, lighter",
+        "banyue",
+        "orphie-and-magus",
+        "lucia",
+        "manato",
+        "yidhari"
+      ],
+      "comment": "New best Stun set, to be used on any Stun character in almost any team with very few exceptions. Gives 6% increased Daze on the 2-piece and up to 30% CRIT DMG for the entire squad for 15s when casting EX Specials and Chain Attacks on the condition that the equipper has 50% CRIT Rate or higher, a requirement which must be ensured, although on Ju Fufu this can prove difficult it remains highly important. Uptime on this buff is almost always easily maintained permanently, however be mindful this set will not be effective if you aren’t building the rest of your team on CRIT, in which case alternatives will be preferred, and that you cannot run this set multiple times on the same team."
+    },
+    {
+      "key": "lighter",
+      "name": "Lighter",
+      "tier": "T1",
+      "role": "support",
+      "category": "Support",
+      "rating": 9,
+      "rarity": "S",
+      "element": "fire",
+      "specialty": "stun",
+      "faction": "Sons of Calydon",
+      "build_patch": 2,
+      "slot_mains": {
+        "4": [
+          [
+            "crit_rate"
+          ],
+          [
+            "crit_dmg"
+          ]
+        ],
+        "5": [
+          [
+            "atk_pct",
+            "fire_dmg",
+            "pen_ratio"
+          ]
+        ],
+        "6": [
+          [
+            "impact"
+          ]
+        ]
+      },
+      "slot_mains_note": null,
+      "substat_priority_raw": "CRIT RATE > CRIT DMG > ATK% > PEN = ATK",
+      "four_piece_families": [
+        {
+          "set": "king_of_the_summit",
+          "usage_pct": null
+        },
+        {
+          "set": "astral_voice",
+          "usage_pct": null
+        },
+        {
+          "set": "proto_punk",
+          "usage_pct": null
+        },
+        {
+          "set": "shockstar_disco",
+          "usage_pct": null
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "shockstar_disco",
+          "swing_jazz"
+        ],
+        [
+          "king_of_the_summit",
+          "shockstar_disco",
+          "swing_jazz"
+        ],
+        [
+          "king_of_the_summit",
+          "shockstar_disco",
+          "swing_jazz"
+        ],
+        [
+          "king_of_the_summit",
+          "swing_jazz"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "king_of_the_summit",
+          "two_piece": "shockstar_disco",
+          "q": 0.2322
+        },
+        {
+          "four_piece": "king_of_the_summit",
+          "two_piece": "swing_jazz",
+          "q": 0.1626
+        },
+        {
+          "four_piece": "astral_voice",
+          "two_piece": "king_of_the_summit",
+          "q": 0.1256
+        },
+        {
+          "four_piece": "astral_voice",
+          "two_piece": "shockstar_disco",
+          "q": 0.0879
+        },
+        {
+          "four_piece": "proto_punk",
+          "two_piece": "king_of_the_summit",
+          "q": 0.0879
+        },
+        {
+          "four_piece": "shockstar_disco",
+          "two_piece": "king_of_the_summit",
+          "q": 0.0797
+        },
+        {
+          "four_piece": "astral_voice",
+          "two_piece": "swing_jazz",
+          "q": 0.0628
+        },
+        {
+          "four_piece": "proto_punk",
+          "two_piece": "shockstar_disco",
+          "q": 0.0616
+        },
+        {
+          "four_piece": "shockstar_disco",
+          "two_piece": "swing_jazz",
+          "q": 0.0558
+        },
+        {
+          "four_piece": "proto_punk",
+          "two_piece": "swing_jazz",
+          "q": 0.044
+        }
+      ],
+      "team_primary": [],
+      "synergy_partners": [
+        "evelyn, miyabi, ellen, soldier-11",
+        "astra-yao, ukinami-yuzuha, lucy",
+        "orphie-and-magus, yidhari"
+      ],
+      "comment": "New best Stun set, to be used on any Stun character in almost any team with very few exceptions. Gives 6% increased Daze on the 2-piece and up to 30% CRIT DMG for the entire squad for 15s when casting EX Specials and Chain Attacks on the condition that the equipper has 50% CRIT Rate or higher, a requirement which is easy to meet but must be ensured. Uptime on this buff is almost always easily maintained permanently, however be mindful this set will not be effective if you aren’t building the rest of your team on CRIT, in which case alternatives will be preferred, and that you cannot run this set multiple times on the same team."
+    },
+    {
+      "key": "lucia",
+      "name": "Lucia",
+      "tier": "T0",
+      "role": "support",
+      "category": "Support",
+      "rating": 11,
+      "rarity": "S",
+      "element": "ether",
+      "specialty": "support",
+      "faction": "Spook Shack",
+      "build_patch": 2.3,
+      "slot_mains": {
+        "4": [
+          [
+            "hp_pct"
+          ]
+        ],
+        "5": [
+          [
+            "hp_pct"
+          ]
+        ],
+        "6": [
+          [
+            "hp_pct"
+          ]
+        ]
+      },
+      "slot_mains_note": null,
+      "substat_priority_raw": "HP% > HP > CRIT Rate >= CRIT DMG",
+      "four_piece_families": [
+        {
+          "set": "moonlight_lullaby",
+          "usage_pct": null
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "yunkui_tales"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "moonlight_lullaby",
+          "two_piece": "yunkui_tales",
+          "q": 1.0
+        }
+      ],
+      "team_primary": [],
+      "synergy_partners": [
+        "yixuan, manato, banyue",
+        "yidhari"
+      ],
+      "comment": "Grants 20% Energy Regen on the 2-piece, and most importantly the 4-piece is the best set for every Support-class Agent. This is because it provides not only more DMG Bonus than both Proto Punk and Swing Jazz (18%), but the duration of the buff is also much longer than both of them as well (25s), while the condition is also much easier to fulfill (it only requires casting an EX Special or Ultimate). It makes this set the best choice for all Supports and is only superceded by a fully stacked Astral Voice, which is not consistently upkept by most Agents."
+    },
+    {
+      "key": "lycaon",
+      "name": "Lycaon",
+      "tier": "T1",
+      "role": "support",
+      "category": "Support",
+      "rating": 9,
+      "rarity": "S",
+      "element": "ice",
+      "specialty": "stun",
+      "faction": "Victoria Housekeeping Co.",
+      "build_patch": 2.6,
+      "slot_mains": {
+        "4": [
+          [
+            "crit_rate"
+          ],
+          [
+            "crit_dmg"
+          ]
+        ],
+        "5": [
+          [
+            "ice_dmg"
+          ],
+          [
+            "atk_pct"
+          ]
+        ],
+        "6": [
+          [
+            "impact"
+          ]
+        ]
+      },
+      "slot_mains_note": null,
+      "substat_priority_raw": "CRIT RATE = CRIT DMG > ATK% > PEN = ATK",
+      "four_piece_families": [
+        {
+          "set": "king_of_the_summit",
+          "usage_pct": null
+        },
+        {
+          "set": "astral_voice",
+          "usage_pct": null
+        },
+        {
+          "set": "proto_punk",
+          "usage_pct": null
+        },
+        {
+          "set": "shockstar_disco",
+          "usage_pct": null
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "shockstar_disco",
+          "swing_jazz",
+          "moonlight_lullaby"
+        ],
+        [
+          "king_of_the_summit",
+          "shockstar_disco",
+          "swing_jazz",
+          "moonlight_lullaby"
+        ],
+        [
+          "king_of_the_summit",
+          "shockstar_disco",
+          "swing_jazz",
+          "moonlight_lullaby"
+        ],
+        [
+          "king_of_the_summit",
+          "swing_jazz",
+          "moonlight_lullaby"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "king_of_the_summit",
+          "two_piece": "shockstar_disco",
+          "q": 0.2322
+        },
+        {
+          "four_piece": "astral_voice",
+          "two_piece": "king_of_the_summit",
+          "q": 0.1256
+        },
+        {
+          "four_piece": "astral_voice",
+          "two_piece": "shockstar_disco",
+          "q": 0.0879
+        },
+        {
+          "four_piece": "proto_punk",
+          "two_piece": "king_of_the_summit",
+          "q": 0.0879
+        },
+        {
+          "four_piece": "king_of_the_summit",
+          "two_piece": "swing_jazz",
+          "q": 0.0813
+        },
+        {
+          "four_piece": "king_of_the_summit",
+          "two_piece": "moonlight_lullaby",
+          "q": 0.0813
+        },
+        {
+          "four_piece": "shockstar_disco",
+          "two_piece": "king_of_the_summit",
+          "q": 0.0797
+        },
+        {
+          "four_piece": "proto_punk",
+          "two_piece": "shockstar_disco",
+          "q": 0.0616
+        },
+        {
+          "four_piece": "astral_voice",
+          "two_piece": "swing_jazz",
+          "q": 0.0314
+        },
+        {
+          "four_piece": "astral_voice",
+          "two_piece": "moonlight_lullaby",
+          "q": 0.0314
+        },
+        {
+          "four_piece": "shockstar_disco",
+          "two_piece": "swing_jazz",
+          "q": 0.0279
+        },
+        {
+          "four_piece": "shockstar_disco",
+          "two_piece": "moonlight_lullaby",
+          "q": 0.0279
+        },
+        {
+          "four_piece": "proto_punk",
+          "two_piece": "swing_jazz",
+          "q": 0.022
+        },
+        {
+          "four_piece": "proto_punk",
+          "two_piece": "moonlight_lullaby",
+          "q": 0.022
+        }
+      ],
+      "team_primary": [
+        "yidhari",
+        "lucia"
+      ],
+      "synergy_partners": [
+        "rina",
+        "miyabi, ellen",
+        "corin",
+        "astra-yao, ukinami-yuzuha, nicole-demara",
+        "soukaku",
+        "hugo",
+        "yidhari"
+      ],
+      "comment": "New best Stun set, to be used on any Stun character in almost any team with very few exceptions. Gives 6% increased Daze on the 2-piece and up to 30% CRIT DMG for the entire squad for 15s when casting EX Specials and Chain Attacks on the condition that the equipper has 50% CRIT Rate or higher, a requirement which is easy to meet but must be ensured. Uptime on this buff is almost always easily maintained permanently, however be mindful this set will not be effective if you aren’t building the rest of your team on CRIT, in which case alternatives will be preferred, and that you cannot run this set multiple times on the same team."
+    },
+    {
+      "key": "miyabi",
+      "name": "Miyabi",
+      "tier": "T0.5",
+      "role": "sec-dps",
+      "category": "AnoDPS",
+      "rating": 10,
+      "rarity": "S",
+      "element": "ice",
+      "specialty": "anomaly",
+      "faction": "Section 6",
+      "build_patch": 2.1,
+      "slot_mains": {
+        "4": [
+          [
+            "crit_rate"
+          ],
+          [
+            "atk_pct"
+          ]
+        ],
+        "5": [
+          [
+            "ice_dmg",
+            "atk_pct"
+          ]
+        ],
+        "6": [
+          [
+            "atk_pct"
+          ]
+        ]
+      },
+      "slot_mains_note": null,
+      "substat_priority_raw": "CRIT RATE (Until 80%) >= CRIT DMG = ATK% > Anomaly Proficiency = ATK = PEN",
+      "four_piece_families": [
+        {
+          "set": "branch_and_blade_song",
+          "usage_pct": 100.0
+        },
+        {
+          "set": "woodpecker_electro",
+          "usage_pct": 95.22
+        },
+        {
+          "set": "polar_metal",
+          "usage_pct": 93.49
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "polar_metal",
+          "astral_voice",
+          "hormone_punk",
+          "puffer_electro",
+          "woodpecker_electro"
+        ],
+        [
+          "polar_metal",
+          "astral_voice",
+          "hormone_punk",
+          "puffer_electro",
+          "branch_and_blade_song"
+        ],
+        [
+          "woodpecker_electro",
+          "astral_voice",
+          "hormone_punk",
+          "branch_and_blade_song",
+          "puffer_electro"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "branch_and_blade_song",
+          "two_piece": "polar_metal",
+          "q": 0.1358
+        },
+        {
+          "four_piece": "woodpecker_electro",
+          "two_piece": "polar_metal",
+          "q": 0.1293
+        },
+        {
+          "four_piece": "polar_metal",
+          "two_piece": "woodpecker_electro",
+          "q": 0.127
+        },
+        {
+          "four_piece": "branch_and_blade_song",
+          "two_piece": "puffer_electro",
+          "q": 0.0679
+        },
+        {
+          "four_piece": "woodpecker_electro",
+          "two_piece": "puffer_electro",
+          "q": 0.0647
+        },
+        {
+          "four_piece": "polar_metal",
+          "two_piece": "branch_and_blade_song",
+          "q": 0.0635
+        },
+        {
+          "four_piece": "branch_and_blade_song",
+          "two_piece": "astral_voice",
+          "q": 0.0475
+        },
+        {
+          "four_piece": "branch_and_blade_song",
+          "two_piece": "hormone_punk",
+          "q": 0.0475
+        },
+        {
+          "four_piece": "branch_and_blade_song",
+          "two_piece": "woodpecker_electro",
+          "q": 0.0475
+        },
+        {
+          "four_piece": "woodpecker_electro",
+          "two_piece": "astral_voice",
+          "q": 0.0453
+        },
+        {
+          "four_piece": "woodpecker_electro",
+          "two_piece": "hormone_punk",
+          "q": 0.0453
+        },
+        {
+          "four_piece": "woodpecker_electro",
+          "two_piece": "branch_and_blade_song",
+          "q": 0.0453
+        },
+        {
+          "four_piece": "polar_metal",
+          "two_piece": "astral_voice",
+          "q": 0.0444
+        },
+        {
+          "four_piece": "polar_metal",
+          "two_piece": "hormone_punk",
+          "q": 0.0444
+        },
+        {
+          "four_piece": "polar_metal",
+          "two_piece": "puffer_electro",
+          "q": 0.0444
+        }
+      ],
+      "team_primary": [],
+      "synergy_partners": [
+        "yanagi, vivian, burnice, piper",
+        "trigger, lighter, lycaon",
+        "astra-yao, ukinami-yuzuha, nicole-demara, lucy, soukaku"
+      ],
+      "comment": "Disc drive set designed for Miyabi and her best choice, grants huge CRIT DMG bonuses that can be kept active at all times and a 12% CRIT RATE boost that will be up most of the time aiding Miyabi greatly. Competitive with other sets in a world where 80% CRIT RATE is achievable easily but pulls ahead further the more you're struggling with CRIT RATE."
+    },
+    {
+      "key": "nangong-yu",
+      "name": "Nangong Yu",
+      "tier": "T0",
+      "role": "support",
+      "category": "Support",
+      "rating": 11,
+      "rarity": "S",
+      "element": "ether",
+      "specialty": "stun",
+      "faction": "Angels of Delusion",
+      "build_patch": 2.7,
+      "slot_mains": {
+        "4": [
+          [
+            "anomaly_proficiency"
+          ]
+        ],
+        "5": [
+          [
+            "ether_dmg",
+            "atk_pct"
+          ],
+          [
+            "pen_ratio"
+          ]
+        ],
+        "6": [
+          [
+            "anomaly_mastery"
+          ]
+        ]
+      },
+      "slot_mains_note": null,
+      "substat_priority_raw": "Anomaly Proficiency > ATK% > PEN > ATK",
+      "four_piece_families": [
+        {
+          "set": "phaethons_melody",
+          "usage_pct": null
+        },
+        {
+          "set": "freedom_blues",
+          "usage_pct": null
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "freedom_blues",
+          "chaos_jazz",
+          "shining_aria",
+          "chaotic_metal",
+          "astral_voice",
+          "hormone_punk"
+        ],
+        [
+          "phaethons_melody"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "freedom_blues",
+          "two_piece": "phaethons_melody",
+          "q": 0.4118
+        },
+        {
+          "four_piece": "phaethons_melody",
+          "two_piece": "freedom_blues",
+          "q": 0.1337
+        },
+        {
+          "four_piece": "phaethons_melody",
+          "two_piece": "chaos_jazz",
+          "q": 0.1337
+        },
+        {
+          "four_piece": "phaethons_melody",
+          "two_piece": "shining_aria",
+          "q": 0.0936
+        },
+        {
+          "four_piece": "phaethons_melody",
+          "two_piece": "chaotic_metal",
+          "q": 0.0936
+        },
+        {
+          "four_piece": "phaethons_melody",
+          "two_piece": "astral_voice",
+          "q": 0.0668
+        },
+        {
+          "four_piece": "phaethons_melody",
+          "two_piece": "hormone_punk",
+          "q": 0.0668
+        }
+      ],
+      "team_primary": [
+        "sunna",
+        "aria"
+      ],
+      "synergy_partners": [
+        "aria, alice, jane-doe, piper, grace-howard, burnice, miyabi, yanagi",
+        "sunna, ukinami-yuzuha, nicole-demara"
+      ],
+      "comment": "Phaethon's Melody is Nangong's best set for damage purposes. As she has both high personal damage and Anomaly build-up, it's the better option - especially with the Idols team where Nangong can dilute Ether. As most damage happens in stun, EX Specials from a main-DPS and Supports can sustain this in burst periods without much active management required, but it can struggle on heavy Disorder-focused comps depending on the encounter."
+    },
+    {
+      "key": "nekomata",
+      "name": "Nekomata",
+      "tier": "T1",
+      "role": "dps",
+      "category": "CritDPS",
+      "rating": 9,
+      "rarity": "S",
+      "element": "physical",
+      "specialty": "attack",
+      "faction": "Cunning Hares",
+      "build_patch": 3.1,
+      "slot_mains": {
+        "4": [
+          [
+            "crit_rate"
+          ],
+          [
+            "crit_dmg",
+            "atk_pct"
+          ]
+        ],
+        "5": [
+          [
+            "pen_ratio"
+          ],
+          [
+            "atk_pct"
+          ],
+          [
+            "physical_dmg"
+          ]
+        ],
+        "6": [
+          [
+            "atk_pct"
+          ]
+        ]
+      },
+      "slot_mains_note": null,
+      "substat_priority_raw": "CRIT RATE (Until 100%) >= CRIT DMG = ATK% > PEN = ATK",
+      "four_piece_families": [
+        {
+          "set": "woodpecker_electro",
+          "usage_pct": null
+        },
+        {
+          "set": "puffer_electro",
+          "usage_pct": null
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "puffer_electro",
+          "branch_and_blade_song",
+          "fanged_metal",
+          "astral_voice",
+          "hormone_punk"
+        ],
+        [
+          "woodpecker_electro",
+          "branch_and_blade_song",
+          "fanged_metal",
+          "astral_voice",
+          "hormone_punk"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "woodpecker_electro",
+          "two_piece": "puffer_electro",
+          "q": 0.2307
+        },
+        {
+          "four_piece": "woodpecker_electro",
+          "two_piece": "branch_and_blade_song",
+          "q": 0.1615
+        },
+        {
+          "four_piece": "puffer_electro",
+          "two_piece": "woodpecker_electro",
+          "q": 0.1615
+        },
+        {
+          "four_piece": "woodpecker_electro",
+          "two_piece": "fanged_metal",
+          "q": 0.1153
+        },
+        {
+          "four_piece": "puffer_electro",
+          "two_piece": "branch_and_blade_song",
+          "q": 0.113
+        },
+        {
+          "four_piece": "puffer_electro",
+          "two_piece": "fanged_metal",
+          "q": 0.0807
+        },
+        {
+          "four_piece": "woodpecker_electro",
+          "two_piece": "astral_voice",
+          "q": 0.0404
+        },
+        {
+          "four_piece": "woodpecker_electro",
+          "two_piece": "hormone_punk",
+          "q": 0.0404
+        },
+        {
+          "four_piece": "puffer_electro",
+          "two_piece": "astral_voice",
+          "q": 0.0283
+        },
+        {
+          "four_piece": "puffer_electro",
+          "two_piece": "hormone_punk",
+          "q": 0.0283
+        }
+      ],
+      "team_primary": [
+        "dialyn",
+        "sunna"
+      ],
+      "synergy_partners": [
+        "dialyn",
+        "seed",
+        "sunna, rina",
+        "astra-yao, nicole-demara"
+      ],
+      "comment": "Always a great option for CRIT-scaling Main DPS characters who will remain on the field for extended periods of time, this Disc Drive set provides extra CRIT Rate and lots of ATK% which can be triggered using very general conditions, making this set versatile and effective."
+    },
+    {
+      "key": "nicole-demara",
+      "name": "Nicole",
+      "tier": "T0.5",
+      "role": "support",
+      "category": "Support",
+      "rating": 10,
+      "rarity": "A",
+      "element": "ether",
+      "specialty": "support",
+      "faction": "Cunning Hares",
+      "build_patch": 2.2,
+      "slot_mains": {
+        "4": [
+          [
+            "atk_pct",
+            "anomaly_proficiency"
+          ]
+        ],
+        "5": [
+          [
+            "ether_dmg"
+          ],
+          [
+            "atk_pct"
+          ]
+        ],
+        "6": [
+          [
+            "energy_regen",
+            "atk_pct"
+          ]
+        ]
+      },
+      "slot_mains_note": null,
+      "substat_priority_raw": "Anomaly Proficiency = ATK% > PEN = FLAT ATK",
+      "four_piece_families": [
+        {
+          "set": "moonlight_lullaby",
+          "usage_pct": null
+        },
+        {
+          "set": "astral_voice",
+          "usage_pct": null
+        },
+        {
+          "set": "swing_jazz",
+          "usage_pct": null
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "phaethons_melody",
+          "astral_voice",
+          "hormone_punk",
+          "chaos_jazz",
+          "freedom_blues"
+        ],
+        [
+          "phaethons_melody",
+          "hormone_punk",
+          "chaos_jazz",
+          "freedom_blues"
+        ],
+        [
+          "phaethons_melody",
+          "astral_voice",
+          "hormone_punk",
+          "chaos_jazz",
+          "freedom_blues"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "moonlight_lullaby",
+          "two_piece": "phaethons_melody",
+          "q": 0.2076
+        },
+        {
+          "four_piece": "astral_voice",
+          "two_piece": "phaethons_melody",
+          "q": 0.1453
+        },
+        {
+          "four_piece": "astral_voice",
+          "two_piece": "hormone_punk",
+          "q": 0.1017
+        },
+        {
+          "four_piece": "swing_jazz",
+          "two_piece": "phaethons_melody",
+          "q": 0.1017
+        },
+        {
+          "four_piece": "moonlight_lullaby",
+          "two_piece": "astral_voice",
+          "q": 0.0726
+        },
+        {
+          "four_piece": "moonlight_lullaby",
+          "two_piece": "hormone_punk",
+          "q": 0.0726
+        },
+        {
+          "four_piece": "moonlight_lullaby",
+          "two_piece": "chaos_jazz",
+          "q": 0.0519
+        },
+        {
+          "four_piece": "moonlight_lullaby",
+          "two_piece": "freedom_blues",
+          "q": 0.0519
+        },
+        {
+          "four_piece": "astral_voice",
+          "two_piece": "chaos_jazz",
+          "q": 0.0363
+        },
+        {
+          "four_piece": "astral_voice",
+          "two_piece": "freedom_blues",
+          "q": 0.0363
+        },
+        {
+          "four_piece": "swing_jazz",
+          "two_piece": "astral_voice",
+          "q": 0.0356
+        },
+        {
+          "four_piece": "swing_jazz",
+          "two_piece": "hormone_punk",
+          "q": 0.0356
+        },
+        {
+          "four_piece": "swing_jazz",
+          "two_piece": "chaos_jazz",
+          "q": 0.0254
+        },
+        {
+          "four_piece": "swing_jazz",
+          "two_piece": "freedom_blues",
+          "q": 0.0254
+        }
+      ],
+      "team_primary": [],
+      "synergy_partners": [
+        "zhu-yuan",
+        "harumasa"
+      ],
+      "comment": "Gives 20% Energy Regen on the 2-piece, and most importantly the 4-piece is the best set for every Support-class Agent. This is because it provides not only more DMG Bonus than both Proto Punk and Swing Jazz (18%), but the duration of the buff is also much longer than both of them as well (25s), while the condition is also much easier to fulfill (it only requires casting an EX Special or Ultimate). It makes this set the best choice for all Supports and is only superceded by a fully stacked Astral Voice, which is not consistently upkept by most Agents."
+    },
+    {
+      "key": "norma",
+      "name": "Norma",
+      "tier": "T0",
+      "role": "support",
+      "category": "Support",
+      "rating": 11,
+      "rarity": "S",
+      "element": "fire",
+      "specialty": "stun",
+      "faction": "External Strategy Department",
+      "build_patch": 3,
+      "slot_mains": {
+        "4": [
+          [
+            "crit_rate"
+          ]
+        ],
+        "5": [
+          [
+            "fire_dmg"
+          ],
+          [
+            "pen_ratio"
+          ],
+          [
+            "atk_pct"
+          ]
+        ],
+        "6": [
+          [
+            "energy_regen",
+            "impact"
+          ]
+        ]
+      },
+      "slot_mains_note": null,
+      "substat_priority_raw": "CRIT RATE (until 100% in combat) > CRIT DMG = ATK% > Flat PEN > Flat ATK",
+      "four_piece_families": [
+        {
+          "set": "king_of_the_summit",
+          "usage_pct": null
+        },
+        {
+          "set": "astral_voice",
+          "usage_pct": null
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "swing_jazz",
+          "moonlight_lullaby",
+          "woodpecker_electro"
+        ],
+        [
+          "swing_jazz",
+          "moonlight_lullaby",
+          "woodpecker_electro"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "king_of_the_summit",
+          "two_piece": "woodpecker_electro",
+          "q": 0.2422
+        },
+        {
+          "four_piece": "king_of_the_summit",
+          "two_piece": "swing_jazz",
+          "q": 0.173
+        },
+        {
+          "four_piece": "king_of_the_summit",
+          "two_piece": "moonlight_lullaby",
+          "q": 0.173
+        },
+        {
+          "four_piece": "astral_voice",
+          "two_piece": "woodpecker_electro",
+          "q": 0.1696
+        },
+        {
+          "four_piece": "astral_voice",
+          "two_piece": "swing_jazz",
+          "q": 0.1211
+        },
+        {
+          "four_piece": "astral_voice",
+          "two_piece": "moonlight_lullaby",
+          "q": 0.1211
+        }
+      ],
+      "team_primary": [
+        "pyrois",
+        "sunna"
+      ],
+      "synergy_partners": [
+        "sunna",
+        "pyrois, soldier-11",
+        "cissia, orphie-and-magus",
+        "hugo",
+        "manato, billy-starlight"
+      ],
+      "comment": "King of the Summit is the natural choice, especially with how easy meeting the 50% CRIT Rate requirement is for Norma. She can maintain it easily enough owing to her low cost EX Special, so it's a perfect fit. For 2-piece, Woodpecker is best if at below 100% CRIT Rate, but an Energy Regen set will be best if maxed out."
+    },
+    {
+      "key": "orphie-and-magus",
+      "name": "Orphie &amp; Magus",
+      "tier": "T1",
+      "role": "dps",
+      "category": "CritDPS",
+      "rating": 9,
+      "rarity": "S",
+      "element": "fire",
+      "specialty": "attack",
+      "faction": "OBOLS Squad",
+      "build_patch": 2.2,
+      "slot_mains": {
+        "4": [
+          [
+            "crit_dmg",
+            "crit_rate"
+          ]
+        ],
+        "5": [
+          [
+            "fire_dmg"
+          ],
+          [
+            "atk_pct"
+          ]
+        ],
+        "6": [
+          [
+            "energy_regen"
+          ],
+          [
+            "atk_pct"
+          ]
+        ]
+      },
+      "slot_mains_note": null,
+      "substat_priority_raw": "CRIT DMG = CRIT Rate > ATK% > PEN > ATK",
+      "four_piece_families": [
+        {
+          "set": "shadow_harmony",
+          "usage_pct": null
+        },
+        {
+          "set": "astral_voice",
+          "usage_pct": null
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "swing_jazz",
+          "moonlight_lullaby"
+        ],
+        [
+          "swing_jazz",
+          "moonlight_lullaby"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "shadow_harmony",
+          "two_piece": "swing_jazz",
+          "q": 0.346
+        },
+        {
+          "four_piece": "shadow_harmony",
+          "two_piece": "moonlight_lullaby",
+          "q": 0.2422
+        },
+        {
+          "four_piece": "astral_voice",
+          "two_piece": "swing_jazz",
+          "q": 0.2422
+        },
+        {
+          "four_piece": "astral_voice",
+          "two_piece": "moonlight_lullaby",
+          "q": 0.1696
+        }
+      ],
+      "team_primary": [
+        "seed",
+        "trigger"
+      ],
+      "synergy_partners": [
+        "seed, anby-demara-soldier-0",
+        "trigger, ju-fufu",
+        "astra-yao, ukinami-yuzuha, nicole-demara",
+        "lighter, manato, yidhari"
+      ],
+      "comment": "Best set for Orphie's personal damage but can be outshined by Astral Voice in Dual Attacker compositions. Shadow Harmony is easier to play around though and and requires very little maintenance making it th choice for those not looking to worry about maintaing Astral Voice uptime"
+    },
+    {
+      "key": "piper",
+      "name": "Piper",
+      "tier": "T1",
+      "role": "sec-dps",
+      "category": "AnoDPS",
+      "rating": 9,
+      "rarity": "A",
+      "element": "physical",
+      "specialty": "anomaly",
+      "faction": "Sons of Calydon",
+      "build_patch": 2.4,
+      "slot_mains": {
+        "4": [
+          [
+            "anomaly_proficiency"
+          ]
+        ],
+        "5": [
+          [
+            "pen_ratio",
+            "atk_pct",
+            "physical_dmg"
+          ]
+        ],
+        "6": [
+          [
+            "anomaly_mastery"
+          ]
+        ]
+      },
+      "slot_mains_note": null,
+      "substat_priority_raw": "Anomaly Proficiency > ATK% > PEN = ATK",
+      "four_piece_families": [
+        {
+          "set": "fanged_metal",
+          "usage_pct": null
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "phaethons_melody",
+          "puffer_electro",
+          "chaos_jazz",
+          "freedom_blues",
+          "astral_voice",
+          "hormone_punk"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "fanged_metal",
+          "two_piece": "phaethons_melody",
+          "q": 0.3922
+        },
+        {
+          "four_piece": "fanged_metal",
+          "two_piece": "puffer_electro",
+          "q": 0.2745
+        },
+        {
+          "four_piece": "fanged_metal",
+          "two_piece": "chaos_jazz",
+          "q": 0.098
+        },
+        {
+          "four_piece": "fanged_metal",
+          "two_piece": "freedom_blues",
+          "q": 0.098
+        },
+        {
+          "four_piece": "fanged_metal",
+          "two_piece": "astral_voice",
+          "q": 0.0686
+        },
+        {
+          "four_piece": "fanged_metal",
+          "two_piece": "hormone_punk",
+          "q": 0.0686
+        }
+      ],
+      "team_primary": [
+        "ukinami-yuzuha",
+        "vivian"
+      ],
+      "synergy_partners": [
+        "velina, remielle",
+        "nangong-yu, ukinami-yuzuha",
+        "vivian, burnice",
+        "astra-yao, nicole-demara, lucy"
+      ],
+      "comment": "Best option for direct Anomaly-based Physical damage dealers, granting 10% permanent Physical DMG% from the 2-PC and 35% increased DMG against enemies inflicted by Assault by any party member for 12 seconds. DMG% bonus against enemies will be up the majority of most fights against boss-type enemies thanks to its long duration and ability to trigger from any team member, allowing a Physical-based Bangboo/teammate to assist with uptime via their own Assaults."
+    },
+    {
+      "key": "promeia",
+      "name": "Promeia",
+      "tier": "T0.5",
+      "role": "sec-dps",
+      "category": "AnoDPS",
+      "rating": 10,
+      "rarity": "S",
+      "element": "ice",
+      "specialty": "anomaly",
+      "faction": "Krampus Compliance Authority",
+      "build_patch": 2.8,
+      "slot_mains": {
+        "4": [
+          [
+            "anomaly_proficiency"
+          ]
+        ],
+        "5": [
+          [
+            "ice_dmg",
+            "atk_pct"
+          ],
+          [
+            "pen_ratio"
+          ]
+        ],
+        "6": [
+          [
+            "anomaly_mastery"
+          ]
+        ]
+      },
+      "slot_mains_note": null,
+      "substat_priority_raw": "Anomaly Proficiency > ATK% > PEN > ATK",
+      "four_piece_families": [
+        {
+          "set": "notes_from_the_chained",
+          "usage_pct": 100.0
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "phaethons_melody",
+          "freedom_blues",
+          "chaos_jazz",
+          "astral_voice",
+          "hormone_punk"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "notes_from_the_chained",
+          "two_piece": "phaethons_melody",
+          "q": 0.4545
+        },
+        {
+          "four_piece": "notes_from_the_chained",
+          "two_piece": "freedom_blues",
+          "q": 0.1591
+        },
+        {
+          "four_piece": "notes_from_the_chained",
+          "two_piece": "chaos_jazz",
+          "q": 0.1591
+        },
+        {
+          "four_piece": "notes_from_the_chained",
+          "two_piece": "astral_voice",
+          "q": 0.1136
+        },
+        {
+          "four_piece": "notes_from_the_chained",
+          "two_piece": "hormone_punk",
+          "q": 0.1136
+        }
+      ],
+      "team_primary": [
+        "nangong-yu",
+        "ukinami-yuzuha"
+      ],
+      "synergy_partners": [
+        "nangong-yu",
+        "vivian",
+        "ukinami-yuzuha, sunna",
+        "lycaon, astra-yao, nicole-demara"
+      ],
+      "comment": "Notes From the Chained is a set tailor made for Promeia: she constantly applies Freeze (and does so quickly!) and has Ablooms too, so its effect doesn't need much thought to maintain it. Do keep in mind that its Anomaly Proficiency bonus does need an Abloom to activate, so even on Stunner teams it may be worth using an out-of-stun Abloom early to get its effect active before the stun burst, if doing so won't cost any Abloom triggers in stun."
+    },
+    {
+      "key": "pyrois",
+      "name": "Pyrois",
+      "tier": "T0.5",
+      "role": "dps",
+      "category": "CritDPS",
+      "rating": 10,
+      "rarity": "S",
+      "element": "ether",
+      "specialty": "attack",
+      "faction": "Unknown Faction",
+      "build_patch": 3,
+      "slot_mains": {
+        "4": [
+          [
+            "crit_rate"
+          ],
+          [
+            "crit_dmg"
+          ]
+        ],
+        "5": [
+          [
+            "pen_ratio"
+          ],
+          [
+            "ether_dmg"
+          ],
+          [
+            "atk_pct"
+          ]
+        ],
+        "6": [
+          [
+            "atk_pct"
+          ]
+        ]
+      },
+      "slot_mains_note": null,
+      "substat_priority_raw": "CRIT RATE (until 100% in combat) > CRIT DMG = ATK% > Flat PEN > Flat ATK",
+      "four_piece_families": [
+        {
+          "set": "the_sky_ablaze",
+          "usage_pct": 100.0
+        },
+        {
+          "set": "puffer_electro",
+          "usage_pct": 98.39
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "puffer_electro",
+          "branch_and_blade_song",
+          "chaotic_metal",
+          "shining_aria",
+          "astral_voice",
+          "hormone_punk"
+        ],
+        [
+          "branch_and_blade_song",
+          "astral_voice",
+          "hormone_punk"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "puffer_electro",
+          "two_piece": "branch_and_blade_song",
+          "q": 0.2917
+        },
+        {
+          "four_piece": "the_sky_ablaze",
+          "two_piece": "puffer_electro",
+          "q": 0.1977
+        },
+        {
+          "four_piece": "the_sky_ablaze",
+          "two_piece": "branch_and_blade_song",
+          "q": 0.1384
+        },
+        {
+          "four_piece": "puffer_electro",
+          "two_piece": "astral_voice",
+          "q": 0.1021
+        },
+        {
+          "four_piece": "puffer_electro",
+          "two_piece": "hormone_punk",
+          "q": 0.1021
+        },
+        {
+          "four_piece": "the_sky_ablaze",
+          "two_piece": "chaotic_metal",
+          "q": 0.0494
+        },
+        {
+          "four_piece": "the_sky_ablaze",
+          "two_piece": "shining_aria",
+          "q": 0.0494
+        },
+        {
+          "four_piece": "the_sky_ablaze",
+          "two_piece": "astral_voice",
+          "q": 0.0346
+        },
+        {
+          "four_piece": "the_sky_ablaze",
+          "two_piece": "hormone_punk",
+          "q": 0.0346
+        }
+      ],
+      "team_primary": [
+        "dialyn",
+        "sunna"
+      ],
+      "synergy_partners": [
+        "sunna, nicole-demara, dialyn",
+        "ju-fufu, nangong-yu",
+        "astra-yao, zhao, lycaon, rina"
+      ],
+      "comment": "The Sky Ablaze is the tailor-made set for Pyrois, and between its high unconditional CRIT DMG and near permanent ATK % uptime owing to low-cost EXs and Ultimates, there's no better option."
+    },
+    {
+      "key": "remielle",
+      "name": "Remielle",
+      "tier": "T0",
+      "role": "sec-dps",
+      "category": "AnoDPS",
+      "rating": 11,
+      "rarity": "S",
+      "element": "lumiflux",
+      "specialty": "anomaly",
+      "faction": "Unknown Faction",
+      "build_patch": 3.1,
+      "slot_mains": {
+        "4": [
+          [
+            "anomaly_proficiency"
+          ]
+        ],
+        "5": [
+          [
+            "atk_pct"
+          ]
+        ],
+        "6": [
+          [
+            "atk_pct"
+          ]
+        ]
+      },
+      "slot_mains_note": null,
+      "substat_priority_raw": "ATK% (until 4000 in statscreen) > Anomaly Proficiency > PEN ",
+      "four_piece_families": [
+        {
+          "set": "feathered_fate",
+          "usage_pct": 100.0
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "freedom_blues",
+          "chaos_jazz",
+          "astral_voice",
+          "hormone_punk"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "feathered_fate",
+          "two_piece": "freedom_blues",
+          "q": 0.2941
+        },
+        {
+          "four_piece": "feathered_fate",
+          "two_piece": "chaos_jazz",
+          "q": 0.2941
+        },
+        {
+          "four_piece": "feathered_fate",
+          "two_piece": "astral_voice",
+          "q": 0.2059
+        },
+        {
+          "four_piece": "feathered_fate",
+          "two_piece": "hormone_punk",
+          "q": 0.2059
+        }
+      ],
+      "team_primary": [
+        "promeia",
+        "velina"
+      ],
+      "synergy_partners": [
+        "velina",
+        "aria, promeia, burnice",
+        "jane-doe",
+        "alice, grace-howard, piper, vivian, yanagi, miyabi"
+      ],
+      "comment": "Feathered Fate is the tailor-made set for Remielle. The Anomaly Proficiency bonus on it is permanent, and although the Attribute Anomaly DMG it provides lasts for only 15 seconds, it remains active when she's off-field and is refreshed whenever she's switched in, meaning it's effectively always up.\r\n\r\nIf her ATK needs are being met, then a 2-piece AP is best, otherwise fall back on ATK % to make up the difference."
+    },
+    {
+      "key": "rina",
+      "name": "Rina",
+      "tier": "T0.5",
+      "role": "support",
+      "category": "Support",
+      "rating": 10,
+      "rarity": "S",
+      "element": "electric",
+      "specialty": "support",
+      "faction": "Victoria Housekeeping Co.",
+      "build_patch": 3.1,
+      "slot_mains": {
+        "4": [
+          [
+            "atk_pct",
+            "anomaly_proficiency",
+            "crit_rate"
+          ]
+        ],
+        "5": [
+          [
+            "pen_ratio"
+          ]
+        ],
+        "6": [
+          [
+            "energy_regen"
+          ]
+        ]
+      },
+      "slot_mains_note": null,
+      "substat_priority_raw": "Anomaly Proficiency = CRIT Rate = ATK% > CRIT DMG > PEN > FLAT ATK",
+      "four_piece_families": [
+        {
+          "set": "moonlight_lullaby",
+          "usage_pct": null
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "puffer_electro"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "moonlight_lullaby",
+          "two_piece": "puffer_electro",
+          "q": 1.0
+        }
+      ],
+      "team_primary": [],
+      "synergy_partners": [
+        "yanagi, jane-doe",
+        "harumasa"
+      ],
+      "comment": "Gives 20% Energy Regen on the 2-piece, and most importantly the 4-piece is the best set for every Support-class Agent. This is because it provides not only more DMG Bonus than both Proto Punk and Swing Jazz (18%), but the duration of the buff is also much longer than both of them as well (25s), while the condition is also much easier to fulfill (it only requires casting an EX Special or Ultimate). It makes this set the best choice for all Supports and is only superceded by a fully stacked Astral Voice, which is not consistently upkept by most Agents."
+    },
+    {
+      "key": "seed",
+      "name": "Seed",
+      "tier": "T0.5",
+      "role": "dps",
+      "category": "CritDPS",
+      "rating": 10,
+      "rarity": "S",
+      "element": "electric",
+      "specialty": "attack",
+      "faction": "OBOLS Squad",
+      "build_patch": 2.2,
+      "slot_mains": {
+        "4": [
+          [
+            "crit_dmg"
+          ],
+          [
+            "crit_rate"
+          ]
+        ],
+        "5": [
+          [
+            "pen_ratio"
+          ],
+          [
+            "atk_pct",
+            "electric_dmg"
+          ]
+        ],
+        "6": [
+          [
+            "atk_pct"
+          ]
+        ]
+      },
+      "slot_mains_note": null,
+      "substat_priority_raw": "CRIT DMG = CRIT Rate > ATK% > PEN > ATK",
+      "four_piece_families": [
+        {
+          "set": "dawns_bloom",
+          "usage_pct": 100.0
+        },
+        {
+          "set": "woodpecker_electro",
+          "usage_pct": 96.8
+        },
+        {
+          "set": "hormone_punk",
+          "usage_pct": 94.75
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "woodpecker_electro",
+          "branch_and_blade_song",
+          "puffer_electro",
+          "thunder_metal",
+          "astral_voice",
+          "hormone_punk"
+        ],
+        [
+          "branch_and_blade_song",
+          "puffer_electro",
+          "dawns_bloom",
+          "thunder_metal",
+          "astral_voice",
+          "hormone_punk"
+        ],
+        [
+          "woodpecker_electro",
+          "branch_and_blade_song",
+          "dawns_bloom",
+          "puffer_electro",
+          "thunder_metal"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "dawns_bloom",
+          "two_piece": "woodpecker_electro",
+          "q": 0.1225
+        },
+        {
+          "four_piece": "woodpecker_electro",
+          "two_piece": "branch_and_blade_song",
+          "q": 0.1186
+        },
+        {
+          "four_piece": "hormone_punk",
+          "two_piece": "woodpecker_electro",
+          "q": 0.1161
+        },
+        {
+          "four_piece": "dawns_bloom",
+          "two_piece": "branch_and_blade_song",
+          "q": 0.0857
+        },
+        {
+          "four_piece": "woodpecker_electro",
+          "two_piece": "puffer_electro",
+          "q": 0.083
+        },
+        {
+          "four_piece": "hormone_punk",
+          "two_piece": "branch_and_blade_song",
+          "q": 0.0812
+        },
+        {
+          "four_piece": "dawns_bloom",
+          "two_piece": "puffer_electro",
+          "q": 0.0612
+        },
+        {
+          "four_piece": "woodpecker_electro",
+          "two_piece": "dawns_bloom",
+          "q": 0.0593
+        },
+        {
+          "four_piece": "hormone_punk",
+          "two_piece": "dawns_bloom",
+          "q": 0.058
+        },
+        {
+          "four_piece": "dawns_bloom",
+          "two_piece": "thunder_metal",
+          "q": 0.0429
+        },
+        {
+          "four_piece": "woodpecker_electro",
+          "two_piece": "thunder_metal",
+          "q": 0.0415
+        },
+        {
+          "four_piece": "hormone_punk",
+          "two_piece": "puffer_electro",
+          "q": 0.0406
+        },
+        {
+          "four_piece": "hormone_punk",
+          "two_piece": "thunder_metal",
+          "q": 0.029
+        },
+        {
+          "four_piece": "dawns_bloom",
+          "two_piece": "astral_voice",
+          "q": 0.0153
+        },
+        {
+          "four_piece": "dawns_bloom",
+          "two_piece": "hormone_punk",
+          "q": 0.0153
+        },
+        {
+          "four_piece": "woodpecker_electro",
+          "two_piece": "astral_voice",
+          "q": 0.0148
+        },
+        {
+          "four_piece": "woodpecker_electro",
+          "two_piece": "hormone_punk",
+          "q": 0.0148
+        }
+      ],
+      "team_primary": [
+        "anby-demara-soldier-0",
+        "astra-yao"
+      ],
+      "synergy_partners": [
+        "orphie-and-magus",
+        "anby-demara-soldier-0, evelyn, nekomata, soldier-11, billy-kid",
+        "ye-shunguang",
+        "astra-yao, trigger, nicole-demara"
+      ],
+      "comment": "Generally the best option for Seed, focused on increasing Basic Attack DMG which she deals an overwhelming majority of. Able to buff Basic Attack DMG up to 55% maintained easily, which makes it by default the best Disk Drive set for her."
+    },
+    {
+      "key": "sigrid",
+      "name": "Sigrid",
+      "tier": "T0",
+      "role": "dps",
+      "category": "CritDPS",
+      "rating": 11,
+      "rarity": "S",
+      "element": "ice",
+      "specialty": "attack",
+      "faction": "Unknown Faction",
+      "build_patch": 3.1,
+      "slot_mains": {
+        "4": [
+          [
+            "crit_dmg"
+          ],
+          [
+            "atk_pct"
+          ]
+        ],
+        "5": [
+          [
+            "pen_ratio"
+          ]
+        ],
+        "6": [
+          [
+            "atk_pct"
+          ]
+        ]
+      },
+      "slot_mains_note": null,
+      "substat_priority_raw": "CRIT RATE (until 33.8% in statscreen) > CRIT DMG = ATK% > PEN > ATK",
+      "four_piece_families": [
+        {
+          "set": "hormone_punk",
+          "usage_pct": null
+        },
+        {
+          "set": "puffer_electro",
+          "usage_pct": null
+        },
+        {
+          "set": "dawns_bloom",
+          "usage_pct": null
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "puffer_electro"
+        ],
+        [
+          "branch_and_blade_song",
+          "astral_voice",
+          "hormone_punk",
+          "polar_metal"
+        ],
+        [
+          "puffer_electro"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "hormone_punk",
+          "two_piece": "puffer_electro",
+          "q": 0.4566
+        },
+        {
+          "four_piece": "dawns_bloom",
+          "two_piece": "puffer_electro",
+          "q": 0.2237
+        },
+        {
+          "four_piece": "puffer_electro",
+          "two_piece": "branch_and_blade_song",
+          "q": 0.1453
+        },
+        {
+          "four_piece": "puffer_electro",
+          "two_piece": "polar_metal",
+          "q": 0.0726
+        },
+        {
+          "four_piece": "puffer_electro",
+          "two_piece": "astral_voice",
+          "q": 0.0509
+        },
+        {
+          "four_piece": "puffer_electro",
+          "two_piece": "hormone_punk",
+          "q": 0.0509
+        }
+      ],
+      "team_primary": [
+        "norma",
+        "sunna"
+      ],
+      "synergy_partners": [
+        "norma, dialyn, lycaon",
+        "sunna, rina, astra-yao",
+        "lighter, ju-fufu"
+      ],
+      "comment": "Hormone Punk is likely to be the better generalist set for Sigrid. Although she is quite saturated in Combat ATK and its bonuses have a cooldown, the raw amount of ATK given is high and many of her teams have stun extensions, meaning that she still gets value out of it whether its triggered early or late. No calcs are provided as 4-piece set values can change significantly between different teams."
+    },
+    {
+      "key": "soldier-11",
+      "name": "Soldier 11",
+      "tier": "T1",
+      "role": "dps",
+      "category": "CritDPS",
+      "rating": 9,
+      "rarity": "S",
+      "element": "fire",
+      "specialty": "attack",
+      "faction": "OBOLS Squad",
+      "build_patch": 2.5,
+      "slot_mains": {
+        "4": [
+          [
+            "crit_rate"
+          ],
+          [
+            "atk_pct"
+          ],
+          [
+            "crit_dmg"
+          ]
+        ],
+        "5": [
+          [
+            "pen_ratio"
+          ],
+          [
+            "atk_pct"
+          ],
+          [
+            "fire_dmg"
+          ]
+        ],
+        "6": [
+          [
+            "atk_pct"
+          ]
+        ]
+      },
+      "slot_mains_note": null,
+      "substat_priority_raw": "CRIT RATE = CRIT DMG > ATK% > Anomaly Proficiency > PEN > ATK",
+      "four_piece_families": [
+        {
+          "set": "puffer_electro",
+          "usage_pct": 100.0
+        },
+        {
+          "set": "woodpecker_electro",
+          "usage_pct": 98.82
+        },
+        {
+          "set": "dawns_bloom",
+          "usage_pct": 98.75
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "woodpecker_electro",
+          "astral_voice",
+          "hormone_punk",
+          "branch_and_blade_song",
+          "inferno_metal",
+          "dawns_bloom"
+        ],
+        [
+          "puffer_electro",
+          "inferno_metal",
+          "branch_and_blade_song",
+          "astral_voice",
+          "hormone_punk",
+          "dawns_bloom"
+        ],
+        [
+          "woodpecker_electro",
+          "astral_voice",
+          "hormone_punk",
+          "branch_and_blade_song",
+          "inferno_metal",
+          "puffer_electro"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "puffer_electro",
+          "two_piece": "woodpecker_electro",
+          "q": 0.12
+        },
+        {
+          "four_piece": "woodpecker_electro",
+          "two_piece": "puffer_electro",
+          "q": 0.1186
+        },
+        {
+          "four_piece": "dawns_bloom",
+          "two_piece": "woodpecker_electro",
+          "q": 0.1185
+        },
+        {
+          "four_piece": "woodpecker_electro",
+          "two_piece": "inferno_metal",
+          "q": 0.083
+        },
+        {
+          "four_piece": "puffer_electro",
+          "two_piece": "branch_and_blade_song",
+          "q": 0.06
+        },
+        {
+          "four_piece": "woodpecker_electro",
+          "two_piece": "branch_and_blade_song",
+          "q": 0.0593
+        },
+        {
+          "four_piece": "dawns_bloom",
+          "two_piece": "branch_and_blade_song",
+          "q": 0.0593
+        },
+        {
+          "four_piece": "puffer_electro",
+          "two_piece": "astral_voice",
+          "q": 0.042
+        },
+        {
+          "four_piece": "puffer_electro",
+          "two_piece": "hormone_punk",
+          "q": 0.042
+        },
+        {
+          "four_piece": "puffer_electro",
+          "two_piece": "inferno_metal",
+          "q": 0.042
+        },
+        {
+          "four_piece": "dawns_bloom",
+          "two_piece": "astral_voice",
+          "q": 0.0415
+        },
+        {
+          "four_piece": "dawns_bloom",
+          "two_piece": "hormone_punk",
+          "q": 0.0415
+        },
+        {
+          "four_piece": "dawns_bloom",
+          "two_piece": "inferno_metal",
+          "q": 0.0415
+        },
+        {
+          "four_piece": "puffer_electro",
+          "two_piece": "dawns_bloom",
+          "q": 0.03
+        },
+        {
+          "four_piece": "woodpecker_electro",
+          "two_piece": "dawns_bloom",
+          "q": 0.0297
+        },
+        {
+          "four_piece": "dawns_bloom",
+          "two_piece": "puffer_electro",
+          "q": 0.0296
+        },
+        {
+          "four_piece": "woodpecker_electro",
+          "two_piece": "astral_voice",
+          "q": 0.0208
+        },
+        {
+          "four_piece": "woodpecker_electro",
+          "two_piece": "hormone_punk",
+          "q": 0.0208
+        }
+      ],
+      "team_primary": [
+        "dialyn",
+        "orphie-and-magus"
+      ],
+      "synergy_partners": [
+        "lighter, koleda",
+        "trigger, ju-fufu, pulchra",
+        "orphie-and-magus, seed",
+        "ukinami-yuzuha, astra-yao, lucy",
+        "dialyn"
+      ],
+      "comment": "Puffer Electro is the ideal set to use when Dialyn is on the team. With her, one of Soldier 11's Chain Attacks can be converted into an Ultimate at the start of a combo, then her Decibel Ultimate can be used later on in the combo, ensuring full 4-piece uptime in stuns. Without Dialyn though, it suffers, as Soldier 11 is highly dependent on double Chain Attacks (if she were to normally open with a Decibel Ultimate, she'd only get 1 Chain and 1 Ultimate, rather than 2 Chains and 1 Ultimate). Some characters, like Astra, can in part make up for this by supplying the missing Chain Attacks, so it can be the best Drive Disc pick, but only when specific teammates are considered."
+    },
+    {
+      "key": "sunna",
+      "name": "Sunna",
+      "tier": "T0",
+      "role": "support",
+      "category": "Support",
+      "rating": 11,
+      "rarity": "S",
+      "element": "physical",
+      "specialty": "support",
+      "faction": "Angels of Delusion",
+      "build_patch": 2.6,
+      "slot_mains": {
+        "4": [
+          [
+            "atk_pct"
+          ]
+        ],
+        "5": [
+          [
+            "atk_pct"
+          ]
+        ],
+        "6": [
+          [
+            "energy_regen"
+          ]
+        ]
+      },
+      "slot_mains_note": "CRIT Build",
+      "substat_priority_raw": "ATK% > ATK (until 3500) > Crit Rate = Crit DMG > Flat PEN",
+      "four_piece_families": [
+        {
+          "set": "moonlight_lullaby",
+          "usage_pct": null
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "swing_jazz",
+          "astral_voice",
+          "hormone_punk"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "moonlight_lullaby",
+          "two_piece": "swing_jazz",
+          "q": 0.5882
+        },
+        {
+          "four_piece": "moonlight_lullaby",
+          "two_piece": "astral_voice",
+          "q": 0.2059
+        },
+        {
+          "four_piece": "moonlight_lullaby",
+          "two_piece": "hormone_punk",
+          "q": 0.2059
+        }
+      ],
+      "team_primary": [],
+      "synergy_partners": [
+        "ye-shunguang, zhao, dialyn",
+        "billy-kid, ellen, harumasa"
+      ],
+      "comment": "With Sunna being able to split her EX Special casts, it's not difficult for her to maintain full uptime of Moonlight Lullaby, making it the ideal set for her. Note that 2-piece sets is ideally Swing Jazz, given Sunna's low base ER making every point count, but Attack sets like Astral Voice or Hormone Punk can be used if struggling to meet her Core Passive thresholds."
+    },
+    {
+      "key": "trigger",
+      "name": "Trigger",
+      "tier": "T1",
+      "role": "support",
+      "category": "Support",
+      "rating": 9,
+      "rarity": "S",
+      "element": "electric",
+      "specialty": "stun",
+      "faction": "OBOLS Squad",
+      "build_patch": 2,
+      "slot_mains": {
+        "4": [
+          [
+            "crit_rate"
+          ]
+        ],
+        "5": [
+          [
+            "electric_dmg"
+          ],
+          [
+            "atk_pct"
+          ]
+        ],
+        "6": [
+          [
+            "impact"
+          ]
+        ]
+      },
+      "slot_mains_note": null,
+      "substat_priority_raw": "CRIT RATE >= CRIT DMG > ATK% > PEN = ATK",
+      "four_piece_families": [
+        {
+          "set": "king_of_the_summit",
+          "usage_pct": null
+        },
+        {
+          "set": "astral_voice",
+          "usage_pct": null
+        },
+        {
+          "set": "proto_punk",
+          "usage_pct": null
+        },
+        {
+          "set": "shockstar_disco",
+          "usage_pct": null
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "shockstar_disco",
+          "swing_jazz"
+        ],
+        [
+          "king_of_the_summit",
+          "shockstar_disco",
+          "swing_jazz"
+        ],
+        [
+          "king_of_the_summit",
+          "shockstar_disco",
+          "swing_jazz"
+        ],
+        [
+          "king_of_the_summit",
+          "swing_jazz"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "king_of_the_summit",
+          "two_piece": "shockstar_disco",
+          "q": 0.2322
+        },
+        {
+          "four_piece": "king_of_the_summit",
+          "two_piece": "swing_jazz",
+          "q": 0.1626
+        },
+        {
+          "four_piece": "astral_voice",
+          "two_piece": "king_of_the_summit",
+          "q": 0.1256
+        },
+        {
+          "four_piece": "astral_voice",
+          "two_piece": "shockstar_disco",
+          "q": 0.0879
+        },
+        {
+          "four_piece": "proto_punk",
+          "two_piece": "king_of_the_summit",
+          "q": 0.0879
+        },
+        {
+          "four_piece": "shockstar_disco",
+          "two_piece": "king_of_the_summit",
+          "q": 0.0797
+        },
+        {
+          "four_piece": "astral_voice",
+          "two_piece": "swing_jazz",
+          "q": 0.0628
+        },
+        {
+          "four_piece": "proto_punk",
+          "two_piece": "shockstar_disco",
+          "q": 0.0616
+        },
+        {
+          "four_piece": "shockstar_disco",
+          "two_piece": "swing_jazz",
+          "q": 0.0558
+        },
+        {
+          "four_piece": "proto_punk",
+          "two_piece": "swing_jazz",
+          "q": 0.044
+        }
+      ],
+      "team_primary": [],
+      "synergy_partners": [
+        "anby-demara-soldier-0",
+        "astra-yao, nicole-demara, lucy, ukinami-yuzuha",
+        "yanagi",
+        "yixuan",
+        "yixuan, manato, yidhari"
+      ],
+      "comment": "New best Stun set, to be used on any Stun character in almost any team with very few exceptions. Gives 6% increased Daze on the 2-piece and up to 30% CRIT DMG for the entire squad for 15s when casting EX Specials and Chain Attacks on the condition that the equipper has 50% CRIT Rate or higher, a requirement which is easy to meet but must be ensured. Uptime on this buff is almost always easily maintained permanently, however be mindful this set will not be effective if you aren’t building the rest of your team on CRIT, in which case alternatives will be preferred, and that you cannot run this set multiple times on the same team."
+    },
+    {
+      "key": "ukinami-yuzuha",
+      "name": "Yuzuha",
+      "tier": "T0",
+      "role": "support",
+      "category": "Support",
+      "rating": 11,
+      "rarity": "S",
+      "element": "physical",
+      "specialty": "support",
+      "faction": "Spook Shack",
+      "build_patch": 2.6,
+      "slot_mains": {
+        "4": [
+          [
+            "atk_pct"
+          ],
+          [
+            "anomaly_proficiency"
+          ]
+        ],
+        "5": [
+          [
+            "atk_pct"
+          ],
+          [
+            "pen_ratio"
+          ]
+        ],
+        "6": [
+          [
+            "anomaly_mastery",
+            "atk_pct"
+          ]
+        ]
+      },
+      "slot_mains_note": "Other Teams",
+      "substat_priority_raw": "ATK% > ATK (until 3000) > Anomaly Proficiency > PEN",
+      "four_piece_families": [
+        {
+          "set": "moonlight_lullaby",
+          "usage_pct": null
+        },
+        {
+          "set": "astral_voice",
+          "usage_pct": null
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "phaethons_melody",
+          "astral_voice",
+          "hormone_punk",
+          "chaos_jazz",
+          "freedom_blues"
+        ],
+        [
+          "phaethons_melody",
+          "hormone_punk",
+          "chaos_jazz",
+          "freedom_blues"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "moonlight_lullaby",
+          "two_piece": "phaethons_melody",
+          "q": 0.2674
+        },
+        {
+          "four_piece": "astral_voice",
+          "two_piece": "phaethons_melody",
+          "q": 0.1872
+        },
+        {
+          "four_piece": "astral_voice",
+          "two_piece": "hormone_punk",
+          "q": 0.131
+        },
+        {
+          "four_piece": "moonlight_lullaby",
+          "two_piece": "astral_voice",
+          "q": 0.0936
+        },
+        {
+          "four_piece": "moonlight_lullaby",
+          "two_piece": "hormone_punk",
+          "q": 0.0936
+        },
+        {
+          "four_piece": "moonlight_lullaby",
+          "two_piece": "chaos_jazz",
+          "q": 0.0668
+        },
+        {
+          "four_piece": "moonlight_lullaby",
+          "two_piece": "freedom_blues",
+          "q": 0.0668
+        },
+        {
+          "four_piece": "astral_voice",
+          "two_piece": "chaos_jazz",
+          "q": 0.0468
+        },
+        {
+          "four_piece": "astral_voice",
+          "two_piece": "freedom_blues",
+          "q": 0.0468
+        }
+      ],
+      "team_primary": [],
+      "synergy_partners": [
+        "velina",
+        "nangong-yu",
+        "jane-doe, piper, promeia",
+        "miyabi",
+        "vivian, burnice"
+      ],
+      "comment": "Gives 20% Energy Regen on the 2-piece, and most importantly the 4-piece is the best set for every Support-class Agent. This is because it provides not only more DMG Bonus than both Proto Punk and Swing Jazz (18%), but the duration of the buff is also much longer than both of them as well (25s), while the condition is also much easier to fulfill (it only requires casting an EX Special or Ultimate). It makes this set the best choice for all Supports and is only superceded by a fully stacked Astral Voice, which is not consistently upkept by most Agents."
+    },
+    {
+      "key": "velina",
+      "name": "Velina",
+      "tier": "T0",
+      "role": "sec-dps",
+      "category": "AnoDPS",
+      "rating": 11,
+      "rarity": "S",
+      "element": "wind",
+      "specialty": "anomaly",
+      "faction": "External Strategy Department",
+      "build_patch": 3,
+      "slot_mains": {
+        "4": [
+          [
+            "anomaly_proficiency"
+          ]
+        ],
+        "5": [
+          [
+            "wind_dmg",
+            "atk_pct",
+            "pen_ratio"
+          ]
+        ],
+        "6": [
+          [
+            "energy_regen"
+          ]
+        ]
+      },
+      "slot_mains_note": null,
+      "substat_priority_raw": "Anomaly Proficiency = ATK% > PEN > ATK",
+      "four_piece_families": [
+        {
+          "set": "wuthering_salon",
+          "usage_pct": 100.0
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "moonlight_lullaby",
+          "swing_jazz"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "wuthering_salon",
+          "two_piece": "moonlight_lullaby",
+          "q": 0.5
+        },
+        {
+          "four_piece": "wuthering_salon",
+          "two_piece": "swing_jazz",
+          "q": 0.5
+        }
+      ],
+      "team_primary": [
+        "promeia",
+        "ukinami-yuzuha"
+      ],
+      "synergy_partners": [
+        "aria",
+        "jane-doe",
+        "burnice, grace-howard",
+        "piper, vivian, promeia, nangong-yu",
+        "ukinami-yuzuha",
+        "yanagi, alice, miyabi"
+      ],
+      "comment": "Wuthering Salon is the made specifically for Velina, and its bonuses come far ahead of any other alternative so it's the pick. As she needs ER to max out her Core Passive, any 2-piece effect that provides it is ideal. "
+    },
+    {
+      "key": "vivian",
+      "name": "Vivian",
+      "tier": "T1",
+      "role": "sec-dps",
+      "category": "AnoDPS",
+      "rating": 9,
+      "rarity": "S",
+      "element": "ether",
+      "specialty": "anomaly",
+      "faction": "Mockingbird",
+      "build_patch": 2.3,
+      "slot_mains": {
+        "4": [
+          [
+            "anomaly_proficiency"
+          ]
+        ],
+        "5": [
+          [
+            "ether_dmg"
+          ],
+          [
+            "pen_ratio",
+            "atk_pct"
+          ]
+        ],
+        "6": [
+          [
+            "anomaly_mastery"
+          ]
+        ]
+      },
+      "slot_mains_note": null,
+      "substat_priority_raw": "Anomaly Proficiency >>> ATK% > ATK = PEN",
+      "four_piece_families": [
+        {
+          "set": "phaethons_melody",
+          "usage_pct": 100.0
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "chaos_jazz",
+          "freedom_blues",
+          "chaotic_metal",
+          "astral_voice",
+          "hormone_punk",
+          "puffer_electro"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "phaethons_melody",
+          "two_piece": "chaotic_metal",
+          "q": 0.2745
+        },
+        {
+          "four_piece": "phaethons_melody",
+          "two_piece": "chaos_jazz",
+          "q": 0.1961
+        },
+        {
+          "four_piece": "phaethons_melody",
+          "two_piece": "freedom_blues",
+          "q": 0.1961
+        },
+        {
+          "four_piece": "phaethons_melody",
+          "two_piece": "puffer_electro",
+          "q": 0.1373
+        },
+        {
+          "four_piece": "phaethons_melody",
+          "two_piece": "astral_voice",
+          "q": 0.098
+        },
+        {
+          "four_piece": "phaethons_melody",
+          "two_piece": "hormone_punk",
+          "q": 0.098
+        }
+      ],
+      "team_primary": [
+        "jane-doe",
+        "ukinami-yuzuha"
+      ],
+      "synergy_partners": [
+        "miyabi, yanagi, alice, jane-doe, piper, grace-howard",
+        "astra-yao, ukinami-yuzuha, nicole-demara, lucy"
+      ],
+      "comment": "Best Disc Drive set for Anomaly-focused Ether Agents, as it gives a stackable 45 Anomaly Proficiency bonus for 8s when any character in the team uses EX Specials, boosting Ether DMG for the equipper if the effect is activated by other party members, all the while boosting Anomaly Mastery with the 2-piece effect."
+    },
+    {
+      "key": "yanagi",
+      "name": "Yanagi",
+      "tier": "T1",
+      "role": "sec-dps",
+      "category": "AnoDPS",
+      "rating": 9,
+      "rarity": "S",
+      "element": "electric",
+      "specialty": "anomaly",
+      "faction": "Section 6",
+      "build_patch": 2.3,
+      "slot_mains": {
+        "4": [
+          [
+            "anomaly_proficiency"
+          ]
+        ],
+        "5": [
+          [
+            "pen_ratio"
+          ],
+          [
+            "electric_dmg"
+          ],
+          [
+            "atk_pct"
+          ]
+        ],
+        "6": [
+          [
+            "anomaly_mastery"
+          ],
+          [
+            "atk_pct"
+          ]
+        ]
+      },
+      "slot_mains_note": null,
+      "substat_priority_raw": "Anomaly Proficiency > ATK% > PEN = ATK",
+      "four_piece_families": [
+        {
+          "set": "chaos_jazz",
+          "usage_pct": null
+        },
+        {
+          "set": "feathered_fate",
+          "usage_pct": null
+        },
+        {
+          "set": "freedom_blues",
+          "usage_pct": null
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "freedom_blues",
+          "feathered_fate",
+          "puffer_electro",
+          "thunder_metal",
+          "astral_voice",
+          "hormone_punk"
+        ],
+        [
+          "freedom_blues",
+          "chaos_jazz",
+          "puffer_electro",
+          "thunder_metal",
+          "astral_voice",
+          "hormone_punk"
+        ],
+        [
+          "chaos_jazz",
+          "feathered_fate",
+          "puffer_electro",
+          "thunder_metal",
+          "astral_voice",
+          "hormone_punk"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "chaos_jazz",
+          "two_piece": "puffer_electro",
+          "q": 0.1253
+        },
+        {
+          "four_piece": "chaos_jazz",
+          "two_piece": "freedom_blues",
+          "q": 0.0895
+        },
+        {
+          "four_piece": "chaos_jazz",
+          "two_piece": "feathered_fate",
+          "q": 0.0895
+        },
+        {
+          "four_piece": "chaos_jazz",
+          "two_piece": "thunder_metal",
+          "q": 0.0895
+        },
+        {
+          "four_piece": "feathered_fate",
+          "two_piece": "puffer_electro",
+          "q": 0.0877
+        },
+        {
+          "four_piece": "feathered_fate",
+          "two_piece": "freedom_blues",
+          "q": 0.0627
+        },
+        {
+          "four_piece": "feathered_fate",
+          "two_piece": "chaos_jazz",
+          "q": 0.0627
+        },
+        {
+          "four_piece": "feathered_fate",
+          "two_piece": "thunder_metal",
+          "q": 0.0627
+        },
+        {
+          "four_piece": "freedom_blues",
+          "two_piece": "puffer_electro",
+          "q": 0.0614
+        },
+        {
+          "four_piece": "freedom_blues",
+          "two_piece": "chaos_jazz",
+          "q": 0.0439
+        },
+        {
+          "four_piece": "freedom_blues",
+          "two_piece": "feathered_fate",
+          "q": 0.0439
+        },
+        {
+          "four_piece": "freedom_blues",
+          "two_piece": "thunder_metal",
+          "q": 0.0439
+        },
+        {
+          "four_piece": "chaos_jazz",
+          "two_piece": "astral_voice",
+          "q": 0.0313
+        },
+        {
+          "four_piece": "chaos_jazz",
+          "two_piece": "hormone_punk",
+          "q": 0.0313
+        },
+        {
+          "four_piece": "feathered_fate",
+          "two_piece": "astral_voice",
+          "q": 0.0219
+        },
+        {
+          "four_piece": "feathered_fate",
+          "two_piece": "hormone_punk",
+          "q": 0.0219
+        },
+        {
+          "four_piece": "freedom_blues",
+          "two_piece": "astral_voice",
+          "q": 0.0154
+        },
+        {
+          "four_piece": "freedom_blues",
+          "two_piece": "hormone_punk",
+          "q": 0.0154
+        }
+      ],
+      "team_primary": [
+        "nangong-yu",
+        "ukinami-yuzuha"
+      ],
+      "synergy_partners": [
+        "nangong-yu",
+        "ukinami-yuzuha, rina, remielle"
+      ],
+      "comment": " A strong all-rounder option for Yanagi, being useful both in Disorder and Wind teams. As Yanagi's EX Special is what'll be triggering most of her Polarity Disorders, the carry-on DMG % bonus when swapping into her means its often up in full for much of her burst. Although some active management is needed, it's far easier than other specialised options, like Thunder Metal, and remains a competitive pick for her no matter the comp."
+    },
+    {
+      "key": "ye-shunguang",
+      "name": "Ye Shunguang",
+      "tier": "T0",
+      "role": "dps",
+      "category": "CritDPS",
+      "rating": 11,
+      "rarity": "S",
+      "element": "physical",
+      "specialty": "attack",
+      "faction": "Yunkui Summit",
+      "build_patch": 2.5,
+      "slot_mains": {
+        "4": [
+          [
+            "atk_pct"
+          ],
+          [
+            "crit_dmg"
+          ]
+        ],
+        "5": [
+          [
+            "pen_ratio",
+            "atk_pct"
+          ]
+        ],
+        "6": [
+          [
+            "atk_pct"
+          ]
+        ]
+      },
+      "slot_mains_note": null,
+      "substat_priority_raw": "CRIT DMG = CRIT Rate > ATK% > PEN > ATK",
+      "four_piece_families": [
+        {
+          "set": "white_water_ballad",
+          "usage_pct": null
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "branch_and_blade_song",
+          "puffer_electro",
+          "astral_voice",
+          "hormone_punk",
+          "fanged_metal",
+          "woodpecker_electro"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "white_water_ballad",
+          "two_piece": "branch_and_blade_song",
+          "q": 0.3571
+        },
+        {
+          "four_piece": "white_water_ballad",
+          "two_piece": "puffer_electro",
+          "q": 0.25
+        },
+        {
+          "four_piece": "white_water_ballad",
+          "two_piece": "fanged_metal",
+          "q": 0.125
+        },
+        {
+          "four_piece": "white_water_ballad",
+          "two_piece": "astral_voice",
+          "q": 0.0893
+        },
+        {
+          "four_piece": "white_water_ballad",
+          "two_piece": "hormone_punk",
+          "q": 0.0893
+        },
+        {
+          "four_piece": "white_water_ballad",
+          "two_piece": "woodpecker_electro",
+          "q": 0.0893
+        }
+      ],
+      "team_primary": [
+        "dialyn",
+        "zhao"
+      ],
+      "synergy_partners": [
+        "dialyn",
+        "zhao",
+        "trigger, ju-fufu",
+        "seed",
+        "sunna"
+      ],
+      "comment": "White Water Ballad is Ye Shunguang's dedicated set, giving a respectable 10% Combat ATK and, most importantly, up to 20% CRIT Rate. No other set would come close to its raw stat value, and with Ye Shunguang able to maintain full uptime of its 4-piece effect, it's the obvious best choice. It can also make building her either a lot easier or harder (depending on whether the W-Engine has CRIT Rate mainstat/special effects), with only 50% in initial CRIT Rate being required to max out. Note that 2-piece set priority changes depending on the boss lineup: against standard DEF bosses, Puffer Electro is best, whereas against lower DEF bosses (like Primordial Nightmare), the other sets win out."
+    },
+    {
+      "key": "yidhari",
+      "name": "Yidhari",
+      "tier": "T0.5",
+      "role": "dps",
+      "category": "CritDPS",
+      "rating": 10,
+      "rarity": "S",
+      "element": "ice",
+      "specialty": "rupture",
+      "faction": "Spook Shack",
+      "build_patch": 2.5,
+      "slot_mains": {
+        "4": [
+          [
+            "crit_rate",
+            "crit_dmg"
+          ]
+        ],
+        "5": [
+          [
+            "ice_dmg"
+          ],
+          [
+            "hp_pct"
+          ]
+        ],
+        "6": [
+          [
+            "hp_pct"
+          ]
+        ]
+      },
+      "slot_mains_note": null,
+      "substat_priority_raw": "CRIT Rate = CRIT DMG > HP% > ATK% = Flat HP",
+      "four_piece_families": [
+        {
+          "set": "yunkui_tales",
+          "usage_pct": 100.0
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "woodpecker_electro",
+          "branch_and_blade_song"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "yunkui_tales",
+          "two_piece": "woodpecker_electro",
+          "q": 0.5882
+        },
+        {
+          "four_piece": "yunkui_tales",
+          "two_piece": "branch_and_blade_song",
+          "q": 0.4118
+        }
+      ],
+      "team_primary": [
+        "ju-fufu",
+        "lucia"
+      ],
+      "synergy_partners": [
+        "lucia",
+        "pan-yinhu",
+        "dialyn",
+        "lycaon",
+        "ju-fufu",
+        "trigger",
+        "koleda"
+      ],
+      "comment": "Yidhari already benefits from the 2-piece HP % bonuses, and as she gets free EX Special hits every 12 seconds as a result of her Additional Ability, full uptime of Yunkui Tales’ 4-piece effect can be maintained. These combined make it the strongest set choice for her."
+    },
+    {
+      "key": "yixuan",
+      "name": "Yixuan",
+      "tier": "T0.5",
+      "role": "dps",
+      "category": "CritDPS",
+      "rating": 10,
+      "rarity": "S",
+      "element": "ether",
+      "specialty": "rupture",
+      "faction": "Yunkui Summit",
+      "build_patch": 2.5,
+      "slot_mains": {
+        "4": [
+          [
+            "crit_dmg",
+            "crit_rate"
+          ]
+        ],
+        "5": [
+          [
+            "ether_dmg"
+          ],
+          [
+            "hp_pct"
+          ]
+        ],
+        "6": [
+          [
+            "hp_pct"
+          ]
+        ]
+      },
+      "slot_mains_note": null,
+      "substat_priority_raw": "CRIT Rate = CRIT DMG > HP% > ATK% > Flat HP",
+      "four_piece_families": [
+        {
+          "set": "yunkui_tales",
+          "usage_pct": null
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "woodpecker_electro",
+          "branch_and_blade_song"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "yunkui_tales",
+          "two_piece": "woodpecker_electro",
+          "q": 0.5882
+        },
+        {
+          "four_piece": "yunkui_tales",
+          "two_piece": "branch_and_blade_song",
+          "q": 0.4118
+        }
+      ],
+      "team_primary": [
+        "ju-fufu",
+        "lucia"
+      ],
+      "synergy_partners": [
+        "lucia",
+        "pan-yinhu",
+        "dialyn",
+        "ju-fufu",
+        "trigger",
+        "qingyi",
+        "pulchra",
+        "astra-yao, ukinami-yuzuha"
+      ],
+      "comment": "The best (and frankly only) option that should be considered on Yixuan. Provides HP% on the 2-piece which is perfect for her, and provides a stackable CRIT Rate up effect for up to 4% 3 times (with a total of 12%) for 15s. At max stacks, it also increases Sheer DMG by 10%. A perfect Disc Drive set for her which boosts all of the stats she desires."
+    },
+    {
+      "key": "zhao",
+      "name": "Zhao",
+      "tier": "T0.5",
+      "role": "support",
+      "category": "Support",
+      "rating": 10,
+      "rarity": "S",
+      "element": "ice",
+      "specialty": "defense",
+      "faction": "Krampus Compliance Authority",
+      "build_patch": 2.5,
+      "slot_mains": {
+        "4": [
+          [
+            "hp_pct"
+          ]
+        ],
+        "5": [
+          [
+            "hp_pct"
+          ]
+        ],
+        "6": [
+          [
+            "energy_regen"
+          ]
+        ]
+      },
+      "slot_mains_note": null,
+      "substat_priority_raw": "HP% (Until 27000 Initial HP) > Flat HP (Until 27000 Initial HP) > Crit Rate = Crit DMG",
+      "four_piece_families": [
+        {
+          "set": "bunny_in_wonderland",
+          "usage_pct": null
+        },
+        {
+          "set": "astral_voice",
+          "usage_pct": null
+        }
+      ],
+      "two_piece_ranked_raw": [
+        [
+          "yunkui_tales",
+          "moonlight_lullaby",
+          "swing_jazz"
+        ],
+        [
+          "moonlight_lullaby",
+          "swing_jazz",
+          "yunkui_tales"
+        ]
+      ],
+      "build_variants": [
+        {
+          "four_piece": "bunny_in_wonderland",
+          "two_piece": "yunkui_tales",
+          "q": 0.346
+        },
+        {
+          "four_piece": "astral_voice",
+          "two_piece": "yunkui_tales",
+          "q": 0.1696
+        },
+        {
+          "four_piece": "bunny_in_wonderland",
+          "two_piece": "moonlight_lullaby",
+          "q": 0.1211
+        },
+        {
+          "four_piece": "bunny_in_wonderland",
+          "two_piece": "swing_jazz",
+          "q": 0.1211
+        },
+        {
+          "four_piece": "astral_voice",
+          "two_piece": "moonlight_lullaby",
+          "q": 0.1211
+        },
+        {
+          "four_piece": "astral_voice",
+          "two_piece": "swing_jazz",
+          "q": 0.1211
+        }
+      ],
+      "team_primary": [],
+      "synergy_partners": [
+        "ye-shunguang",
+        "nekomata, ellen, seed, yanagi, alice"
+      ],
+      "comment": "Bunny in Wonderland is easily Zhao's best-in-slot pick. Its triggering criteria is the easiest to meet, with either EX Special use or Perfect Assists, and while it does need to ramp up, the 18% DMG bonus it gives is teamwide and stacks last long enough that it's easy enough to maintain them.  The 2-piece HP effect is also a nice to have, making it easier to meet Zhao's steep HP thresholds."
+    }
+  ]
+}

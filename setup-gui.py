@@ -119,7 +119,7 @@ def write_env(base: str, model: str, key: str | None) -> str:
     for k, v in values.items():
         line = f"{k}={v}"
         if re.search(rf"(?m)^{k}=", text):
-            text = re.sub(rf"(?m)^{k}=.*$", lambda _m: line, text)
+            text = re.sub(rf"(?m)^{k}=.*$", lambda _m, repl=line: repl, text)
         else:
             text = (text.rstrip("\n") + "\n" if text else "") + line + "\n"
     ENV_FILE.write_text(text)
@@ -335,7 +335,7 @@ def build_report(client: dict) -> str:
     if (REPO / ".venv/bin/python").exists():
         ok, out = run([str(REPO / ".venv/bin/python"), "-c", PLAYERS_SNIPPET], timeout=60)
         if ok:
-            players = "; ".join(l.split("\t")[1] for l in out.splitlines() if "\t" in l)
+            players = "; ".join(ln.split("\t")[1] for ln in out.splitlines() if "\t" in ln)
     L += ["PROFILES", players or "(none / not readable)", ""]
 
     L += ["BROWSER", f"user agent  : {client.get('ua', '')}", "client errors:"]
@@ -350,21 +350,25 @@ def desktop_shortcut() -> dict:
     and the day-to-day control panel."""
     apps = Path.home() / ".local" / "share" / "applications"
     apps.mkdir(parents=True, exist_ok=True)
+    venv_cli = REPO / ".venv" / "bin" / "game-companion"
+    # M23 cutover: the main icon opens the companion itself (app window),
+    # falling back to the control panel when the CLI is not installed yet.
+    main_exec = f"{venv_cli} app" if venv_cli.exists() else f"python3 {REPO / 'setup-gui.py'} --panel"
     entries = [
-        ("gacha-companion.desktop", "Gacha Companion",
-         "Open the Gacha Companion control panel", "--panel"),
+        ("gacha-companion.desktop", "Gacha Companion", "Open your Gacha Companion", main_exec),
         ("gacha-companion-setup.desktop", "Gacha Companion Setup",
-         "Run the Gacha Companion setup wizard", ""),
+         "Run the Gacha Companion setup wizard",
+         f"python3 {REPO / 'setup-gui.py'}"),
     ]
     written = []
-    for filename, name, comment, flag in entries:
+    for filename, name, comment, exec_line in entries:
         path = apps / filename
         path.write_text(
             "[Desktop Entry]\n"
             "Type=Application\n"
             f"Name={name}\n"
             f"Comment={comment}\n"
-            f"Exec=python3 {REPO / 'setup-gui.py'} {flag}\n"
+            f"Exec={exec_line}\n"
             "Icon=applications-games\n"
             "Terminal=false\n"
             "Categories=Utility;Game;\n"
@@ -610,6 +614,15 @@ PANEL_PAGE = """<!doctype html>
   <div class="sub" id="statusline">checking&hellip;</div>
 </header>
 
+<div class="card" style="border-color:var(--ok,#39d98a)">
+  <h2>Open your companion</h2>
+  <div class="btns">
+    <a id="btn-open-companion" class="btn" style="text-decoration:none;text-align:center" href="http://127.0.0.1:8765/ui" target="_blank">Dashboard &amp; chat &rarr;</a>
+    <a id="btn-open-chat" class="btn sec" style="text-decoration:none;text-align:center" href="http://127.0.0.1:8765/ui/chat" target="_blank">Chat</a>
+  </div>
+  <div class="hint" id="companion-hint">Everything lives in the companion now &mdash; roster, teams, resources, codes and chat.</div>
+</div>
+
 <div class="card">
   <h2>Keep it fresh <span id="upd-badge" class="badge b-dim"></span></h2>
   <div class="btns">
@@ -739,6 +752,9 @@ function render(){
   $("au-badge").className = "badge " + (s.autoupdate === "on" ? "b-ok" : "b-dim");
   $("au-badge").textContent = s.autoupdate === "on" ? "daily" : "off";
   $("btn-au").textContent = s.autoupdate === "on" ? "Turn off" : "Turn on";
+  const companionBase = "http://127.0.0.1:" + (s.service && s.service.port ? s.service.port : 8765);
+  $("btn-open-companion").href = companionBase + "/ui";
+  $("btn-open-chat").href = companionBase + "/ui/chat";
   $("au-hint").textContent = s.autoupdate === "on"
     ? "updates every night by itself, rolls back a bad update automatically"
     : "off — updates only happen when you press the button above";
@@ -1003,7 +1019,17 @@ PAGE = """<!doctype html>
     <div class="msg" id="key2-msg"></div>
   </div>
 
-  <h3>Last part &mdash; connect it to Open WebUI <span id="owui-progress-label"></span></h3>
+  <div class="owcard" data-ow="0" style="border-color:var(--ok,#39d98a)">
+    <div class="owtop"><span class="owtitle"><span class="ownum">&#9894;</span>You&rsquo;re done &mdash; open your companion</span></div>
+    <div class="owbody">Everything now lives in your companion&rsquo;s own app:
+      roster, teams, resources, codes and <b>chat with your companion</b> &mdash; no Open WebUI needed.
+      <a id="open-companion" href="http://127.0.0.1:8765/ui" target="_blank"><b>Open your companion &rarr;</b></a>
+      &nbsp;or double-click the <b>Gacha Companion</b> desktop icon any time.
+      <div class="hint" id="companion-hint" style="margin-top:6px"></div>
+    </div>
+  </div>
+
+  <h3>Optional &mdash; also use it from Open WebUI <span id="owui-progress-label"></span></h3>
   <div class="progress"><i id="owui-bar"></i></div>
   <div class="hint" id="owui-hint"></div>
 
@@ -1344,6 +1370,9 @@ function showDone(playerId, playerName){
   $("c-url").textContent = `http://127.0.0.1:${s.service.port}`;
   $("c-base").textContent = s.env.base || "https://llm.tictac.one/v1";
   $("c-player").textContent = playerId || "";
+  const companionUrl = `http://127.0.0.1:${s.service.port}/ui`;
+  $("open-companion").href = companionUrl;
+  $("companion-hint").textContent = "Your companion lives at " + companionUrl + " — bookmark it.";
 
   $("key-reminder").hidden = s.env.key_set;
   const links = s.openwebui_port ? `http://127.0.0.1:${s.openwebui_port}` : null;

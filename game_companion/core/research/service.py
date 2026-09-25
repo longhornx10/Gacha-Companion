@@ -14,6 +14,7 @@ import re
 from collections.abc import Sequence
 from dataclasses import dataclass
 from typing import Protocol
+from urllib.parse import unquote
 
 import httpx
 from pydantic import BaseModel, Field
@@ -61,15 +62,90 @@ class SearXNGProvider:
         return hits
 
 
+_DDG_RESULT = re.compile(
+    r'<a[^>]*class="[^"]*result__a[^"]*"[^>]*href="([^"]+)"[^>]*>(.*?)</a>', re.S
+)
+_DDG_SNIPPET = re.compile(r'class="[^"]*result__snippet[^"]*"[^>]*>(.*?)</a>', re.S)
+_TAG = re.compile(r"<[^>]+>")
+_UDDG = re.compile(r"[?&]uddg=([^&]+)")
+
+
+def _clean(text: str) -> str:
+    return html.unescape(re.sub(r"\s+", " ", _TAG.sub("", text))).strip()
+
+
+def _unwrap_ddg_href(href: str) -> str:
+    """DDG wraps outbound links in /l/?uddg=<urlencoded target>."""
+    if "uddg=" in href:
+        found = _UDDG.search(href)
+        if found:
+            return unquote(html.unescape(found.group(1)))
+    if href.startswith("//"):
+        return "https:" + href
+    return href
+
+
+class DuckDuckGoProvider:
+    """Built-in fallback: no key, no setup — the HTML endpoint parsed directly."""
+
+    def search(self, query: str, *, limit: int = 5) -> list[SearchHit]:
+        response = httpx.post(
+            "https://html.duckduckgo.com/html/",
+            data={"q": query},
+            timeout=20,
+            headers={"User-Agent": "gacha-companion/0.1 (local research tool)"},
+        )
+        response.raise_for_status()
+        page = response.text
+        hits: list[SearchHit] = []
+        snippets = _DDG_SNIPPET.findall(page)
+        for i, (href, title) in enumerate(_DDG_RESULT.findall(page)):
+            if len(hits) >= limit:
+                break
+            snippet = _clean(snippets[i]) if i < len(snippets) else ""
+            hits.append(SearchHit(title=_clean(title), url=_unwrap_ddg_href(href), snippet=snippet))
+        if not hits:
+            raise SearchNotConfiguredError(
+                "the built-in search returned no results (the search backend may be "
+                "temporarily blocking this network)"
+            )
+        return hits
+
+
+class ChainedProvider:
+    """Try configured providers in order; first non-empty result wins."""
+
+    def __init__(self, providers: list) -> None:
+        self._providers = providers
+
+    def search(self, query: str, *, limit: int = 5) -> list[SearchHit]:
+        errors: list[str] = []
+        for provider in self._providers:
+            try:
+                hits = provider.search(query, limit=limit)
+                if hits:
+                    return hits
+            except Exception as exc:  # fall through to the next provider
+                errors.append(f"{type(provider).__name__}: {exc}")
+        raise SearchNotConfiguredError(
+            "no search provider answered"
+            + (f" ({'; '.join(errors)})" if errors else "")
+        )
+
+
 class NullProvider:
     def search(self, query: str, *, limit: int = 5) -> list[SearchHit]:
         raise SearchNotConfiguredError()
 
 
-def provider_from_settings(settings) -> SearchProvider:
+def provider_from_settings(settings):
+    """SearXNG when configured, plus the built-in DuckDuckGo fallback — so
+    search works out of the box with zero configuration."""
+    providers = []
     if settings.searxng_base_url:
-        return SearXNGProvider(settings.searxng_base_url)
-    return NullProvider()
+        providers.append(SearXNGProvider(settings.searxng_base_url))
+    providers.append(DuckDuckGoProvider())
+    return ChainedProvider(providers)
 
 
 def fetch_text(url: str, max_chars: int = 6000) -> str:

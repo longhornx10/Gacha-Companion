@@ -65,3 +65,17 @@ class AuditResult(PKMixin, TimestampMixin, Base):
     status: Mapped[str] = mapped_column(String(40), default="ok")
     issues: Mapped[list] = mapped_column(JSON, default=list)
     checked_at: Mapped[datetime] = mapped_column(UTCDateTime(), default=None)
+
+
+class Achievement(PKMixin, TimestampMixin, Base):
+    __tablename__ = "achievements"
+    __table_args__ = (
+        UniqueConstraint("player_profile_id", "game_id", "key", name="uq_achievement"),
+    )
+
+    player_profile_id: Mapped[str] = mapped_column(
+        ForeignKey("player_profiles.id", ondelete="CASCADE"), index=True
+    )
+    game_id: Mapped[str] = mapped_column(String(40), index=True)
+    key: Mapped[str] = mapped_column(String(60))
+    unlocked_at: Mapped[datetime] = mapped_column(UTCDateTime(), default=None)

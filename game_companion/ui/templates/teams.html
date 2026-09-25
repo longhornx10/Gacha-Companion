@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-head">
+  {% if theme.logo %}<img class="page-logo" src="{{ theme.logo }}" alt="" {% if theme.logo_filter %}style="filter:{{ theme.logo_filter }}"{% endif %}>{% endif %}
+  <h1>{{ term.team }}s</h1>
+</div>
+
+{% if teams %}
+<div class="grid2">
+  {% for t in teams %}
+  <section class="card {{ 'team-active' if t.is_active }}">
+    <h2>{{ t.name }} {% if t.is_active %}<span class="chip chip-cyan">active</span>{% endif %}</h2>
+    <ol class="team-members">
+      {% for m in t.members %}<li>{{ m.name }}</li>{% endfor %}
+    </ol>
+    {% if t.notes %}<p class="muted">{{ t.notes }}</p>{% endif %}
+    <form method="post" action="/ui/teams/{{ t.id }}/{{ 'deactivate' if t.is_active else 'activate' }}" class="inline">
+      <button type="submit">{{ 'Deactivate' if t.is_active else 'Set active' }}</button>
+    </form>
+  </section>
+  {% endfor %}
+</div>
+{% else %}
+<div class="card"><p class="muted">No {{ term.team|lower }}s saved yet.</p></div>
+{% endif %}
+{% endblock %}
+

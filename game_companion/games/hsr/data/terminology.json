@@ -1,0 +1,28 @@
+{
+  "_meta": {
+    "review": "hand_curated",
+    "notes": "Starter terminology from public wikis (Prydwen, Game8) and research in docs/game-adapters-research.md. Verify against in-game naming during live play."
+  },
+  "terms": {
+    "character": {"display": "Character", "gloss": "Playable unit you own and level"},
+    "character_plural": {"display": "Characters", "gloss": ""},
+    "equipment": {"display": "Light Cone", "gloss": "Signature weapon card; one per character"},
+    "equipment_plural": {"display": "Light Cones", "gloss": ""},
+    "gear": {"display": "Relic", "gloss": "Set-based gear piece (4 slots, 2pc/4pc sets)"},
+    "gear_plural": {"display": "Relics", "gloss": "Planar Ornaments are a second gear family (2 slots, 2pc)"},
+    "duplication": {"display": "Eidolon", "gloss": "Dupe system, E0 (no dupes) to E6"},
+    "special_progression": {"display": "Traces", "gloss": "Per-character skill/stat progression tree"},
+    "team": {"display": "Team", "gloss": "Up to 4 characters fighting together"},
+    "build": {"display": "Build", "gloss": "Light Cone + relic/ornament loadout"},
+    "role": {"display": "Path", "gloss": "Destruction, Hunt, Erudition, Harmony, Nihility, Preservation, Abundance, Remembrance"},
+    "attribute": {"display": "Combat Type", "gloss": "Physical, Fire, Ice, Lightning, Wind, Quantum, Imaginary"},
+    "faction": {"display": "Faction", "gloss": "In-game affiliation"},
+    "banner": {"display": "Warp", "gloss": "Limited (Character Event) or standard (Stellar) Warp"},
+    "endgame": {"display": "endgame mode", "gloss": "Memory of Chaos, Pure Fiction, Apocalyptic Shadow, Simulated Universe"},
+    "pull_currency": {"display": "Stellar Jade", "gloss": "Premium currency converted into passes"},
+    "pull_ticket_limited": {"display": "Star Rail Special Pass", "gloss": "Ticket for limited character Warp"},
+    "pull_ticket_standard": {"display": "Star Rail Pass", "gloss": "Ticket for the standard Stellar Warp"},
+    "money": {"display": "Credits", "gloss": "Everyday currency for upgrades"},
+    "stamina": {"display": "Trailblaze Power", "gloss": "Regenerating energy spent on farming"}
+  }
+}

@@ -13,6 +13,11 @@ from game_companion.core.games.base import (
     ScoreComponent,
 )
 
+# Slot main-stat pools are a VERIFIED MECHANIC (v3.2): slots 1-3 are fixed
+# (flat HP / ATK / DEF); slot 4 can roll CRIT stats; slot 5 carries elemental
+# damage bonuses; slot 6 carries utility mains. Elemental list includes
+# wind_dmg, seen in Prydwen build data (3.2) — flagged UNKNOWN-NEEDS DATA
+# until corroborated in-game.
 GEAR_SLOTS = [
     GearSlotDefinition(key="1", name="Slot 1", main_stat_pool=("hp",)),
     GearSlotDefinition(key="2", name="Slot 2", main_stat_pool=("atk",)),
@@ -20,17 +25,24 @@ GEAR_SLOTS = [
     GearSlotDefinition(
         key="4",
         name="Slot 4",
-        main_stat_pool=("hp_pct", "atk_pct", "def_pct", "anomaly_proficiency", "impact"),
+        main_stat_pool=(
+            "hp_pct", "atk_pct", "def_pct", "crit_rate", "crit_dmg", "anomaly_proficiency",
+        ),
     ),
     GearSlotDefinition(
         key="5",
         name="Slot 5",
-        main_stat_pool=("crit_rate", "crit_dmg", "atk_pct", "anomaly_proficiency", "pen_ratio"),
+        main_stat_pool=(
+            "hp_pct", "atk_pct", "def_pct", "pen_ratio",
+            "physical_dmg", "fire_dmg", "ice_dmg", "electric_dmg", "ether_dmg", "wind_dmg",
+        ),
     ),
     GearSlotDefinition(
         key="6",
         name="Slot 6",
-        main_stat_pool=("atk_pct", "hp_pct", "def_pct", "anomaly_mastery", "impact", "energy_regen"),
+        main_stat_pool=(
+            "hp_pct", "atk_pct", "def_pct", "anomaly_mastery", "energy_regen", "impact",
+        ),
     ),
 ]
 

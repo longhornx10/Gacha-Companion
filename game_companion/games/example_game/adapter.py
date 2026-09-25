@@ -51,6 +51,8 @@ class ExampleGameAdapter(GameAdapter):
     game_id = "example"
     display_name = "Aether Tactics (Example)"
     version = "1.0.0"
+    # test-only adapter: proves core genericity, never offered to users
+    hidden = True
 
     def terminology(self) -> Terminology:
         return Terminology(

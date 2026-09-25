@@ -9,7 +9,7 @@ import pytest
 from game_companion.core.games.base import GameAdapter
 from game_companion.core.games.registry import get_adapter
 
-ADAPTER_IDS = ["zzz", "example"]
+ADAPTER_IDS = ["zzz", "example", "hsr", "nte"]
 
 
 @pytest.mark.parametrize("game_id", ADAPTER_IDS)

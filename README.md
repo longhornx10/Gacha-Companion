@@ -28,6 +28,23 @@ future runs need no terminal at all.
 It's safe to re-run any time; `bash stop-service.sh` / `bash start-service.sh`
 manage the background service.
 
+When the wizard finishes, open **<http://127.0.0.1:8765/ui>** — that's your
+companion: dashboard, roster, teams, resources, codes, imports and
+**chat**. No Open WebUI needed (it remains optional; see below).
+For an app-style window use `game-companion app`, or the **Gacha Companion**
+desktop icon.
+
+### Daily use
+
+```bash
+game-companion app     # opens the UI in an app window (starts the service if needed)
+```
+
+In the app: paste your roster under **Imports**, fix anything on any page with
+**Edit** buttons, flip games with the **switcher** in the header (each game has
+its own theme, persona, chats and data), and talk to your companion on the
+**Chat** page — it reads your real data from SQLite, never the other way around.
+
 Prefer doing it by hand?
 
 ```bash
@@ -51,24 +68,24 @@ Other CLI commands: `list-games`, `create-player`, `init-db`, `check-sources`.
 
 | Doc | Contents |
 | --- | --- |
-| [docs/getting-started.md](docs/getting-started.md) | **start here** — install → Open WebUI → daily use |
+| [docs/getting-started.md](docs/getting-started.md) | **start here** — install → the app → daily use |
 | [docs/SPEC.md](docs/SPEC.md) | full product specification |
 | [docs/architecture.md](docs/architecture.md) | design, layering rules, decision log |
 | [docs/data-model.md](docs/data-model.md) | every table, integrity rules |
 | [docs/game-adapter.md](docs/game-adapter.md) | how to add HSR/NTE as a new adapter |
-| [docs/openwebui.md](docs/openwebui.md) | connecting Open WebUI tools |
+| [docs/openwebui.md](docs/openwebui.md) | optional: chat from Open WebUI instead |
 | [docs/zzz.md](docs/zzz.md) | ZZZ adapter rules, data honesty notes |
 | [docs/TODO.md](docs/TODO.md) | milestone tracker / current status |
 
 ## Development
 
 ```bash
-uv run pytest tests                      # 89 tests; fully offline (no API calls)
+uv run pytest tests                      # fully offline (no API calls)
 uv run ruff check game_companion tests   # lint
 ```
 
 See `docs/architecture.md` for the design, [docs/getting-started.md](docs/getting-started.md)
-for the full 0→100 walkthrough (clone → configure → Open WebUI → daily use),
+for the full 0→100 walkthrough (clone → configure → the app → daily use),
 and `docs/game-adapter.md` to add a new game.
 
 ## Status

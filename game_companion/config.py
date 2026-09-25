@@ -24,14 +24,20 @@ class Settings(BaseSettings):
     llm_api_key: SecretStr = SecretStr("")
     llm_model: str = "muse-glimmer-30b-vlm-128k"
     llm_timeout_seconds: float = 120.0
+    # Vision capability: None = auto-detect from the model id; True/False =
+    # manual override set in Settings (guards screenshot imports).
+    llm_vision_model: bool | None = None
 
     # Local data
     data_dir: Path | None = None
     database_url: str | None = None
 
     # Local service binding — localhost only unless explicitly changed.
+    # D2 threat model: the UI/API is unauthenticated; binding a non-loopback
+    # host requires GAME_COMPANION_EXPOSE=1 as an explicit tripwire.
     host: str = "127.0.0.1"
     port: int = 8765
+    expose: bool = False
 
     # Logging
     log_level: str = "INFO"
@@ -39,6 +45,9 @@ class Settings(BaseSettings):
 
     # Research / search
     searxng_base_url: str | None = None
+
+    # Background auto-refresh (codes daily, catalog weekly). Off in tests.
+    auto_refresh: bool = True
 
     @property
     def resolved_data_dir(self) -> Path:

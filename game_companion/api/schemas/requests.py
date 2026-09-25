@@ -96,6 +96,7 @@ class EquipmentUpdate(BaseModel):
 
 
 class GearCreate(BaseModel):
+    gear_type: str | None = None  # adapter gear-family key; adapter default applies
     set_key: str | None = None
     slot: str | None = None
     rarity: int | str | None = None
@@ -237,6 +238,13 @@ class ImportCreate(BaseModel):
     character_hint: str | None = None
     # Manual candidate (no LLM): validated against the adapter schema.
     candidate: dict | None = None
+
+
+class RosterImportCreate(BaseModel):
+    """Deterministic roster import (M21): plain text or our own JSON shape."""
+
+    text: str | None = None
+    json_data: dict | None = None
 
 
 class TeamRecommendationRequest(BaseModel):

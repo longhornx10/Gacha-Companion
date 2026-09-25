@@ -1,8 +1,8 @@
 # Getting Started: 0 → 100
 
-From a bare Linux machine to daily use with Open WebUI Desktop. Everything here
-matches the code on `main`. See [architecture.md](architecture.md) for design
-details and [openwebui.md](openwebui.md) for integration specifics.
+From a bare Linux machine to daily use with the companion's own app. Everything
+here matches the code on `main`. See [architecture.md](architecture.md) for
+design details. Open WebUI is **optional** — see [openwebui.md](openwebui.md).
 
 ## 0. The easy way: setup wizard
 
@@ -117,39 +117,37 @@ uv run game-companion create-player "Nick"
 Leave `serve` running — it's a normal foreground process; put it in a tmux
 window or a systemd user unit if you want it persistent.
 
-## 5. Hook up Open WebUI Desktop
+## 5. Open your companion (the app)
 
-Two separate connections happen here: Open WebUI → your LLM endpoint (for
-chat), and Open WebUI → the companion service (for tools).
+The companion has its own interface now — no Open WebUI needed:
 
-**5a. Point Open WebUI at your LLM endpoint.**
-In Open WebUI Desktop: Settings → **Admin Settings → Connections** → OpenAI
-API → add `https://llm.tictac.one/v1` with your key. Then pick
-`muse-glimmer-30b-vlm-128k` (or whatever the router exposes) as the chat
-model. Tool calling must work on whatever model you chat with — that's what
-drives the tools.
+```bash
+game-companion app        # app-style window (chromium --app); falls back to your browser
+```
 
-**5b. Install the companion tools.**
-Open `game_companion/integrations/openwebui/gacha_companion_tools.py` from the
-repo, copy its entire contents. In Open WebUI: **Workspace → Tools → +** (new
-tool), paste it, save. It appears as "Gacha Companion".
+or just open **<http://127.0.0.1:8765/ui>**. What's inside:
 
-**5c. Set the tool's Valves.**
-Open the tool → Valves (gear icon):
+- **Dashboard** — counts, active team, resource statuses, recent results.
+- **Imports** — paste your roster as text or upload a screenshot; review the
+  proposed changes, then **Apply**. Nothing is saved before you confirm.
+- **Roster / Inventory / Teams / Resources / Codes** — read views with inline
+  **Edit** buttons; saving marks the data as verified by you.
+- **Chat** — talk to your companion. It reads your real data through tools,
+  shows which tools it used, and can propose lasting "memories" (visible and
+  deletable under **Settings**).
+- **Personas** — tone-only characters, optionally bound to a game.
+- **Settings** — profiles, backups (create/restore), memories, games.
+- **Game switcher** (top header) — switch everything at once: theme, persona,
+  chats and data follow the game.
 
-- `base_url` → `http://127.0.0.1:8765`
-- `game_id` → `zzz`
-- `player_id` → the UUID from step 4 (you can leave it empty while only one
-  profile exists, and the service resolves it automatically)
-
-**5d. Enable it in a chat.**
-New chat → click the **"+" next to the message box → Tools** → toggle on
-**Gacha Companion**. You only need to do this once per chat.
+> Prefer Open WebUI? It still works — see [openwebui.md](openwebui.md) for the
+> tool setup (this is now the optional path).
 
 ## 6. Using it (the fun part)
 
-With the tool enabled, talk normally — the model calls the tools to read/write
-your real data before answering.
+Open the **Chat** page (or, if you use the optional Open WebUI path, enable the
+tool there) and talk normally — the model calls the tools to read/write your
+real data before answering.
 
 **Store your account:**
 

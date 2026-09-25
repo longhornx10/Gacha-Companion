@@ -1,0 +1,27 @@
+{
+  "_meta": {
+    "review": "hand_curated",
+    "notes": "Generic ontology -> ZZZ vocabulary. Chat prompts inject this so the model speaks the game's language; contract tests require every key."
+  },
+  "terms": {
+    "character": {"display": "Agent", "gloss": "Playable unit you own and level"},
+    "character_plural": {"display": "Agents", "gloss": ""},
+    "equipment": {"display": "W-Engine", "gloss": "Signature weapon; one per character"},
+    "equipment_plural": {"display": "W-Engines", "gloss": ""},
+    "gear": {"display": "Drive Disc", "gloss": "Set-based gear piece with a main stat and up to 4 substats"},
+    "gear_plural": {"display": "Drive Discs", "gloss": ""},
+    "duplication": {"display": "Mindscape", "gloss": "Dupe system, M0 (no dupes) to M6"},
+    "special_progression": {"display": "Core Skill", "gloss": "Per-character progression track, levels A-F"},
+    "team": {"display": "Team", "gloss": "Up to 3 characters fighting together"},
+    "build": {"display": "Build", "gloss": "A character's equipment + 6 gear slots loadout"},
+    "role": {"display": "Specialty", "gloss": "Attack, Stun, Anomaly, Support, Defense"},
+    "attribute": {"display": "Attribute", "gloss": "Fire, Ice, Electric, Physical, Ether"},
+    "faction": {"display": "Faction", "gloss": "In-game organization a character belongs to"},
+    "banner": {"display": "Signal Search", "gloss": "Limited or standard gacha banner"},
+    "endgame": {"display": "endgame mode", "gloss": "Shiyu Defense, Deadly Assault"},
+    "pull_currency": {"display": "Polychrome", "gloss": "Premium currency converted into pull tickets"},
+    "pull_ticket_limited": {"display": "Master Tape", "gloss": "Ticket for limited/standard banner pulls"},
+    "money": {"display": "Dennies", "gloss": "Everyday currency for upgrades"},
+    "stamina": {"display": "Battery Charge", "gloss": "Regenerating energy spent on farming"}
+  }
+}

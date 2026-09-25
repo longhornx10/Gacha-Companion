@@ -28,7 +28,7 @@ def test_manual_candidate_confirm_flow(client, player):
     updated = client.get("/api/games/zzz/characters/burnice").json()
     assert updated["level"] == 60
     assert updated["duplication_level"] == 2
-    assert updated["source"] == "manual"  # unchanged; verification bumped instead
+    assert updated["source"] == "screenshot_import"  # source reflects the data pathway
     assert updated["last_verified_at"] is not None
     assert char["id"] == updated["id"]
 

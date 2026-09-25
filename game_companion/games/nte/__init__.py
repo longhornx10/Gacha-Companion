@@ -1,0 +1,1 @@
+"""NTE game adapter package."""

@@ -1,0 +1,105 @@
+{
+ "codes": [
+  {
+   "code": "BBPU5PC7F7W5",
+   "rewards": "...",
+   "status": "active",
+   "sources": [
+    "source3"
+   ],
+   "discovered_date": "2024-10-16",
+   "discovered_date_display": "October 16, 2024"
+  },
+  {
+   "code": "ZZZVOID32",
+   "rewards": "Polychrome, \u00d720, Denny, \u00d72,222",
+   "status": "active",
+   "sources": [
+    "source1",
+    "source2",
+    "source3",
+    "source4"
+   ],
+   "discovered_date": "2024-09-12",
+   "discovered_date_display": "September 12, 2024"
+  },
+  {
+   "code": "ZZZINK32",
+   "rewards": "Polychrome, \u00d720, Denny, \u00d72,222",
+   "status": "active",
+   "sources": [
+    "source1",
+    "source2",
+    "source3",
+    "source4"
+   ],
+   "discovered_date": "2024-09-11",
+   "discovered_date_display": "September 11, 2024"
+  },
+  {
+   "code": "ZZZGRIND32",
+   "rewards": "Polychrome, \u00d720, Denny, \u00d72,222",
+   "status": "active",
+   "sources": [
+    "source1",
+    "source2",
+    "source3",
+    "source4"
+   ],
+   "discovered_date": "2024-09-10",
+   "discovered_date_display": "September 10, 2024"
+  },
+  {
+   "code": "ZENLESSGIFT",
+   "rewards": "Polychrome, \u00d750, Official Investigator Log, \u00d72, W-Engine Power Supply, \u00d73, Bangboo Algorithm Module, \u00d71",
+   "status": "active",
+   "sources": [
+    "source1",
+    "source2",
+    "source3",
+    "source4"
+   ],
+   "discovered_date": "2024-07-04",
+   "discovered_date_display": "July 04, 2024"
+  }
+ ],
+ "expired": [
+  {
+   "code": "ZZZYOU",
+   "expired_date": null
+  },
+  {
+   "code": "ZZZY2ANNIV",
+   "expired_date": null
+  },
+  {
+   "code": "ZZZWITHUS",
+   "expired_date": null
+  }
+ ],
+ "sources": {
+  "source1": {
+   "status": "success",
+   "count": 4
+  },
+  "source2": {
+   "status": "success",
+   "count": 4
+  },
+  "source3": {
+   "status": "success",
+   "count": 5
+  },
+  "source4": {
+   "status": "success",
+   "count": 4
+  },
+  "source5": {
+   "status": "empty",
+   "count": 0
+  }
+ },
+ "timestamp": "2026-09-24T21:44:14.054006+00:00",
+ "generated_at": "2026-09-24 21:44:14 UTC",
+ "total_polychromes": 110
+}

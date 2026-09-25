@@ -1,13 +1,15 @@
-"""System routes: health, games registry, players, preferences."""
+"""System routes: health, games registry, players, preferences, dashboard, backups."""
 
 from __future__ import annotations
 
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
 
-from game_companion.api.deps import get_db, resolve_player
+from game_companion.api.deps import adapter_for, get_db, resolve_player
 from game_companion.api.schemas.requests import PlayerCreate, PlayerUpdate, PreferencePut
 from game_companion.api.serialize import profile_dict
+from game_companion.core.backup import cleanup_staging, create_backup, list_backups, stage_restore
+from game_companion.core.dashboard import build_dashboard
 from game_companion.core.games.registry import adapter_ids, list_adapters
 from game_companion.db.models import PlayerProfile
 from game_companion.db.repositories import PlayerRepository
@@ -134,6 +136,55 @@ def delete_player(player_id: str, session: Session = Depends(get_db)):
     profile = repo.get_or_raise(player_id, "player")
     repo.delete(profile)
     return {"deleted": player_id}
+
+
+# -- dashboard aggregate ---------------------------------------------------------
+
+
+@router.get("/dashboard")
+def dashboard(
+    game_id: str, session: Session = Depends(get_db), player=Depends(resolve_player)
+):
+    return build_dashboard(session, adapter_for(game_id), player.id)
+
+
+# -- backups ---------------------------------------------------------------------
+
+
+@router.get("/system/data-dir")
+def data_dir(request: Request):
+    settings = request.app.state.settings
+    return {"data_dir": str(settings.resolved_data_dir)}
+
+
+@router.post("/system/backup", status_code=201)
+def run_backup(request: Request):
+    path = create_backup(request.app.state.settings)
+    return {"name": path.name, "path": str(path), "size_bytes": path.stat().st_size}
+
+
+@router.get("/system/backups")
+def backups(request: Request):
+    return {"backups": list_backups(request.app.state.settings)}
+
+
+@router.post("/system/restore")
+def restore(request: Request, payload: dict, session: Session = Depends(get_db)):
+    """Swap the live database with the one inside a backup (personas restored too).
+
+    The engine is recreated in place — no service restart needed. The request
+    session is rolled back first so pending writes never land in the old file.
+    """
+    name = (payload or {}).get("name", "")
+    settings = request.app.state.settings
+    session.rollback()
+    staging, staged_db = stage_restore(settings, name)
+
+    from game_companion.db.backup_swap import swap_live_database
+
+    swap_live_database(request.app, staged_db, staging)
+    cleanup_staging(settings)
+    return {"restored": name, "restarted": False}
 
 
 # -- preferences ---------------------------------------------------------------

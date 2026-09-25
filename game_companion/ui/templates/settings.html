@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-head">
+  {% if theme.logo %}<img class="page-logo" src="{{ theme.logo }}" alt="" {% if theme.logo_filter %}style="filter:{{ theme.logo_filter }}"{% endif %}>{% endif %}
+  <h1>Settings</h1>
+</div>
+
+<section class="card">
+  <h2>Assistant model
+    <span class="status-dot {{ 'status-ok' if llm.configured else 'status-bad' }}"></span>
+    {% if llm.configured %}<code>{{ llm.model }}</code>{% else %}<span class="chip chip-red">not configured</span>{% endif %}
+    {% if llm.vision_capable %}<span class="chip chip-cyan">vision</span>{% elif llm.vision_override is none %}<span class="chip chip-cyan">vision: auto-tested on upload</span>{% else %}<span class="chip chip-orange">no vision</span>{% endif %}
+  </h2>
+  <p class="muted">Changes apply immediately — no restart needed. The model list fills in
+  automatically from your endpoint. Screenshots need a vision (VLM) model; chat needs
+  one that supports tools.</p>
+  <form method="post" action="/ui/settings/assistant" id="assistant-form">
+    <div class="grid2">
+      <p><label>Model
+        <br><select id="llm-model-select" name="llm_model" data-current="{{ llm.model }}">
+          <option value="{{ llm.model }}">{{ llm.model or '(none — load a list)' }}</option>
+        </select>
+        <button type="button" class="mini" id="btn-reload-models">Reload list</button>
+        <span class="muted" id="models-status"></span>
+      </label></p>
+      <p><label>Endpoint base URL<br>
+        <input type="text" name="llm_base_url" value="{{ llm.base_url }}" style="width:100%"></label></p>
+      <p><label>API key <span class="muted">{{ '(saved — type only to replace)' if llm.key_set else '(not set)' }}</span><br>
+        <input type="password" name="llm_api_key" placeholder="{{ '••••••••' if llm.key_set else 'sk-…' }}" autocomplete="off"></label></p>
+      <p><label>Timeout (seconds)<br>
+        <input type="text" name="llm_timeout_seconds" value="{{ llm.timeout_seconds }}" style="max-width:8rem"></label></p>
+      <p><label>Vision detection<br>
+        <select name="vision_override">
+          <option value="auto" {% if llm.vision_override is none %}selected{% endif %}>Auto (test with a tiny image on first upload)</option>
+          <option value="yes" {% if llm.vision_override == true %}selected{% endif %}>This model reads images</option>
+          <option value="no" {% if llm.vision_override == false %}selected{% endif %}>This model can't read images</option>
+        </select></label></p>
+      <p><label>Research search URL (SearXNG, optional)<br>
+        <input type="text" name="searxng_base_url" value="{{ llm.searxng_base_url }}" placeholder="https://…/search" style="width:100%"></label></p>
+    </div>
+    <p>
+      <button type="submit">Save &amp; apply</button>
+      <button type="button" class="button" id="btn-test-endpoint">Test endpoint</button>
+      <span id="test-result" class="muted"></span>
+    </p>
+  </form>
+</section>
+
+<section class="card">
+  <h2>Profiles</h2>
+  {% if players %}
+  <table>
+    <thead><tr><th>Name</th><th>Created</th><th></th></tr></thead>
+    <tbody>
+      {% for p in players %}
+      <tr>
+        <td>{% if p.id == player_id %}<strong>{{ p.display_name }}</strong> <span class="chip chip-cyan">active</span>{% else %}{{ p.display_name }}{% endif %}</td>
+        <td class="muted">{{ (p.created_at|isodate or '')[:10] }}</td>
+        <td>
+          {% if p.id != player_id %}
+          <form method="post" action="/ui/select-player" class="inline">
+            <input type="hidden" name="player_id" value="{{ p.id }}">
+            <input type="hidden" name="next" value="/ui/settings">
+            <button type="submit">Use</button>
+          </form>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}<p class="muted">No profiles yet.</p>{% endif %}
+  <form method="post" action="/ui/players/create" class="inline-row">
+    <input type="text" name="display_name" placeholder="New profile name" required>
+    <button type="submit">Create profile</button>
+  </form>
+</section>
+
+<section class="card">
+  <h2>Backups</h2>
+  <p class="muted">A backup zips your database and personas into the data folder. Restoring replaces what you have now — the current state is backed up automatically first.</p>
+  <form method="post" action="/ui/backup" class="inline-row">
+    <button type="submit">Create backup now</button>
+  </form>
+  {% if backups %}
+  <table>
+    <thead><tr><th>Backup</th><th>Size</th><th>Created</th><th></th></tr></thead>
+    <tbody>
+      {% for b in backups %}
+      <tr>
+        <td><strong>{{ b.name }}</strong></td>
+        <td class="num-cell">{{ (b.size_bytes / 1024)|round(1) }} KB</td>
+        <td class="muted">{{ b.created_at[:19].replace('T', ' ') }}</td>
+        <td>
+          <form method="post" action="/ui/restore" class="inline"
+                onsubmit="return confirm('Replace ALL current data with {{ b.name }}?')">
+            <input type="hidden" name="name" value="{{ b.name }}">
+            <button type="submit" class="danger">Restore</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}<p class="muted">No backups yet.</p>{% endif %}
+</section>
+
+<section class="card">
+  <h2>Companion memories</h2>
+  <p class="muted">Lasting notes the chat uses (playstyle, preferences). Ones the assistant
+  proposed are marked — you can pause or delete anything, always.</p>
+  {% if memories %}
+  <table>
+    <thead><tr><th>Note</th><th>Source</th><th>State</th><th></th></tr></thead>
+    <tbody>
+      {% for m in memories %}
+      <tr>
+        <td>{{ m.content }}</td>
+        <td class="muted">{{ m.source }}</td>
+        <td>{% if m.active %}<span class="chip chip-cyan">active</span>{% else %}<span class="chip chip-gray">paused</span>{% endif %}</td>
+        <td>
+          <form method="post" action="/ui/memories/{{ m.id }}/toggle" class="inline"><button type="submit">{{ 'Pause' if m.active else 'Resume' }}</button></form>
+          <form method="post" action="/ui/memories/{{ m.id }}/delete" class="inline"><button type="submit" class="danger">Delete</button></form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}<p class="muted">No memories saved.</p>{% endif %}
+  <form method="post" action="/ui/memories/add" class="inline-row">
+    <input type="text" name="content" placeholder="e.g. Prefers anomaly teams" style="flex:1" required>
+    <button type="submit">Add memory</button>
+  </form>
+</section>
+
+<section class="card">
+  <h2>Games</h2>
+  <table>
+    <thead><tr><th>Game</th><th>ID</th><th>Version</th></tr></thead>
+    <tbody>
+      {% for g in games %}
+      <tr><td><strong>{{ g.display_name }}</strong></td><td>{{ g.game_id }}</td><td>{{ g.version }}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<section class="card">
+  <h2>Data folder</h2>
+  <p><code>{{ data_dir }}</code></p>
+  <p class="muted">Everything lives here: the SQLite database, personas, exports and backups.</p>
+</section>
+<script>
+(function () {
+  function modelSelect() { return document.getElementById("llm-model-select"); }
+
+  async function loadModels() {
+    var status = document.getElementById("models-status");
+    status.textContent = "loading…";
+    try {
+      var base = document.querySelector("#assistant-form input[name='llm_base_url']").value.trim();
+      var url = "/api/llm/models" + (base ? "?base=" + encodeURIComponent(base) : "");
+      var response = await fetch(url);
+      var payload = await response.json();
+      if (payload.detail) { status.textContent = "endpoint error"; return; }
+      var select = modelSelect();
+      var current = select.dataset.current || "";
+      select.innerHTML = "";
+      (payload.models || []).forEach(function (m) {
+        var option = document.createElement("option");
+        option.value = m; option.textContent = m;
+        if (m === current) option.selected = true;
+        select.appendChild(option);
+      });
+      if (!payload.models || !payload.models.length) {
+        select.innerHTML = "<option value=''>(no models reported)</option>";
+        status.textContent = "0 models";
+      } else {
+        status.textContent = payload.models.length + " models";
+      }
+    } catch (error) {
+      status.textContent = "could not reach endpoint";
+    }
+  }
+
+  document.getElementById("btn-reload-models").addEventListener("click", loadModels);
+
+  document.getElementById("btn-test-endpoint").addEventListener("click", async function () {
+    var result = document.getElementById("test-result");
+    result.textContent = "testing…";
+    var form = document.getElementById("assistant-form");
+    var base = form.querySelector("input[name='llm_base_url']").value.trim();
+    var key = form.querySelector("input[name='llm_api_key']").value.trim();
+    try {
+      var url = "/api/llm/models?base=" + encodeURIComponent(base);
+      if (key) url += "&key=" + encodeURIComponent(key);
+      var response = await fetch(url);
+      var payload = await response.json();
+      if (payload.detail) {
+        result.textContent = "✗ " + (payload.detail.message || payload.detail.error || "failed");
+      } else {
+        result.textContent = "✓ reachable — " + payload.count + " models";
+      }
+    } catch (error) {
+      result.textContent = "✗ could not reach endpoint";
+    }
+  });
+
+  loadModels();
+})();
+</script>
+<section class="card">
+  <h2>Personas</h2>
+  <p class="muted">Make the companion speak as a character, or give it a custom tone.
+  <a href="/ui/personas">Manage personas</a> — they're used from the chat on <a href="/ui">Home</a>.</p>
+</section>
+<section class="card">
+  <h2>Sounds &amp; delight</h2>
+  <p class="muted">Tiny synthesized sounds for saves and achievements. Volume is per
+  browser; 0 silences everything.</p>
+  <div class="inline-row">
+    <label for="sound-vol">Volume</label>
+    <input type="range" id="sound-vol" min="0" max="100" value="30" style="max-width:14rem">
+    <span id="sound-vol-label" class="muted">30%</span>
+    <button type="button" id="sound-test">Test</button>
+  </div>
+</section>
+{% endblock %}
