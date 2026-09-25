@@ -6,10 +6,24 @@
 set -uo pipefail
 cd "$(dirname "$0")"
 
+# a pid only counts as ours if its command line actually mentions the
+# companion — serve.pid survives reboots and pids get recycled
+pid_is_ours() {
+    [[ -n $1 ]] && [[ -r "/proc/$1/cmdline" ]] \
+        && grep -aq 'game.companion' "/proc/$1/cmdline"
+}
+
 pid=""
 [[ -f serve.pid ]] && pid=$(cat serve.pid)
-if [[ -z $pid ]] || ! kill -0 "$pid" 2>/dev/null; then
-    pid=$(pgrep -f '\.venv/bin/game-companion serve' | head -n 1)
+if [[ -n $pid ]] && ! kill -0 "$pid" 2>/dev/null; then
+    pid=""
+fi
+if [[ -n $pid ]] && ! pid_is_ours "$pid"; then
+    echo "stale serve.pid (pid $pid is not Gacha Companion) — ignoring it"
+    pid=""
+fi
+if [[ -z $pid ]]; then
+    pid=$(pgrep -f 'game-companion serve|game_companion\.cli serve' | head -n 1)
 fi
 [[ -n $pid ]] || { echo "Gacha Companion is not running."; exit 0; }
 

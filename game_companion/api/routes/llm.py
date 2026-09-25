@@ -59,18 +59,29 @@ def llm_status(request: Request):
     }
 
 
-@router.get("/models")
-def llm_models(request: Request, base: str | None = None, key: str | None = None):
-    """Live model list. Pass base/key to test a NEW endpoint before saving."""
+class ModelsProbe(BaseModel):
+    llm_base_url: str | None = None
+    llm_api_key: str | None = None
+
+
+@router.post("/models")
+def llm_models(request: Request, payload: ModelsProbe | None = None):
+    """Live model list. Pass base/key to test a NEW endpoint before saving.
+
+    A POST with the key in the body, deliberately: a GET query parameter would
+    land the key verbatim in serve.log via the access log. An empty body
+    probes the currently stored endpoint.
+    """
+    payload = payload or ModelsProbe()
     settings: Settings = request.app.state.settings
     probe_settings = settings
-    if base or key:
+    if payload.llm_base_url or payload.llm_api_key:
         from pydantic import SecretStr
 
         probe_settings = settings.model_copy(
             update={
-                "llm_base_url": base or settings.llm_base_url,
-                "llm_api_key": SecretStr(key) if key else settings.llm_api_key,
+                "llm_base_url": payload.llm_base_url or settings.llm_base_url,
+                "llm_api_key": SecretStr(payload.llm_api_key) if payload.llm_api_key else settings.llm_api_key,
             }
         )
     transport = getattr(request.app.state, "llm_transport", None)

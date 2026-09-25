@@ -27,14 +27,14 @@ def test_llm_status_reports_current_config(client):
 
 def test_models_endpoint_probes_stored_endpoint(client):
     # a fresh install has no base URL: probing must fail honestly
-    no_base = client.get("/api/llm/models")
+    no_base = client.post("/api/llm/models")
     assert no_base.status_code == 502
 
     # once configured, the probe uses the stored endpoint + key
     client.put("/api/llm/config", json={"llm_base_url": "https://stored.example.com/v1"})
     client.app.state.llm_transport = _mock_models(["muse-glimmer-30b-vlm-128k", "vlrm-8b", "text-only-7b"])
     try:
-        data = client.get("/api/llm/models").json()
+        data = client.post("/api/llm/models").json()
     finally:
         client.app.state.llm_transport = None
     assert data["count"] == 3
@@ -44,7 +44,9 @@ def test_models_endpoint_probes_stored_endpoint(client):
 def test_models_endpoint_tests_new_endpoint_before_saving(client):
     client.app.state.llm_transport = _mock_models(["other-endpoint-model"])
     try:
-        data = client.get("/api/llm/models?base=https://example.com/v1&key=sk-test").json()
+        data = client.post("/api/llm/models", json={
+            "llm_base_url": "https://example.com/v1", "llm_api_key": "sk-test",
+        }).json()
     finally:
         client.app.state.llm_transport = None
     assert data["models"] == ["other-endpoint-model"]
@@ -103,7 +105,7 @@ def test_models_endpoint_reports_endpoint_errors_honestly(client):
     client.put("/api/llm/config", json={"llm_base_url": "https://stored.example.com/v1"})
     client.app.state.llm_transport = _mock_models([], status=401)
     try:
-        response = client.get("/api/llm/models")
+        response = client.post("/api/llm/models")
     finally:
         client.app.state.llm_transport = None
     assert response.status_code == 502  # LLMError

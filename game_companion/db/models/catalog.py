@@ -32,7 +32,7 @@ class CatalogEntry(PKMixin, TimestampMixin, Base):
     key: Mapped[str] = mapped_column(String(120))
     display_name: Mapped[str] = mapped_column(String(200))
     rarity: Mapped[int | None] = mapped_column(Integer, default=None)
-    meta: Mapped[dict] = mapped_column(JSON, default=dict)
+    meta: Mapped[dict | None] = mapped_column(JSON, default=dict, nullable=True)
     source: Mapped[str | None] = mapped_column(String(60), default=None)
     fetched_at: Mapped[datetime | None] = mapped_column(UTCDateTime(), default=None)
 

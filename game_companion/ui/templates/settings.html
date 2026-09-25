@@ -93,7 +93,7 @@
         <td class="muted">{{ b.created_at[:19].replace('T', ' ') }}</td>
         <td>
           <form method="post" action="/ui/restore" class="inline"
-                onsubmit="return confirm('Replace ALL current data with {{ b.name }}?')">
+                data-confirm="Replace ALL current data with this backup? This cannot be undone.">
             <input type="hidden" name="name" value="{{ b.name }}">
             <button type="submit" class="danger">Restore</button>
           </form>
@@ -159,8 +159,11 @@
     status.textContent = "loading…";
     try {
       var base = document.querySelector("#assistant-form input[name='llm_base_url']").value.trim();
-      var url = "/api/llm/models" + (base ? "?base=" + encodeURIComponent(base) : "");
-      var response = await fetch(url);
+      var response = await fetch("/api/llm/models", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(base ? { llm_base_url: base } : {})
+      });
       var payload = await response.json();
       if (payload.detail) { status.textContent = "endpoint error"; return; }
       var select = modelSelect();
@@ -192,9 +195,13 @@
     var base = form.querySelector("input[name='llm_base_url']").value.trim();
     var key = form.querySelector("input[name='llm_api_key']").value.trim();
     try {
-      var url = "/api/llm/models?base=" + encodeURIComponent(base);
-      if (key) url += "&key=" + encodeURIComponent(key);
-      var response = await fetch(url);
+      var body = { llm_base_url: base };
+      if (key) body.llm_api_key = key;
+      var response = await fetch("/api/llm/models", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
       var payload = await response.json();
       if (payload.detail) {
         result.textContent = "✗ " + (payload.detail.message || payload.detail.error || "failed");

@@ -147,6 +147,9 @@ def _cmd_app(_args) -> int:
     except RuntimeError as exc:
         print(str(exc))
         return 1
+    except OSError as exc:
+        print(f"could not start the companion: {exc}")
+        return 1
     print(f"Gacha Companion opened in a {mode}.")
     return 0
 

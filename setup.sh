@@ -191,13 +191,17 @@ if [[ $reconfig == y ]]; then
         cp .env.example "$ENV_FILE"
     fi
 
-    .venv/bin/python - "$ENV_FILE" \
-        GAME_COMPANION_LLM_BASE_URL "$LLM_BASE" \
-        GAME_COMPANION_LLM_MODEL "$LLM_MODEL" \
-        GAME_COMPANION_LLM_API_KEY "$LLM_KEY" <<'PYEOF' || die "could not write .env"
-import re, sys, pathlib
-path = pathlib.Path(sys.argv[1])
-pairs = dict(zip(sys.argv[2::2], sys.argv[3::2]))
+    # values pass through the environment (not argv) so the key is never
+    # visible in `ps` / /proc/*/cmdline to other local users
+    GC_ENV_FILE="$ENV_FILE" GC_W_BASE="$LLM_BASE" GC_W_MODEL="$LLM_MODEL" GC_W_KEY="$LLM_KEY" \
+        .venv/bin/python - <<'PYEOF' || die "could not write .env"
+import os, re, sys, pathlib
+path = pathlib.Path(os.environ["GC_ENV_FILE"])
+pairs = {
+    "GAME_COMPANION_LLM_BASE_URL": os.environ["GC_W_BASE"],
+    "GAME_COMPANION_LLM_MODEL": os.environ["GC_W_MODEL"],
+    "GAME_COMPANION_LLM_API_KEY": os.environ["GC_W_KEY"],
+}
 text = path.read_text() if path.exists() else ""
 for key, val in pairs.items():
     line = f"{key}={val}"

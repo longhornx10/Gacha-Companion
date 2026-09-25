@@ -63,9 +63,10 @@ results — all on one page.</p>
   when one is available it will be fetched automatically, daily.</p>
   {% endif %}
 
-  {% set active_codes = codes | rejectattr('used') | selectattr('status', 'equalto', 'active') | list %}
+  {% set live_codes = codes | rejectattr('used') | selectattr('status', 'in', ['active', 'recycled']) | list %}
+  {% set active_codes = live_codes %}
   {% set used_codes = codes | selectattr('used') | list %}
-  {% set expired_codes = codes | rejectattr('used') | rejectattr('status', 'equalto', 'active') | list %}
+  {% set expired_codes = codes | rejectattr('used') | rejectattr('status', 'in', ['active', 'recycled']) | list %}
 
   {% if active_codes %}
   <div class="code-grid">

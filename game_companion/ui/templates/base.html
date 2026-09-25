@@ -15,7 +15,7 @@
     <a class="brand" href="/ui"><span class="brand-dot"></span>Gacha Companion</a>
     {% if not ctx.needs_setup %}
     <form method="post" action="/ui/select-game" class="switcher">
-      <input type="hidden" name="next" value="{{ request.url.path }}">
+      <input type="hidden" name="next" value="{{ request.url.path }}{{ ('?' + request.query_string.decode()) if request.query_string else '' }}">
       <label class="switcher-label" for="game-select">Game</label>
       <select id="game-select" name="game_id" onchange="this.form.submit()">
         {% for g in games %}

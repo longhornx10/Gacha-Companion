@@ -3,11 +3,15 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 
 from game_companion.config import Settings
 from game_companion.core.persona.schema import PersonaConfig
 from game_companion.errors import NotFoundError, ValidationError
+
+# persona ids become filenames — keep them to a safe slug (no traversal)
+_ID_RE = re.compile(r"^[a-z0-9][a-z0-9_-]{0,63}$")
 
 BUILT_IN_PERSONAS: list[PersonaConfig] = [
     PersonaConfig(
@@ -85,6 +89,10 @@ class PersonaStore:
         raise NotFoundError(f"persona '{persona_id}' not found (available: {known})")
 
     def save(self, persona: PersonaConfig) -> Path:
+        if not _ID_RE.match(persona.id):
+            raise ValidationError(
+                "persona id must be lowercase letters, digits, '-' or '_' (max 64 chars)"
+            )
         self._dir.mkdir(parents=True, exist_ok=True)
         if any(p.id == persona.id for p in BUILT_IN_PERSONAS) and not (
             self._dir / f"{persona.id}.json"
@@ -94,6 +102,16 @@ class PersonaStore:
         path = self._dir / f"{persona.id}.json"
         path.write_text(persona.model_dump_json(indent=2), encoding="utf-8")
         return path
+
+    def delete_file(self, persona_id: str) -> bool:
+        """Remove a stored persona file. Returns False for unknown/built-in ids."""
+        if not _ID_RE.match(persona_id):
+            return False
+        path = self._dir / f"{persona_id}.json"
+        if path.exists():
+            path.unlink()
+            return True
+        return False
 
     @staticmethod
     def parse(data: dict) -> PersonaConfig:

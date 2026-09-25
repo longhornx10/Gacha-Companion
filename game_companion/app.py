@@ -31,7 +31,7 @@ async def lifespan(app: FastAPI):
     yield
     from game_companion.core.catalog.scheduler import stop_refresh_loop
 
-    stop_refresh_loop(app.state.refresh_task)
+    await stop_refresh_loop(app.state.refresh_task)
     app.state.llm.close()
 
 

@@ -35,7 +35,7 @@
           {{ conv.title|truncate(28) }}
         </a>
         <form method="post" action="/ui/chat/{{ conv.id }}/delete" class="inline"
-              onsubmit="return confirm('Delete this chat?')">
+              data-confirm="Delete this chat?">
           <button type="submit" class="link-danger" title="Delete chat">✕</button>
         </form>
       </li>

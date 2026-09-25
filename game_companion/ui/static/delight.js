@@ -3,7 +3,16 @@
 (function () {
   "use strict";
   var KEY = "gc_sound_vol";
-  var vol = parseInt(localStorage.getItem(KEY) || "30", 10);
+  // storage can throw (block-all-cookies, some private modes) — delight must
+  // never take the page down with it
+  function loadVol() {
+    try { return parseInt(localStorage.getItem(KEY) || "30", 10); }
+    catch (e) { return 30; }
+  }
+  function saveVol(v) {
+    try { localStorage.setItem(KEY, String(v)); } catch (e) {}
+  }
+  var vol = loadVol();
   if (isNaN(vol)) vol = 30;
 
   var ctx = null;
@@ -49,7 +58,7 @@
     volume: function () { return vol; },
     setVolume: function (v) {
       vol = Math.max(0, Math.min(100, parseInt(v, 10) || 0));
-      localStorage.setItem(KEY, String(vol));
+      saveVol(vol);
     },
     play: function (name) { if (sounds[name]) sounds[name](); },
   };
@@ -227,6 +236,13 @@
     e.preventDefault();
     openLightbox(img.getAttribute("data-lightbox") || img.src, img.alt);
   });
+
+  /* destructive-action confirmations: forms opt in with data-confirm="…" */
+  document.addEventListener("submit", function (e) {
+    var form = e.target;
+    if (!(form instanceof Element) || !form.hasAttribute("data-confirm")) return;
+    if (!window.confirm(form.getAttribute("data-confirm"))) e.preventDefault();
+  }, true);
 
   /* ---- page wiring --------------------------------------------------- */
   document.addEventListener("DOMContentLoaded", function () {

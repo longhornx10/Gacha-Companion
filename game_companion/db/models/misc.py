@@ -78,4 +78,4 @@ class Achievement(PKMixin, TimestampMixin, Base):
     )
     game_id: Mapped[str] = mapped_column(String(40), index=True)
     key: Mapped[str] = mapped_column(String(60))
-    unlocked_at: Mapped[datetime] = mapped_column(UTCDateTime(), default=None)
+    unlocked_at: Mapped[datetime | None] = mapped_column(UTCDateTime(), default=None, nullable=True)

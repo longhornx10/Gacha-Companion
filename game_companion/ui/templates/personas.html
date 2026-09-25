@@ -35,7 +35,7 @@ Personas bound to a game are used automatically when that game is active.</p>
     <p class="muted">tone: {{ p.tone }} · verbosity: {{ p.verbosity }}</p>
     {% if p.style_traits %}<p class="muted">{{ p.style_traits|join(' · ') }}</p>{% endif %}
     <form method="post" action="/ui/personas/{{ p.id }}/delete" class="inline"
-          onsubmit="return confirm('Delete persona {{ p.name }}?')">
+          data-confirm="Delete this persona?">
       <button type="submit" class="danger">Delete</button>
     </form>
   </section>

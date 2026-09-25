@@ -18,6 +18,8 @@ from game_companion.errors import NotFoundError, ValidationError
 
 DB_FILENAME = "gacha_companion.db"
 _BACKUP_RE = re.compile(r"^backup-\d{8}-\d{6}\.zip$")
+# housekeeping: keep the newest N backups, prune older ones after each backup
+MAX_BACKUPS = 10
 
 
 def backups_dir(settings: Settings) -> Path:
@@ -52,11 +54,26 @@ def create_backup(settings: Settings) -> Path:
     target = backups_dir(settings) / f"backup-{stamp}.zip"
     with zipfile.ZipFile(target, "w", zipfile.ZIP_DEFLATED) as zf:
         zf.write(db_path, arcname=DB_FILENAME)
-        for folder in ("personas",):
+        for folder in ("personas", "overrides"):
             for path in sorted((data_dir / folder).glob("*")) if (data_dir / folder).exists() else []:
                 if path.is_file():
                     zf.write(path, arcname=f"{folder}/{path.name}")
+    _prune_old_backups(settings)
     return target
+
+
+def _prune_old_backups(settings: Settings, keep: int = MAX_BACKUPS) -> list[str]:
+    """Delete the oldest backup zips beyond ``keep``. Returns removed names."""
+    known = [
+        path for path in backups_dir(settings).glob("backup-*.zip")
+        if _BACKUP_RE.match(path.name)
+    ]
+    known.sort()  # name pattern is a timestamp: lexicographic == chronological
+    removed = []
+    for path in known[:-keep] if keep > 0 else known:
+        path.unlink(missing_ok=True)
+        removed.append(path.name)
+    return removed
 
 
 def list_backups(settings: Settings) -> list[dict]:

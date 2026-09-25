@@ -15,6 +15,10 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 APP_VERSION = "0.1.0"  # keep in sync with pyproject; surfaced in /health
 
+# NOTE: env_file is CWD-relative on purpose — tests chdir into a tmp dir to stay
+# hermetic. Desktop launchers (launch.sh, the panel) must `cd` into the repo
+# before exec'ing, which they do.
+
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(

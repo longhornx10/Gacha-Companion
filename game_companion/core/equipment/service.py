@@ -71,6 +71,8 @@ class EquipmentService:
         return self.equipment.add(item)
 
     def update(self, item: EquipmentItem, payload: Mapping[str, Any]) -> EquipmentItem:
+        if payload.get("unset_character"):
+            payload = {**payload, "character": None, "unset_character": None}
         if "character" in payload:
             char = _validate_ref(
                 self.characters, item.game_id, item.player_profile_id, payload.get("character")
@@ -131,6 +133,8 @@ class GearService:
         return self.gear.add(item)
 
     def update(self, item: GearItem, payload: Mapping[str, Any]) -> GearItem:
+        if payload.get("unset_character"):
+            payload = {**payload, "character": None, "unset_character": None}
         if "slot" in payload and payload["slot"] is not None:
             valid = {s.key for s in self.adapter.gear_slots()}
             if payload["slot"] not in valid:

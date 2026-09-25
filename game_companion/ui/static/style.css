@@ -110,6 +110,7 @@ tr.dim td { opacity: 0.45; }
 .chip-white { background: color-mix(in srgb, var(--white-chip) 18%, transparent); border-color: var(--white-chip); color: var(--white-chip); }
 .chip-cyan { background: color-mix(in srgb, var(--cyan) 18%, transparent); border-color: var(--cyan); color: var(--cyan); }
 .chip-gray { color: var(--muted); }
+.chip-accent { background: color-mix(in srgb, var(--accent) 22%, transparent); border-color: var(--accent); color: var(--accent2); }
 
 .muted { color: var(--muted); }
 .used { text-decoration: line-through; color: var(--muted); }
@@ -302,8 +303,8 @@ body[data-game="hsr"] header nav a.active { box-shadow: 0 2px 0 var(--accent2); 
 .hall-portrait img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
 .hall-monogram { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
   font-size: 2.4rem; font-weight: 700; color: var(--accent); opacity: .85; }
-.hall-rarity-S { border-color: color-mix(in srgb, var(--accent2) 65%, var(--line)); }
-.hall-rarity-S .hall-portrait::after { content: ""; position: absolute; inset: 0;
+.hall-rarity-S, .hall-rarity-5 { border-color: color-mix(in srgb, var(--accent2) 65%, var(--line)); }
+.hall-rarity-S .hall-portrait::after, .hall-rarity-5 .hall-portrait::after { content: ""; position: absolute; inset: 0;
   background: radial-gradient(120% 60% at 50% 105%, color-mix(in srgb, var(--accent2) 30%, transparent), transparent 60%); }
 .hall-badges { position: absolute; top: .4rem; left: .4rem; display: flex; gap: .25rem; }
 .hall-badges img, .hall-badges .hall-icon-fallback { height: 1.15rem; width: 1.15rem;

@@ -116,9 +116,12 @@ def _home_banners(session: Session, adapter) -> dict:
         if not value:
             return None
         try:
-            return _dt.fromisoformat(str(value).replace("Z", "+00:00"))
+            parsed = _dt.fromisoformat(str(value).replace("Z", "+00:00"))
         except ValueError:
             return None
+        if parsed.tzinfo is None:  # offset-less format: treat as UTC
+            parsed = parsed.replace(tzinfo=_dt.timezone.utc)
+        return parsed
 
     live: list[dict] = []
     upcoming: list[dict] = []
@@ -778,7 +781,7 @@ def resources(request: Request, session: Session = Depends(get_db)):
     """Resources moved to Trackers."""
     if ui_state.resolve_context(request.app.state.settings, session).needs_setup:
         return RedirectResponse("/ui", status_code=303)
-    return _redirect("/ui/trackers#resources")
+    return _redirect("/ui/trackers#resources", request.query_params.get("notice"))
 
 
 @router.get("/codes", response_class=HTMLResponse)
@@ -786,7 +789,7 @@ def codes(request: Request, session: Session = Depends(get_db)):
     """Codes moved to Trackers."""
     if ui_state.resolve_context(request.app.state.settings, session).needs_setup:
         return RedirectResponse("/ui", status_code=303)
-    return _redirect("/ui/trackers#codes")
+    return _redirect("/ui/trackers#codes", request.query_params.get("notice"))
 
 
 @router.post("/codes/refresh")
@@ -814,7 +817,7 @@ def history(request: Request, session: Session = Depends(get_db)):
     """Combat history moved to Trackers."""
     if ui_state.resolve_context(request.app.state.settings, session).needs_setup:
         return RedirectResponse("/ui", status_code=303)
-    return _redirect("/ui/trackers#history")
+    return _redirect("/ui/trackers#history", request.query_params.get("notice"))
 
 
 @router.get("/audit", response_class=HTMLResponse)
@@ -1197,18 +1200,23 @@ async def character_edit_save(request: Request, ref: str, session: Session = Dep
         "notes": str(form.get("notes") or "").strip() or None,
         "verified": True,
     }
-    if str(form.get("rarity") or "").strip():
-        patch["rarity"] = str(form["rarity"]).strip()
-    if str(form.get("level") or "").strip():
-        patch["level"] = int(form["level"])
-    if str(form.get("duplication_level") or "").strip():
-        patch["duplication_level"] = int(form["duplication_level"])
+    # an emptied field means "clear it" — level/dupe/rarity go to None, and
+    # data keys (attribute/specialty/faction) are removed from the merged dict
+    patch["rarity"] = str(form.get("rarity") or "").strip() or None
+    patch["level"] = int(form["level"]) if str(form.get("level") or "").strip() else None
+    patch["duplication_level"] = (
+        int(form["duplication_level"]) if str(form.get("duplication_level") or "").strip() else None
+    )
     data_patch = {
         field: str(form.get(field) or "").strip() or None
         for field in _character_field_choices(adapter)
     }
     data_patch["faction"] = str(form.get("faction") or "").strip() or None
-    patch["data"] = {k: v for k, v in data_patch.items() if v is not None}
+    merged = {**(char.data or {}), **{k: v for k, v in data_patch.items() if v is not None}}
+    for key, value in data_patch.items():
+        if value is None:
+            merged.pop(key, None)  # cleared in the form → gone from the record
+    patch["data"] = merged
     try:
         service.update_character(char, patch)
         skill_updates = {
@@ -1457,10 +1465,12 @@ def chat_send(request: Request, conversation_id: str, text: str = Form(...), ses
         return _redirect("/ui")
     try:
         service.send(conversation_id, text)
-        session.commit()
     except Exception as exc:
-        session.rollback()
+        # keep the typed message and the "(chat failed: …)" marker the service
+        # wrote — the user's input must not silently vanish from the transcript
+        session.commit()
         return _redirect(f"/ui?c={conversation_id}", f"Chat error: {exc}")
+    session.commit()
     return _redirect(f"/ui?c={conversation_id}")
 
 
@@ -1603,9 +1613,7 @@ def personas_delete(request: Request, persona_id: str, session: Session = Depend
     from game_companion.core.persona.store import PersonaStore
 
     store = PersonaStore(request.app.state.settings)
-    path = store._dir / f"{persona_id}.json"
-    if path.exists():
-        path.unlink()
+    if store.delete_file(persona_id):
         return _redirect("/ui/personas", f"Persona '{persona_id}' deleted")
     return _redirect("/ui/personas", "Built-in personas can be overridden by saving one with the same id, but not deleted")
 

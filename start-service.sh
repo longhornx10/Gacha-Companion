@@ -23,6 +23,12 @@ if [[ ! -x .venv/bin/game-companion ]]; then
     exit 1
 fi
 
+# housekeeping: the log appends forever, so rotate at startup once it grows
+# past ~1MB (keeping exactly one previous generation)
+if [[ -f serve.log ]] && (( $(stat -c%s serve.log) > 1048576 )); then
+    mv -f serve.log serve.log.old
+fi
+
 nohup .venv/bin/game-companion serve >> serve.log 2>&1 &
 echo $! > serve.pid
 

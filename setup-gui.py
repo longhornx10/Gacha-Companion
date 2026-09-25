@@ -362,9 +362,10 @@ def desktop_shortcut() -> dict:
     launch.write_text(
         "#!/bin/bash\n"
         "# Gacha Companion launcher (rewritten by the setup wizard)\n"
+        f'cd "{REPO}" || exit 1\n'
         f'X="{venv_cli}"\n'
         '[ -x "$X" ] && exec "$X" app\n'
-        f'exec python3 "{REPO / "setup-gui.py"}" --panel\n'
+        'exec python3 "setup-gui.py" --panel\n'
     )
     launch.chmod(0o755)
     entries = [
@@ -506,16 +507,19 @@ class Wizard:
             return {"ok": False, "log": "".join(log)}
         ok, out = run([".venv/bin/game-companion", "list-games"], timeout=60)
         log.append(f"$ game-companion list-games\n{out.strip()}\n")
-        if was_running and ok:
+        if was_running:
             # the code just changed — a running service is now stale and would
-            # keep serving the old version (this is how /ui "went missing")
+            # keep serving the old version (this is how /ui "went missing").
+            # Restart even when the smoke test failed: a stale service is
+            # strictly worse than a restarted one.
             stop = run(["bash", "stop-service.sh"], timeout=60)
             start = run(["bash", "start-service.sh"], timeout=60)
             log.append(
                 f"$ bash stop-service.sh\n{(stop[1] or '').strip()}\n"
                 f"$ bash start-service.sh\n{(start[1] or '').strip()}\n"
             )
-            ok = ok and start[0]
+            if not start[0]:
+                ok = False
         return {"ok": ok, "log": "".join(log)}
 
     def llm_probe(self, base: str, key: str) -> dict:

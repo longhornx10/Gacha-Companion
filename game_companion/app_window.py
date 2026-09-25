@@ -10,10 +10,16 @@ from __future__ import annotations
 
 import shutil
 import subprocess
+import sys
 import time
 import webbrowser
+from pathlib import Path
 
 from game_companion.config import get_settings
+
+# the checkout root — the spawned service runs from here so the repo .env and
+# serve.log resolve regardless of where the app was launched from
+_REPO_ROOT = Path(__file__).resolve().parents[2]
 
 _APP_BROWSERS = (
     "chromium-browser",
@@ -34,9 +40,8 @@ def find_app_window_command(base_url: str) -> list[str] | None:
 
 
 def wait_for_service(base_url: str, timeout_seconds: float = 15.0) -> bool:
-    settings = get_settings()
     deadline = time.monotonic() + timeout_seconds
-    while time.monotonic() < deadline:
+    while True:
         try:
             import urllib.request
 
@@ -44,9 +49,10 @@ def wait_for_service(base_url: str, timeout_seconds: float = 15.0) -> bool:
                 if response.status == 200:
                     return True
         except Exception:
-            time.sleep(0.4)
-    _ = settings
-    return False
+            pass  # not up yet — retry until the deadline
+        if time.monotonic() >= deadline:
+            return False
+        time.sleep(0.4)
 
 
 def open_app(ensure_service: bool = True) -> str:
@@ -55,8 +61,13 @@ def open_app(ensure_service: bool = True) -> str:
     base_url = f"http://{settings.host}:{settings.port}"
 
     if ensure_service and not wait_for_service(base_url, timeout_seconds=1.5):
+        # Spawned via this interpreter, not by name: the venv's bin dir is not
+        # on PATH for desktop-launched apps, and a bare Popen(["game-companion",
+        # …]) would raise FileNotFoundError and kill the whole icon flow.
+        # CWD is the checkout so the repo .env is picked up.
         subprocess.Popen(
-            ["game-companion", "serve"],
+            [sys.executable, "-m", "game_companion.cli", "serve"],
+            cwd=str(_REPO_ROOT),
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
             start_new_session=True,

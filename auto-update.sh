@@ -19,6 +19,11 @@ health="http://127.0.0.1:${port}/health"
 
 say "── update check start ──"
 
+# housekeeping: update.log is append-only — trim it to its last ~64KB monthly-ish
+if [[ -f $LOG ]] && (( $(stat -c%s "$LOG") > 65536 )); then
+    tail -c 32768 "$LOG" > "$LOG.tmp" && mv -f "$LOG.tmp" "$LOG"
+fi
+
 [[ -x .venv/bin/game-companion ]] || { say "not installed yet (no .venv) — run setup.sh first; skipping"; exit 0; }
 command -v git >/dev/null 2>&1 || { say "git is missing — skipping"; exit 0; }
 git rev-parse --is-inside-work-tree >/dev/null 2>&1 || { say "not a git checkout — skipping"; exit 0; }
@@ -75,10 +80,23 @@ else
 
     say "restarting the service…"
     bash stop-service.sh >>"$LOG" 2>&1
+    # snapshot the database while the service is down: if the new version
+    # migrates the schema and then fails to start, rolling back the code alone
+    # would leave old code on a newer schema (permanently unstartable)
+    dbdir=${GAME_COMPANION_DATA_DIR:-$(grep -m1 '^GAME_COMPANION_DATA_DIR=' .env 2>/dev/null | cut -d= -f2- | tr -d '"')}
+    dbdir=${dbdir:-$HOME/.local/share/gacha-companion}
+    dbdir=${dbdir/#\~/$HOME}
+    snapshot=""
+    [[ -f $dbdir/gacha_companion.db ]] && { snapshot="$dbdir/gacha_companion.db.pre-update"; cp "$dbdir/gacha_companion.db" "$snapshot"; }
     if ! bash start-service.sh >>"$LOG" 2>&1; then
         say "the new version did not start — rolling back to $old"
         git reset --hard "$old" >>"$LOG" 2>&1
         install_deps
+        if [[ -n $snapshot && -f $snapshot ]]; then
+            cp "$snapshot" "$dbdir/gacha_companion.db"
+            rm -f "$dbdir/gacha_companion.db-wal" "$dbdir/gacha_companion.db-shm"
+            say "database restored to its pre-update schema"
+        fi
         bash stop-service.sh >>"$LOG" 2>&1
         if bash start-service.sh >>"$LOG" 2>&1; then
             say "rollback complete — running $old again (the broken update was reported in the log above)"
@@ -87,6 +105,7 @@ else
         fi
         exit 0
     fi
+    [[ -n $snapshot ]] && rm -f "$snapshot"
     say "updated to $(git rev-parse --short HEAD) — service healthy at $health"
 fi
 

@@ -91,8 +91,8 @@ def start_refresh_loop(app) -> asyncio.Task | None:
     return asyncio.create_task(refresh_loop(app), name="catalog-auto-refresh")
 
 
-def stop_refresh_loop(task: asyncio.Task | None) -> None:
+async def stop_refresh_loop(task: asyncio.Task | None) -> None:
     if task is not None:
         task.cancel()
         with contextlib.suppress(asyncio.CancelledError):
-            pass  # awaited implicitly by loop teardown; suppress is enough here
+            await task  # let an in-flight to_thread tick finish cleanly
