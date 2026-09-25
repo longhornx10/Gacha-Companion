@@ -1677,6 +1677,8 @@ def main() -> int:
     ap.add_argument("--port", type=int, default=0)
     ap.add_argument("--panel", action="store_true",
                     help="open the day-to-day control panel")
+    ap.add_argument("--shortcuts", action="store_true",
+                    help="(re)write the desktop launchers and exit")
     ap.add_argument("--report", action="store_true",
                     help="print a redacted diagnostic report and exit")
     args = ap.parse_args()
@@ -1684,6 +1686,13 @@ def main() -> int:
     if not (REPO / "pyproject.toml").exists():
         print("run me from inside the Gacha-Companion folder: cd Gacha-Companion && python3 setup-gui.py")
         return 1
+
+    if args.shortcuts:
+        result = desktop_shortcut()
+        print("desktop launchers written:")
+        for path in result["paths"]:
+            print(" ", path)
+        return 0
 
     if args.report:
         print("copy everything below and send it back:", file=sys.stderr)

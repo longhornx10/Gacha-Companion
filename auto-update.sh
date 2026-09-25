@@ -106,6 +106,10 @@ else
         exit 0
     fi
     [[ -n $snapshot ]] && rm -f "$snapshot"
+    # refresh the desktop launchers so they always match the current layout
+    if python3 setup-gui.py --shortcuts >>"$LOG" 2>&1; then
+        say "desktop launchers refreshed"
+    fi
     say "updated to $(git rev-parse --short HEAD) — service healthy at $health"
 fi
 
