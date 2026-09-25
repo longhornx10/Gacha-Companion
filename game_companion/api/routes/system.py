@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 from game_companion.api.deps import adapter_for, get_db, resolve_player
 from game_companion.api.schemas.requests import PlayerCreate, PlayerUpdate, PreferencePut
 from game_companion.api.serialize import profile_dict
+from game_companion.config import APP_VERSION
 from game_companion.core.backup import cleanup_staging, create_backup, list_backups, stage_restore
 from game_companion.core.dashboard import build_dashboard
 from game_companion.core.games.registry import adapter_ids, list_adapters
@@ -22,6 +23,7 @@ def health(request: Request):
     return {
         "status": "ok",
         "service": "gacha-companion",
+        "version": APP_VERSION,
         "games": adapter_ids(),
     }
 

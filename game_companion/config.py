@@ -13,6 +13,8 @@ from pathlib import Path
 from pydantic import SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+APP_VERSION = "0.1.0"  # keep in sync with pyproject; surfaced in /health
+
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(

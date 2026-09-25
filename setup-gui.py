@@ -351,16 +351,24 @@ def desktop_shortcut() -> dict:
     apps = Path.home() / ".local" / "share" / "applications"
     apps.mkdir(parents=True, exist_ok=True)
     venv_cli = REPO / ".venv" / "bin" / "game-companion"
-    # Prefer the installed CLI app; fall back to the control panel when the CLI
-    # is not installed yet. Written as a shell one-liner so a launcher created
-    # before setup finished heals itself once the CLI appears — no stale icons.
-    main_exec = (
-        'sh -c "X=\\"' + str(venv_cli) + '\\"; '
-        '[ -x \\"$X\\" ] && exec \\"$X\\" app; '
-        'exec python3 \\"' + str(REPO / "setup-gui.py") + '\\" --panel"'
+    # The launcher logic lives in a real script (not an inline Exec) — .desktop
+    # Exec quoting rules are strict and a rejected entry silently vanishes from
+    # GNOME's menu. The script prefers the installed CLI app and falls back to
+    # the control panel, so launchers created before setup finishes heal
+    # themselves once the CLI appears.
+    launch_dir = Path.home() / ".local" / "share" / "gacha-companion"
+    launch_dir.mkdir(parents=True, exist_ok=True)
+    launch = launch_dir / "launch.sh"
+    launch.write_text(
+        "#!/bin/bash\n"
+        "# Gacha Companion launcher (rewritten by the setup wizard)\n"
+        f'X="{venv_cli}"\n'
+        '[ -x "$X" ] && exec "$X" app\n'
+        f'exec python3 "{REPO / "setup-gui.py"}" --panel\n'
     )
+    launch.chmod(0o755)
     entries = [
-        ("gacha-companion.desktop", "Gacha Companion", "Open your Gacha Companion", main_exec),
+        ("gacha-companion.desktop", "Gacha Companion", "Open your Gacha Companion", str(launch)),
         ("gacha-companion-setup.desktop", "Gacha Companion Setup",
          "Run the Gacha Companion setup wizard",
          f"python3 {REPO / 'setup-gui.py'}"),
@@ -376,7 +384,7 @@ def desktop_shortcut() -> dict:
             f"Exec={exec_line}\n"
             "Icon=applications-games\n"
             "Terminal=false\n"
-            "Categories=Utility;Game;\n"
+            "Categories=Game;\n"
         )
         # Best-effort trust flag; on some desktops the user confirms once instead.
         if shutil.which("gio"):
@@ -476,6 +484,8 @@ class Wizard:
 
     def do_install(self) -> dict:
         log = []
+        port = service_port()
+        was_running = http_get(f"http://127.0.0.1:{port}/health", timeout=2)[0] == 200
         if (REPO / ".git").exists():
             ok, out = run(["git", "pull", "--ff-only"], timeout=120)
             log.append(f"$ git pull --ff-only\n{out.strip()}\n")
@@ -496,6 +506,16 @@ class Wizard:
             return {"ok": False, "log": "".join(log)}
         ok, out = run([".venv/bin/game-companion", "list-games"], timeout=60)
         log.append(f"$ game-companion list-games\n{out.strip()}\n")
+        if was_running and ok:
+            # the code just changed — a running service is now stale and would
+            # keep serving the old version (this is how /ui "went missing")
+            stop = run(["bash", "stop-service.sh"], timeout=60)
+            start = run(["bash", "start-service.sh"], timeout=60)
+            log.append(
+                f"$ bash stop-service.sh\n{(stop[1] or '').strip()}\n"
+                f"$ bash start-service.sh\n{(start[1] or '').strip()}\n"
+            )
+            ok = ok and start[0]
         return {"ok": ok, "log": "".join(log)}
 
     def llm_probe(self, base: str, key: str) -> dict:

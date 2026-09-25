@@ -10,7 +10,7 @@ from fastapi.staticfiles import StaticFiles
 
 from game_companion.api.deps import domain_error_handler
 from game_companion.api.routes import api_router
-from game_companion.config import Settings, get_settings
+from game_companion.config import APP_VERSION, Settings, get_settings
 from game_companion.core.llm.client import LLMClient
 from game_companion.db.models import *  # noqa: F401,F403 - registers all tables
 from game_companion.db.session import create_db_engine, create_session_factory
@@ -45,7 +45,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             "Local-first, game-agnostic gacha companion framework. "
             "Authoritative account state in SQLite; the LLM never owns your data."
         ),
-        version="0.1.0",
+        version=APP_VERSION,
         lifespan=lifespan,
     )
 
@@ -63,6 +63,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @app.get("/health")
     def root_health(request: Request):  # pragma: no cover - trivial
-        return {"status": "ok", "service": "gacha-companion"}
+        # version lets the setup wizard / scripts tell a stale service from a
+        # fresh one after an update
+        return {"status": "ok", "service": "gacha-companion", "version": APP_VERSION}
 
     return app
