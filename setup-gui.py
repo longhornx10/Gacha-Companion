@@ -395,6 +395,10 @@ class Wizard:
         """Returns (status, content_type, payload). 404s anything un-tokenized."""
         prefix = f"/{self.token}"
         if not path.startswith(prefix):
+            if method == "GET":
+                # a browser landed here: an old bookmark/tab (the token rotates
+                # every launch) or a bare port — explain instead of raw text
+                return 404, "text/html; charset=utf-8", STALE_PAGE
             return 404, "text/plain", "not found"
         route = path[len(prefix):].rstrip("/") or "/"
         try:
@@ -1608,6 +1612,28 @@ $("btn-svc-stop").onclick = async () => {
 # --------------------------------------------------------------- main
 
 PANEL_LOCK = REPO / ".panel.json"
+
+STALE_PAGE = """<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gacha Companion — link expired</title>
+<style>
+  body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
+       background:#0b0f14;color:#dbe4ee;font:16px/1.6 system-ui,sans-serif;text-align:center}
+  .card{max-width:30rem;padding:2.2rem;background:#121822;border:1px solid #1f2b3a;border-radius:14px}
+  h1{font-size:1.25rem;margin:0 0 .6rem}
+  p{margin:.4rem 0;color:#7b8ba0}
+  b{color:#22d3ee}
+</style></head><body>
+<div class="card">
+  <h1>This helper link has expired</h1>
+  <p>Each opening of the Gacha Companion helper uses a fresh private address,
+  so old tabs and bookmarks stop working &mdash; that's the privacy working as intended.</p>
+  <p><b>Close this tab</b> and click the <b>Gacha Companion</b> icon in your applications menu again.</p>
+</div>
+</body></html>
+"""
 
 
 def running_panel_url() -> str | None:
