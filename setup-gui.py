@@ -351,9 +351,14 @@ def desktop_shortcut() -> dict:
     apps = Path.home() / ".local" / "share" / "applications"
     apps.mkdir(parents=True, exist_ok=True)
     venv_cli = REPO / ".venv" / "bin" / "game-companion"
-    # M23 cutover: the main icon opens the companion itself (app window),
-    # falling back to the control panel when the CLI is not installed yet.
-    main_exec = f"{venv_cli} app" if venv_cli.exists() else f"python3 {REPO / 'setup-gui.py'} --panel"
+    # Prefer the installed CLI app; fall back to the control panel when the CLI
+    # is not installed yet. Written as a shell one-liner so a launcher created
+    # before setup finished heals itself once the CLI appears — no stale icons.
+    main_exec = (
+        'sh -c "X=\\"' + str(venv_cli) + '\\"; '
+        '[ -x \\"$X\\" ] && exec \\"$X\\" app; '
+        'exec python3 \\"' + str(REPO / "setup-gui.py") + '\\" --panel"'
+    )
     entries = [
         ("gacha-companion.desktop", "Gacha Companion", "Open your Gacha Companion", main_exec),
         ("gacha-companion-setup.desktop", "Gacha Companion Setup",
@@ -391,7 +396,7 @@ class Wizard:
         prefix = f"/{self.token}"
         if not path.startswith(prefix):
             return 404, "text/plain", "not found"
-        route = path[len(prefix):] or "/"
+        route = path[len(prefix):].rstrip("/") or "/"
         try:
             if method == "GET" and route == "/":
                 return 200, "text/html; charset=utf-8", PAGE
@@ -1078,8 +1083,9 @@ PAGE = """<!doctype html>
     <button id="btn-autoupd" class="sec">Turn on automatic updates</button>
     <button id="btn-again" class="sec">Check for updates now</button>
   </div>
-  <div class="hint" id="shortcut-msg">Two icons: <b>Gacha Companion</b> (opens a control panel &mdash;
-  updates, logs, reports &mdash; anytime) and <b>Gacha Companion Setup</b> (this wizard). No terminal needed, ever again.</div>
+  <div class="hint" id="shortcut-msg">Two icons: <b>Gacha Companion</b> (opens the companion
+  app window &mdash; starts the service first if needed) and <b>Gacha Companion Setup</b> (this
+  wizard &mdash; also a control panel: updates, logs, reports). No terminal needed, ever again.</div>
   <div class="hint" id="autoupd-msg"></div>
 </div>
 
